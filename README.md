@@ -184,7 +184,7 @@ Any additional configuration items are provider-specific.
 
 **Example:**
 
-```json
+```javascript
 ipfs: {
   pinataApiKey: process.env.PINATA_API_KEY,
   pinataApiSecret: process.env.PINATA_API_SECRET,
