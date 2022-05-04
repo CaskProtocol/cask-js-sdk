@@ -4,6 +4,10 @@ The Cask SDK is a lower level API for interacting with the [Cask Protocol](https
 
 For a simple to use, fully functional checkout widget, see the [Cask Widgets](https://github.com/CaskProtocol/cask-widgets) repository.
 
+The SDK code repository is located at [https://github.com/CaskProtocol/cask-js-sdk](https://github.com/CaskProtocol/cask-js-sdk).
+
+Full SDK reference is available at [https://caskprotocol.github.io](https://caskprotocol.github.io).
+
 # Installation
 
 ```shell
