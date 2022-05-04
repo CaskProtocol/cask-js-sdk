@@ -58,7 +58,7 @@ import Query from "./query/index.js";
  *
  *
  * @author Cask Protocol & Subverse Labs, LLC
- * @version 1.0
+ * @version 1.1
  * @name CaskSDK
  */
 
