@@ -6,7 +6,7 @@ For a simple to use, fully functional checkout widget, see the [Cask Widgets](ht
 
 The SDK code repository is located at [https://github.com/CaskProtocol/cask-js-sdk](https://github.com/CaskProtocol/cask-js-sdk).
 
-Full SDK reference is available at [https://caskprotocol.github.io](https://caskprotocol.github.io).
+Full SDK reference is available at [https://caskprotocol.github.io/cask-js-sdk/](https://caskprotocol.github.io/cask-js-sdk/).
 
 # Installation
 
