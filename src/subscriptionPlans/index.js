@@ -26,6 +26,7 @@ import ProviderProfile from "./ProviderProfile.js";
  * @property {number} planId Limit discount to a single plan, 0 to allow redemption by all plans
  * @property {number} gracePeriod Number of days until a past due subscription is canceled
  * @property {number} applyPeriods Number of periods the discount applies for, 0 for the lifetime of the subscription
+ * @property {number} discountType Specifies the type of discount. 1 = code, 2 = ERC-20 balance, 3 = ERC-721 holding
  * @property {boolean} isFixed true if value is a fixed discount, false if value is a percentage in basis points
  */
 
