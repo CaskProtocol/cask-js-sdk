@@ -139,7 +139,7 @@ function generatePlanProof(providerAddress, ref, planData, merkleRoot, merklePro
 }
 
 
-function encodeDiscountData(value, validAfter, expiresAt, maxRedemptions, planId, applyPeriods, isFixed) {
+function encodeDiscountData(value, validAfter, expiresAt, maxRedemptions, planId, applyPeriods, discountType, isFixed) {
     const options =
         (isFixed ? 1 : 0);
 
@@ -150,12 +150,13 @@ function encodeDiscountData(value, validAfter, expiresAt, maxRedemptions, planId
         ...ethers.utils.zeroPad(maxRedemptions, 4),
         ...ethers.utils.zeroPad(planId, 4),
         ...ethers.utils.zeroPad(applyPeriods, 2),
-        ...ethers.utils.zeroPad(options, 2),
+        ...ethers.utils.zeroPad(options, 1),
+        ...ethers.utils.zeroPad(discountType, 1),
     ]);
 }
 
 function parseDiscountData(discountData) {
-    const options = parseInt(ethers.utils.hexDataSlice(discountData, 30, 32)); // 2 bytes (at the end)
+    const options = parseInt(ethers.utils.hexDataSlice(discountData, 30, 31)); // 1 bytes
 
     return {
         value: ethers.BigNumber.from(ethers.utils.hexDataSlice(discountData, 0, 12)), // 12 bytes
@@ -164,15 +165,16 @@ function parseDiscountData(discountData) {
         maxRedemptions: parseInt(ethers.utils.hexDataSlice(discountData, 20, 24)), // 4 bytes
         planId: parseInt(ethers.utils.hexDataSlice(discountData, 24, 28)), // 4 bytes
         applyPeriods: parseInt(ethers.utils.hexDataSlice(discountData, 28, 30)), // 2 bytes
-        isFixed: (options & 0x0001) === 0x0001,
+        discountType: parseInt(ethers.utils.hexDataSlice(discountData, 31, 32)), // 2 bytes
+        isFixed: (options & 0x01) === 0x01,
     }
 }
 
 function generateDiscountId(code) {
-    return ethers.utils.keccak256(generateDiscountCodeProof(code));
+    return ethers.utils.keccak256(generateDiscountCodeValidator(code));
 }
 
-function generateDiscountCodeProof(code) {
+function generateDiscountCodeValidator(code) {
     return ethers.utils.id(code.toUpperCase());
 }
 
@@ -190,6 +192,7 @@ function _discountsMerkleLeafHash(discount) {
             discount.maxUses,
             discount.planId,
             discount.applyPeriods,
+            discount.discountType,
             discount.isFixed);
     }
 
@@ -214,17 +217,17 @@ function discountsMerkleProof(discountsList, discount) {
     return merkleTree.getHexProof(_discountsMerkleLeafHash(discount));
 }
 
-function generateDiscountProof(discountCodeProof, discountData, merkleRoot, merkleProof=[]) {
+function generateDiscountProof(discountValidator, discountData, merkleRoot, merkleProof=[]) {
     return [
-        ethers.utils.hexZeroPad(discountCodeProof, 32),
+        ethers.utils.hexZeroPad(discountValidator, 32),
         ethers.utils.hexZeroPad(discountData, 32),
         ethers.utils.hexZeroPad(merkleRoot, 32),
         ...merkleProof
     ];
 }
 
-function lookupDiscount(discountCodeProof, discountsList) {
-    const discountId = ethers.utils.keccak256(discountCodeProof);
+function lookupCodeDiscount(discountCodeValidator, discountsList) {
+    const discountId = ethers.utils.keccak256(discountCodeValidator);
     return discountsList.find((d) => d.discountId === discountId);
 }
 
@@ -279,11 +282,11 @@ export default {
     encodeDiscountData,
     parseDiscountData,
     generateDiscountId,
-    generateDiscountCodeProof,
+    generateDiscountCodeValidator,
     discountsMerkleRoot,
     discountsMerkleProof,
     generateDiscountProof,
-    lookupDiscount,
+    lookupCodeDiscount,
 
     // signature helpers
     generateMerkleCommitment,

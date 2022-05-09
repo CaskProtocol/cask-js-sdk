@@ -305,28 +305,28 @@ class Subscriptions {
 
         let discountId;
         let discount;
-        let discountCodeProof;
+        let discountCodeValidator;
         let discountData;
         let discountProof;
 
         if (discountCode) {
             discountId = utils.generateDiscountId(discountCode);
-            const discount = providerProfile.discounts[discountId];
+            discount = providerProfile.discounts[discountId];
             if (discount) {
-                discountCodeProof = utils.generateDiscountProof(discountCode);
+                discountCodeValidator = utils.generateDiscountCodeValidator(discountCode);
                 discountData = utils.encodeDiscountData(discount.value, discount.validAfter,
                     discount.expiresAt, discount.maxRedemptions, discount.planId, discount.applyPeriods,
-                    discount.isFixed);
+                    discount.discountType, discount.isFixed);
             }
         }
         if (discount) {
-            discountProof = utils.generateDiscountProof(
-                discountCodeProof,
+            discountProof = utils.generateDiscountCodeValidator(
+                discountCodeValidator,
                 discountData,
                 providerProfile.discountMerkleRoot,
                 utils.discountsMerkleProof(utils.discountsList(providerProfile.discounts), discount));
         } else {
-            discountProof = utils.generateDiscountProof(
+            discountProof = utils.generateDiscountCodeValidator(
                 0,
                 0,
                 providerProfile.discountMerkleRoot);
