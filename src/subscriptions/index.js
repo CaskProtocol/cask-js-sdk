@@ -419,7 +419,6 @@ class Subscriptions {
 
         const tx = await this.CaskSubscriptions.connect(this.ethersConnection.signer)
             .attachData(subscriptionId, attachedDataCid);
-
         await tx.wait();
         return {tx};
     }
@@ -579,6 +578,7 @@ class Subscriptions {
         if (!event) {
             throw new Error("Could not find SubscriptionPaused event after subscription pause");
         }
+        await tx.wait();
         return {tx};
     }
 
@@ -600,6 +600,7 @@ class Subscriptions {
         if (!event) {
             throw new Error("Could not find SubscriptionResumed event after subscription resume");
         }
+        await tx.wait();
         return {tx};
     }
 
@@ -623,6 +624,7 @@ class Subscriptions {
         if (!event) {
             throw new Error("Could not find SubscriptionCanceled or SubscriptionPendingCancel event after subscription cancel");
         }
+        await tx.wait();
         return {tx};
     }
 

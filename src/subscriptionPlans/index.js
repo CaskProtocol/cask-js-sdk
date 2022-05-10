@@ -211,7 +211,7 @@ class SubscriptionPlans {
         }
 
         const tx = await this.CaskSubscriptionPlans.connect(this.ethersConnection.signer).disablePlan(planId);
-
+        await tx.wait();
         return {tx};
     }
 
@@ -232,7 +232,7 @@ class SubscriptionPlans {
         }
 
         const tx = await this.CaskSubscriptionPlans.connect(this.ethersConnection.signer).enablePlan(planId);
-
+        await tx.wait();
         return {tx};
     }
 
@@ -258,7 +258,7 @@ class SubscriptionPlans {
         }
 
         const tx = await this.CaskSubscriptionPlans.connect(this.ethersConnection.signer).retirePlan(planId, retireAt);
-
+        await tx.wait();
         return {tx};
     }
 
@@ -290,6 +290,7 @@ class SubscriptionPlans {
 
         this.providerProfile.registered = true;
 
+        await tx.wait();
         return {tx};
     }
 
