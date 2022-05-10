@@ -31,13 +31,14 @@ async function create() {
     console.log(`response: ${JSON.stringify(resp, null, 2)}`);
 
     cask.stop();
+
+    return resp;
 }
 
 
-async function get() {
+async function get(subscriptionId) {
     await cask.init();
 
-    const subscriptionId = '0x...';
     const resp = await cask.subscriptions.get(subscriptionId);
 
     console.log(`response: ${JSON.stringify(resp, null, 2)}`);
@@ -47,6 +48,6 @@ async function get() {
 
 
 (async () => {
-    await create();
-    await get();
+    const resp = await create();
+    await get(resp.subscriptionId);
 })();

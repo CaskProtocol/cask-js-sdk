@@ -320,13 +320,13 @@ class Subscriptions {
             }
         }
         if (discount) {
-            discountProof = utils.generateDiscountCodeValidator(
+            discountProof = utils.generateDiscountProof(
                 discountCodeValidator,
                 discountData,
                 providerProfile.discountMerkleRoot,
                 utils.discountsMerkleProof(utils.discountsList(providerProfile.discounts), discount));
         } else {
-            discountProof = utils.generateDiscountCodeValidator(
+            discountProof = utils.generateDiscountProof(
                 0,
                 0,
                 providerProfile.discountMerkleRoot);

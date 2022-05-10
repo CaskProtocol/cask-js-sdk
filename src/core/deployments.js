@@ -27,7 +27,7 @@ const deployments = {
             [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0xA80D4D3d0b2C9c38912459F2E674416973a9A161',
+            [chains.ETH_HARDHAT.chainId]: '0x9C59572eAbaED1323F685051595BF2472c9b30f1',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
@@ -49,7 +49,7 @@ const deployments = {
             [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x9C59572eAbaED1323F685051595BF2472c9b30f1',
+            [chains.ETH_HARDHAT.chainId]: '0x8630A6598Cf9E5abAB2f2a05A5C7Ad5344Ad915e',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTION_PLANS ||
@@ -71,7 +71,7 @@ const deployments = {
             [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x8630A6598Cf9E5abAB2f2a05A5C7Ad5344Ad915e',
+            [chains.ETH_HARDHAT.chainId]: '0x8142e40a6e89e55C59cB339896532a0D5a64c02F',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_VAULT ||

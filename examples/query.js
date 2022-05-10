@@ -13,7 +13,7 @@ const cask = new CaskSDK({
         pinataApiKey: process.env.PINATA_API_KEY,
         pinataApiSecret: process.env.PINATA_API_SECRET,
     },
-    environment: CaskSDK.environments.DEVELOPMENT,
+    environment: CaskSDK.environments.TESTNET,
     logLevel: 'debug',
 });
 

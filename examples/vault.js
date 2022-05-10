@@ -22,7 +22,7 @@ async function deposit() {
     await cask.init();
 
     const depositAsset = 'USDT';
-    const depositAmount = 30.50;
+    const depositAmount = 300.50;
 
     let balance;
 

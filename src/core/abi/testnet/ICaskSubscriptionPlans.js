@@ -127,6 +127,30 @@ export default {
       "inputs": [
         {
           "internalType": "address",
+          "name": "_consumer",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_discountValidator",
+          "type": "bytes32"
+        }
+      ],
+      "name": "erc20DiscountCurrentlyApplies",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "_provider",
           "type": "address"
         },
@@ -281,48 +305,9 @@ export default {
       "inputs": [
         {
           "internalType": "address",
-          "name": "_provider",
+          "name": "_consumer",
           "type": "address"
         },
-        {
-          "internalType": "uint32",
-          "name": "_planId",
-          "type": "uint32"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "_discountId",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "_discountData",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "_merkleRoot",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "bytes32[]",
-          "name": "_merkleProof",
-          "type": "bytes32[]"
-        }
-      ],
-      "name": "verifyAndConsumeDiscount",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
         {
           "internalType": "address",
           "name": "_provider",
@@ -334,35 +319,54 @@ export default {
           "type": "uint32"
         },
         {
-          "internalType": "bytes32",
-          "name": "_discountId",
-          "type": "bytes32"
-        },
+          "internalType": "bytes32[]",
+          "name": "_discountProof",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "verifyAndConsumeDiscount",
+      "outputs": [
         {
           "internalType": "bytes32",
-          "name": "_discountData",
+          "name": "",
           "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_consumer",
+          "type": "address"
         },
         {
-          "internalType": "bytes32",
-          "name": "_merkleRoot",
-          "type": "bytes32"
+          "internalType": "address",
+          "name": "_provider",
+          "type": "address"
+        },
+        {
+          "internalType": "uint32",
+          "name": "_planId",
+          "type": "uint32"
         },
         {
           "internalType": "bytes32[]",
-          "name": "_merkleProof",
+          "name": "_discountProof",
           "type": "bytes32[]"
         }
       ],
       "name": "verifyDiscount",
       "outputs": [
         {
-          "internalType": "bool",
+          "internalType": "bytes32",
           "name": "",
-          "type": "bool"
+          "type": "bytes32"
         }
       ],
-      "stateMutability": "view",
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {

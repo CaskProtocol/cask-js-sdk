@@ -9,31 +9,6 @@ export default {
         {
           "indexed": true,
           "internalType": "address",
-          "name": "strategy",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "asset",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "assetAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "AllocatedToStrategy",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
           "name": "asset",
           "type": "address"
         }
@@ -269,29 +244,6 @@ export default {
       ],
       "name": "TransferValue",
       "type": "event"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_strategy",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_asset",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_assetAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "allocateToStrategy",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
     },
     {
       "inputs": [
