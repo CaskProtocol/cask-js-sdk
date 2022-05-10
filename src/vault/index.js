@@ -220,6 +220,7 @@ class Vault {
 
         const tx = await erc20Token.connect(this.ethersConnection.signer)
             .approve(this.CaskVault.address, amountAsset);
+        await tx.wait();
 
         return {tx};
     }
@@ -250,6 +251,7 @@ class Vault {
             tx = await this.CaskVault.connect(this.ethersConnection.signer)
                 .deposit(asset.address, amountAsset);
         }
+        await tx.wait();
 
         return {tx};
     }
@@ -280,6 +282,7 @@ class Vault {
             tx = await this.CaskVault.connect(this.ethersConnection.signer)
                 .withdraw(asset.address, shares);
         }
+        await tx.wait();
 
         return {tx};
     }
@@ -325,6 +328,7 @@ class Vault {
         amountAsset = this.amountInAsset({asset: this.baseAsset, amountSimple, amountAsset});
 
         const tx = await this.CaskVault.connect(this.ethersConnection.signer).transferValue(to, amountAsset);
+        await tx.wait();
 
         return {tx};
     }
