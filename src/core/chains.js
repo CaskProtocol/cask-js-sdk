@@ -26,6 +26,7 @@ const chains = {
     chainId: 1,
     hexChainId: '0x1',
     name: "Ethereum",
+    shortName: 'ethereum',
     token: "ETH",
     defaultRpcUrl: "https://mainnet.infura.io/v3/",
     explorerUrl: "https://etherscan.io/",
@@ -55,12 +56,14 @@ viewBox="0 0 784.37 1277.39"
     defaultRpcUrl: "http://127.0.0.1:8545",
     token: "ETH",
     name: "Hardhat",
+    shortName: 'hardhat',
   },
   POLYGON_MAINNET: {
     chainId: 137,
     hexChainId: '0x89',
     token: "MATIC",
     name: "Polygon",
+    shortName: 'polygon',
     defaultRpcUrl: "https://matic-mainnet.chainstacklabs.com",
     explorerUrl: "https://polygonscan.com/",
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-polygon",
@@ -86,6 +89,7 @@ viewBox="0 0 784.37 1277.39"
     hexChainId: '0x13881',
     token: "MATIC",
     name: "Mumbai Testnet",
+    shortName: 'mumbai',
     defaultRpcUrl: "https://rpc-mumbai.maticvigil.com",
     explorerUrl: "https://mumbai.polygonscan.com/",
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-mumbai",
@@ -110,6 +114,7 @@ viewBox="0 0 784.37 1277.39"
     hexChainId: '0x38',
     token: "BNB",
     name: "Binance Smart Chain",
+    shortName: 'bsc',
     defaultRpcUrl: "https://bsc-dataseed.binance.org/",
     explorerUrl: "https://bscscan.com/",
     litName: 'bsc',
@@ -137,6 +142,7 @@ viewBox="0 0 784.37 1277.39"
     hexChainId: '0x61',
     token: "BNB",
     name: "BSC Testnet",
+    shortName: 'bsc_testnet',
     defaultRpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545/",
     explorerUrl: "https://testnet.bscscan.com/",
     logo: `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -163,6 +169,7 @@ viewBox="0 0 784.37 1277.39"
     hexChainId: '0xA86A',
     token: "AVAX",
     name: "Avalance",
+    shortName: 'avalanche',
     defaultRpcUrl: "https://api.avax.network/ext/bc/C/rpc",
     explorerUrl: "https://snowtrace.io/",
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-avalanche",
@@ -178,6 +185,7 @@ viewBox="0 0 784.37 1277.39"
     hexChainId: '0xA869',
     token: "AVAX",
     name: "Fuji Testnet",
+    shortName: 'fuji',
     defaultRpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
     explorerUrl: "https://testnet.snowtrace.io/",
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji",
@@ -191,6 +199,7 @@ viewBox="0 0 784.37 1277.39"
     hexChainId: '0xFA',
     token: "FTM",
     name: "Fantom",
+    shortName: 'fantom',
     defaultRpcUrl: "https://rpc.ftm.tools/",
     explorerUrl: "https://ftmscan.com/",
     litName: 'fantom',
@@ -201,6 +210,7 @@ viewBox="0 0 784.37 1277.39"
     hexChainId: '0xFA2',
     token: "FTM",
     name: "Fantom Testnet",
+    shortName: 'fantom_testnet',
     defaultRpcUrl: "https://rpc.testnet.fantom.network/",
     explorerUrl: "https://testnet.ftmscan.com/",
     logo: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"><defs><style>.cls-1{fill:#fff;fill-rule:evenodd;}.cls-2{fill:#13b5ec;}.cls-3{mask:url(#mask);}</style><mask id="mask" x="10" y="6" width="93.1" height="20" maskUnits="userSpaceOnUse"><g id="a"><path class="cls-1" d="M10,6h93.1V26H10Z"/></g></mask></defs><title>fa</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><circle class="cls-2" cx="16" cy="16" r="16"/><g class="cls-3"><path class="cls-1" d="M17.2,12.9l3.6-2.1V15Zm3.6,9L16,24.7l-4.8-2.8V17L16,19.8,20.8,17ZM11.2,10.8l3.6,2.1L11.2,15Zm5.4,3.1L20.2,16l-3.6,2.1Zm-1.2,4.2L11.8,16l3.6-2.1Zm4.8-8.3L16,12.2,11.8,9.8,16,7.3ZM10,9.4V22.5l6,3.4,6-3.4V9.4L16,6Z"/></g></g></g></svg>`
@@ -211,11 +221,11 @@ viewBox="0 0 784.37 1277.39"
  * Look up the chain information
  *
  * @memberOf CaskSDK.chains
- * @param chainId
+ * @param chain
  * @return {Chain}
  */
-function lookupChain(chainId) {
-  return Object.values(chains).find((c) => c.chainId === chainId);
+function lookupChain(chain) {
+  return Object.values(chains).find((c) => c.chainId === chain || c.shortName === chain);
 }
 
 export default {
