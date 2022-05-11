@@ -22,9 +22,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0x7899118A8A3EAe4cDd97Cb2Ea9E52a5b78da3cB6",
         },
         [environments.PRODUCTION]: {
-            [chains.POLYGON_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.FANTOM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x9C59572eAbaED1323F685051595BF2472c9b30f1',
@@ -44,9 +42,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0x3E9B8E9D60Abc50b032cdc42Ef2F6CBaBce17983",
         },
         [environments.PRODUCTION]: {
-            [chains.POLYGON_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.FANTOM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x8630A6598Cf9E5abAB2f2a05A5C7Ad5344Ad915e',
@@ -66,9 +62,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0xc924CaAFe6759F92215Dadf326FF4fAb158f6C41",
         },
         [environments.PRODUCTION]: {
-            [chains.POLYGON_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.FANTOM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.POLYGON_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x8142e40a6e89e55C59cB339896532a0D5a64c02F',
