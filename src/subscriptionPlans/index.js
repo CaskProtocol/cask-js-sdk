@@ -287,10 +287,10 @@ class SubscriptionPlans {
             this.providerProfile.paymentAddress,
             this.providerProfile.cid,
             this.providerProfile.nonce);
-        await tx.wait();
 
         this.providerProfile.registered = true;
 
+        await tx.wait();
         return {tx};
     }
 
