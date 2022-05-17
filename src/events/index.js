@@ -143,7 +143,7 @@ class Events {
                 'SubscriptionCreated', 'SubscriptionChangedPlan', 'SubscriptionPendingChangePlan',
                 'SubscriptionPaused', 'SubscriptionResumed', 'SubscriptionPendingCancel',
                 'SubscriptionCanceled', 'SubscriptionRenewed', 'SubscriptionTrialEnded',
-                'SubscriptionPastDue'
+                'SubscriptionPastDue', 'SubscriptionPendingPause'
             ];
         }
         if (!subscriptionFilter) {

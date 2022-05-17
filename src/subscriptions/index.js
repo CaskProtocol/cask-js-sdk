@@ -419,7 +419,6 @@ class Subscriptions {
 
         const tx = await this.CaskSubscriptions.connect(this.ethersConnection.signer)
             .attachData(subscriptionId, attachedDataCid);
-
         await tx.wait();
         return {tx};
     }
@@ -543,13 +542,7 @@ class Subscriptions {
             discountProof,
             providerProfile.signedRoots,
             subscriptionCid);
-
-        const events = (await tx.wait()).events || [];
-        const event = events.find((e) =>
-            e.event === "SubscriptionChangedPlan" || e.event === 'SubscriptionPendingChangePlan');
-        if (!event) {
-            throw new Error("Could not find SubscriptionChangedPlan or SubscriptionPendingChangePlan event after subscription change");
-        }
+        await tx.wait();
         return {
             tx,
             consumer: this.ethersConnection.address,
@@ -574,11 +567,7 @@ class Subscriptions {
 
         const tx = await this.CaskSubscriptions
             .connect(this.ethersConnection.signer).pauseSubscription(subscriptionId);
-        const events = (await tx.wait()).events || [];
-        const event = events.find((e) => e.event === "SubscriptionPaused");
-        if (!event) {
-            throw new Error("Could not find SubscriptionPaused event after subscription pause");
-        }
+        await tx.wait();
         return {tx};
     }
 
@@ -595,11 +584,7 @@ class Subscriptions {
 
         const tx = await this.CaskSubscriptions
             .connect(this.ethersConnection.signer).resumeSubscription(subscriptionId);
-        const events = (await tx.wait()).events || [];
-        const event = events.find((e) => e.event === "SubscriptionResumed");
-        if (!event) {
-            throw new Error("Could not find SubscriptionResumed event after subscription resume");
-        }
+        await tx.wait();
         return {tx};
     }
 
@@ -617,12 +602,7 @@ class Subscriptions {
 
         const tx = await this.CaskSubscriptions
             .connect(this.ethersConnection.signer).cancelSubscription(subscriptionId, cancelAt);
-        const events = (await tx.wait()).events || [];
-        const event = events.find((e) =>
-            e.event === "SubscriptionCanceled" || e.event === "SubscriptionPendingCancel");
-        if (!event) {
-            throw new Error("Could not find SubscriptionCanceled or SubscriptionPendingCancel event after subscription cancel");
-        }
+        await tx.wait();
         return {tx};
     }
 
