@@ -138,6 +138,21 @@ function generatePlanProof(providerAddress, ref, planData, merkleRoot, merklePro
     ];
 }
 
+function encodeNetworkData(networkAddress, feeBps) {
+
+    return ethers.utils.hexlify([
+        ...ethers.utils.zeroPad(networkAddress, 20),
+        ...ethers.utils.zeroPad(feeBps, 2),
+        ...ethers.utils.zeroPad(0, 10), // reserved
+    ]);
+}
+
+function parseNetworkData(networkData) {
+    return {
+        networkAddress: ethers.utils.getAddress(ethers.utils.hexDataSlice(networkData, 0, 20)), // 20 bytes
+        feeBps: parseInt(ethers.utils.hexDataSlice(networkData, 20, 22)), // 2 bytes
+    }
+}
 
 function encodeDiscountData(value, validAfter, expiresAt, maxRedemptions, planId, applyPeriods, discountType, isFixed) {
     const options =
@@ -167,6 +182,23 @@ function parseDiscountData(discountData) {
         applyPeriods: parseInt(ethers.utils.hexDataSlice(discountData, 28, 30)), // 2 bytes
         discountType: parseInt(ethers.utils.hexDataSlice(discountData, 31, 32)), // 2 bytes
         isFixed: (options & 0x01) === 0x01,
+    }
+}
+
+function generateERC20DiscountValidator(address, decimals=0, minBalance=1) {
+    return ethers.utils.hexlify([
+        ...ethers.utils.zeroPad(address, 20),
+        ...ethers.utils.zeroPad(decimals, 1),
+        ...ethers.utils.zeroPad(0, 3),  // reserved
+        ...ethers.utils.zeroPad(minBalance, 8),
+    ]);
+}
+
+function parseERC20DiscountValidator(validatorData) {
+    return {
+        address: ethers.utils.getAddress(ethers.utils.hexDataSlice(validatorData, 0, 20)), // 20 bytes
+        decimals: parseInt(ethers.utils.hexDataSlice(validatorData, 20, 21)), // 1 byte
+        minBalance: parseInt(ethers.utils.hexDataSlice(validatorData, 24, 32)), // 8 bytes
     }
 }
 
@@ -278,9 +310,15 @@ export default {
     plansMerkleProof,
     generatePlanProof,
 
+    // network helpers
+    encodeNetworkData,
+    parseNetworkData,
+
     // discounts helpers
     encodeDiscountData,
     parseDiscountData,
+    generateERC20DiscountValidator,
+    parseERC20DiscountValidator,
     generateDiscountId,
     generateDiscountCodeValidator,
     discountsMerkleRoot,
