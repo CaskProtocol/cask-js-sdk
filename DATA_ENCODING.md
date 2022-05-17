@@ -13,3 +13,7 @@
 `networkData` encoding:
 
 ![networkData encoding](assets/networkData.png)
+
+`discountValidator` encoding:
+
+![networkData encoding](assets/discountValidator.png)
