@@ -291,6 +291,7 @@ class SubscriptionPlans {
 
         this.providerProfile.registered = true;
 
+        await tx.wait();
         return {tx};
     }
 
