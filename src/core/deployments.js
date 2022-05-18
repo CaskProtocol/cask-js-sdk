@@ -70,7 +70,7 @@ const deployments = {
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_VAULT ||
                 '0xC040BDBBb2b1AdDaa7586962e9Fcb5585D7e66a9',
-            [chains.AVAX_TESTNET]: process.env.CASK_CONTRACT_VAULT ||
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_VAULT ||
                 '0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06',
         },
     },

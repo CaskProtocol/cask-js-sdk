@@ -61,6 +61,9 @@ class EthersConnection {
      */
     init({chainId}={}) {
         if (!chainId) {
+            chainId = this.options?.initialChainId;
+        }
+        if (!chainId) {
             chainId = defaultChains[this.environment].chainId;
         }
         return this.switchChain(chainId);
