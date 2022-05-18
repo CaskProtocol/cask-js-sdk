@@ -45,6 +45,7 @@ describe("Plan Utils", function () {
             500, // maxUses - 0 = unlimited
             100, // planId - 0 = all plans
             12, // applyPeriods - 0 = unlimited
+            1, // discountType - 1 = code, 2 = ERC20 balance
             false // isFixed - true for fixed price discount, false for percentage discount
         );
 
@@ -56,6 +57,8 @@ describe("Plan Utils", function () {
         expect(decodedDiscount1.maxRedemptions).to.equal(500);
         expect(decodedDiscount1.planId).to.equal(100);
         expect(decodedDiscount1.applyPeriods).to.equal(12);
+        expect(decodedDiscount1.applyPeriods).to.equal(12);
+        expect(decodedDiscount1.discountType).to.equal(1);
         expect(decodedDiscount1.isFixed).to.equal(false);
 
     });

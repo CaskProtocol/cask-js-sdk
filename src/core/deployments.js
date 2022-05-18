@@ -25,7 +25,7 @@ const deployments = {
             [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x9C59572eAbaED1323F685051595BF2472c9b30f1',
+            [chains.ETH_HARDHAT.chainId]: '0x22f23a383b0CA05c56ee75610183B5d236F2B81d',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
@@ -45,7 +45,7 @@ const deployments = {
             [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x8630A6598Cf9E5abAB2f2a05A5C7Ad5344Ad915e',
+            [chains.ETH_HARDHAT.chainId]: '0xEe5153E1383551F67d59b5fdC5562e3DCe519e81',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTION_PLANS ||
@@ -65,7 +65,7 @@ const deployments = {
             [chains.POLYGON_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x8142e40a6e89e55C59cB339896532a0D5a64c02F',
+            [chains.ETH_HARDHAT.chainId]: '0x61E53693d81A38e72AAe0B2aC5f9B2dbb2B5ac56',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_VAULT ||

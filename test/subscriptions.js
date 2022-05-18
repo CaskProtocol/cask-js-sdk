@@ -7,7 +7,7 @@ const { CaskSDK } = require('..');
 
 const caskConsumer = new CaskSDK({
     connections: {
-        signer: testConsumerWallet(0, 'http://127.0.0.1:8545'),
+        signer: testConsumerWallet(0),
     },
     ipfs: {
         pinataApiKey: process.env.PINATA_API_KEY,
@@ -19,7 +19,7 @@ const caskConsumer = new CaskSDK({
 
 const caskProvider = new CaskSDK({
     connections: {
-        signer: testProviderWallet(0, 'http://127.0.0.1:8545'),
+        signer: testProviderWallet(0),
     },
     ipfs: {
         pinataApiKey: process.env.PINATA_API_KEY,

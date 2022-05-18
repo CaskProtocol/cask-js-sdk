@@ -7,7 +7,7 @@ const { CaskSDK } = require('..');
 
 const cask = new CaskSDK({
     connections: {
-        signer: testConsumerWallet(0, 'http://127.0.0.1:8545'),
+        signer: testConsumerWallet(0),
     },
     ipfs: {
         provider: CaskSDK.ipfs.providers.NONE,
