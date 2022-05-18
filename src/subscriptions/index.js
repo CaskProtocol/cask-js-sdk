@@ -270,7 +270,7 @@ class Subscriptions {
      * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Subscriptions.CreateSubscriptionResult}
      */
-    async create({provider, planId, ref, cancelAt=0, discountCode,
+    async create({provider, planId, ref, cancelAt=0, discountCode, discountId,
                      authSig={}, privateData={}, metadata={}})
     {
         if (!this.ethersConnection.signer) {
@@ -303,23 +303,22 @@ class Subscriptions {
             providerProfile.planMerkleRoot,
             utils.plansMerkleProof(utils.plansList(providerProfile.plans), plan));
 
-        let discountId;
         let discount;
         let discountCodeValidator;
-        let discountData;
         let discountProof;
 
-        if (discountCode) {
+        if (discountId) {
+            discountCodeValidator = discountId;
+        } else if (discountCode) {
             discountId = utils.generateDiscountId(discountCode);
-            discount = providerProfile.discounts[discountId];
-            if (discount) {
-                discountCodeValidator = utils.generateDiscountCodeValidator(discountCode);
-                discountData = utils.encodeDiscountData(discount.value, discount.validAfter,
-                    discount.expiresAt, discount.maxRedemptions, discount.planId, discount.applyPeriods,
-                    discount.discountType, discount.isFixed);
-            }
+            discountCodeValidator = utils.generateDiscountCodeValidator(discountCode);
         }
+        discount = providerProfile.discounts[discountId];
         if (discount) {
+            const discountData = utils.encodeDiscountData(discount.value, discount.validAfter,
+                discount.expiresAt, discount.maxRedemptions, discount.planId, discount.applyPeriods,
+                discount.discountType, discount.isFixed);
+
             discountProof = utils.generateDiscountProof(
                 discountCodeValidator,
                 discountData,
@@ -461,7 +460,7 @@ class Subscriptions {
      * @param metadata
      * @return {Promise<{ref, tx: *, provider, chainId, planId, subscriptionId, consumer: (*)}>}
      */
-    async change(subscriptionId, {planId, discountCode, metadata={}}) {
+    async change(subscriptionId, {planId, discountCode, discountId, metadata={}}) {
 
         if (!this.ethersConnection.signer) {
             throw new Error("Cannot perform transaction without ethers signer");
@@ -493,25 +492,24 @@ class Subscriptions {
             providerProfile.planMerkleRoot,
             utils.plansMerkleProof(utils.plansList(providerProfile.plans), plan));
 
-        let discountId;
         let discount;
-        let discountCodeProof;
-        let discountData;
+        let discountCodeValidator;
         let discountProof;
 
-        if (discountCode) {
+        if (discountId) {
+            discountCodeValidator = discountId;
+        } else if (discountCode) {
             discountId = utils.generateDiscountId(discountCode);
-            const discount = providerProfile.discounts[discountId];
-            if (discount) {
-                discountCodeProof = utils.generateDiscountProof(discountCode);
-                discountData = utils.encodeDiscountData(discount.value, discount.validAfter,
-                    discount.expiresAt, discount.maxRedemptions, discount.planId, discount.applyPeriods,
-                    discount.isFixed);
-            }
+            discountCodeValidator = utils.generateDiscountCodeValidator(discountCode);
         }
+        discount = providerProfile.discounts[discountId];
         if (discount) {
+            const discountData = utils.encodeDiscountData(discount.value, discount.validAfter,
+                discount.expiresAt, discount.maxRedemptions, discount.planId, discount.applyPeriods,
+                discount.discountType, discount.isFixed);
+
             discountProof = utils.generateDiscountProof(
-                discountCodeProof,
+                discountCodeValidator,
                 discountData,
                 providerProfile.discountMerkleRoot,
                 utils.discountsMerkleProof(utils.discountsList(providerProfile.discounts), discount));
