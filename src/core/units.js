@@ -52,7 +52,7 @@ function formatUnits({amount, asset, decimals, units, unitOptions={}}) {
     if (units === caskUnits.SIMPLE) {
         return parseFloat(ethers.utils.formatUnits(amount, decimals));
     } else if (units === caskUnits.NUMERAL) {
-        let roundingFunction;
+        let roundingFunction = unitOptions.roundingFunction;
         if (unitOptions.roundDown) {
             roundingFunction = Math.floor;
         } else if (unitOptions.roundUp) {
