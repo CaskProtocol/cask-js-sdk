@@ -19,10 +19,9 @@ const cask = new CaskSDK({
 
 
 async function deposit() {
-    await cask.init();
 
     const depositAsset = 'USDT';
-    const depositAmount = 300.50;
+    const depositAmount = 190.50;
 
     let balance;
 
@@ -53,7 +52,6 @@ async function deposit() {
 
 
 async function withdraw() {
-    await cask.init();
 
     const withdrawalAsset = 'USDT'; // receive value converted to this asset
     const withdrawalVaultAmount = 25.50; // of vault asset value
@@ -83,6 +81,10 @@ async function withdraw() {
 }
 
 (async () => {
+    await cask.init();
+
     await deposit();
     await withdraw();
+
+    cask.stop();
 })();

@@ -64,6 +64,16 @@ const contracts = {
             abi.ERC20,
             provider || ethersConnection.provider);
     },
+    /**
+     * Get an ERC721 token instance. Uses either the supplied provider, or the connection from the ethersConnection.
+     * @type ethers.Contract
+     */
+    ERC721: ({tokenAddress, ethersConnection, provider}) => {
+        return new ethers.Contract(
+            tokenAddress,
+            abi.ERC721,
+            provider || ethersConnection.provider);
+    },
 }
 
 export default contracts;

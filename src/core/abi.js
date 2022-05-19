@@ -18,6 +18,7 @@ import CaskVaultInternalAbi from "./abi/internal/ICaskVault.js";
 
 import AggregatorV3InterfaceAbi from "./abi/AggregatorV3Interface.js";
 import ERC20Abi from "./abi/ERC20Metadata.js";
+import ERC721Abi from "./abi/ERC721Metadata.js";
 
 
 /**
@@ -67,6 +68,10 @@ const abi = {
    * ERC20 ABI.
    */
   ERC20: ERC20Abi.abi,
+  /**
+   * ERC721 ABI.
+   */
+  ERC721: ERC721Abi.abi,
 };
 
 export default abi;

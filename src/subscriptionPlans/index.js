@@ -119,7 +119,9 @@ class SubscriptionPlans {
                 address,
                 nonce: providerProfile.nonce,
                 registered: true,
-                debug: this.options.debug,
+                logLevel: this.options.logLevel,
+                defaultUnits: this.options.defaultUnits,
+                defaultUnitOptions: this.options.defaultUnitOptions,
             });
             await this.providerProfile.loadFromIPFS(providerProfile.cid);
         } else {
@@ -127,7 +129,9 @@ class SubscriptionPlans {
                 ipfs: this.options.ipfs,
                 address,
                 registered: false,
-                debug: this.options.debug,
+                logLevel: this.options.logLevel,
+                defaultUnits: this.options.defaultUnits,
+                defaultUnitOptions: this.options.defaultUnitOptions,
             });
         }
 
@@ -333,9 +337,14 @@ class SubscriptionPlans {
         });
 
         try {
+            let decimals = erc20DiscountInfo.decimals;
+            if (decimals === 255) {
+                decimals = await contract.decimals();
+            }
+
             let balance = await contract.balanceOf(address);
-            if (erc20DiscountInfo.decimals > 0) {
-                balance = balance.div(ethers.BigNumber.from('10').pow(erc20DiscountInfo.decimals));
+            if (decimals > 0) {
+                balance = balance.div(ethers.BigNumber.from('10').pow(decimals));
             }
 
             this.logger.debug(`Balance of ${balance} found for ERC20 discount on contract ${erc20DiscountInfo.address} for address ${address}`);

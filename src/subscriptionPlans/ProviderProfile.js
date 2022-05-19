@@ -95,8 +95,8 @@ class ProviderProfile {
             price: CaskUnits.formatUnits({
                 amount: planInfo.price,
                 decimals: CaskUnits.BASE_ASSET_DECIMALS,
-                units,
-                unitOptions})
+                units: units || this.options.defaultUnits,
+                unitOptions: unitOptions || this.options.defaultUnitOptions})
         }
     }
 
@@ -179,8 +179,8 @@ class ProviderProfile {
             value: CaskUnits.formatUnits({
                 amount: value,
                 decimals: CaskUnits.BASE_ASSET_DECIMALS,
-                units,
-                unitOptions})
+                units: units || this.options.defaultUnits,
+                unitOptions: unitOptions || this.options.defaultUnitOptions})
         }
 
         return {
@@ -265,6 +265,27 @@ class ProviderProfile {
      */
     removeDiscount(discountId) {
         delete this.discounts[discountId];
+    }
+
+    getDueNow(planId, discountId, {units, unitOptions}={}) {
+        const planInfo = this.plans[planId];
+        const discountInfo = this.discounts[discountId];
+        if (discountInfo.planId !== 0 && discountInfo.planId !== planId) {
+            throw new Error(`The specified discount is not applicable for the specified plan`);
+        }
+
+        let price = ethers.BigNumber.from(planInfo.price);
+        if (discountInfo.isFixed) {
+            price = price.sub(discountInfo.value);
+        } else {
+            price = price.sub(price.mul(discountInfo.value).div('10000'));
+        }
+
+        return CaskUnits.formatUnits({
+            amount: price,
+            decimals: CaskUnits.BASE_ASSET_DECIMALS,
+            units: units || this.options.defaultUnits,
+            unitOptions: unitOptions || this.options.defaultUnitOptions})
     }
 
     /**

@@ -23,9 +23,24 @@ async function create() {
 
     const planId = 100;
 
-    console.log(`Creating subscription to provider ${providerWallet.address} for plan ${planId}`);
+    const consumerAddress = cask.currentAddress();
 
-    const resp = await cask.subscriptions.create({provider: providerWallet.address, planId});
+    const providerProfile = await cask.subscriptionPlans.loadProfile({address: providerWallet.address});
+
+    const discounts = await cask.subscriptionPlans.findERC20BalanceDiscounts(consumerAddress);
+
+    console.log(`Looking for ERC20 balance discounts for address ${consumerAddress}: ${discounts}`);
+    if (discounts.length === 0) {
+        console.log(`Unable to find a valid discount`);
+        return;
+    }
+
+    const dueNow = providerProfile.getDueNow(planId, discounts[0]);
+    console.log(`Due now is ${dueNow}`);
+
+    console.log(`Creating subscription to provider ${providerWallet.address} for plan ${planId} with discount ${discounts[0]}`);
+
+    const resp = await cask.subscriptions.create({provider: providerWallet.address, planId, discountId: discounts[0]});
 
     console.log(`response: ${JSON.stringify(resp, null, 2)}`);
 
