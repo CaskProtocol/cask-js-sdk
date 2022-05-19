@@ -274,11 +274,14 @@ class ProviderProfile {
             throw new Error(`The specified discount is not applicable for the specified plan`);
         }
 
-        let price = ethers.BigNumber.from(planInfo.price);
-        if (discountInfo.isFixed) {
-            price = price.sub(discountInfo.value);
-        } else {
-            price = price.sub(price.mul(discountInfo.value).div('10000'));
+        let price = '0';
+        if (planInfo.freeTrial === 0) {
+            price = ethers.BigNumber.from(planInfo.price);
+            if (discountInfo.isFixed) {
+                price = price.sub(discountInfo.value);
+            } else {
+                price = price.sub(price.mul(discountInfo.value).div('10000'));
+            }
         }
 
         return CaskUnits.formatUnits({
