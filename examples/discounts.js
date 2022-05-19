@@ -39,9 +39,9 @@ async function create() {
 
     console.log(`Discount detail: ${JSON.stringify(discountMetadata, null, 2)}`);
 
-    console.log(`Token metadata: ${JSON.stringify(await cask.tokens.getERC20Info(discountMetadata.address))}`)
+    console.log(`Token metadata: ${JSON.stringify(await cask.tokens.getERC20Info(discountMetadata.address), null, 2)}`);
 
-    const dueNow = providerProfile.getDueNow(planId, discounts[0]);
+    const dueNow = providerProfile.getDueNow(planId, discountId);
     console.log(`Due now is ${dueNow}`);
 
     console.log(`Creating subscription to provider ${providerWallet.address} for plan ${planId} with discount ${discountId}`);
