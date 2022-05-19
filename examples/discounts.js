@@ -34,13 +34,19 @@ async function create() {
         console.log(`Unable to find a valid discount`);
         return;
     }
+    const discountId = discounts[0];
+    const discountMetadata = CaskSDK.utils.parseERC20DiscountValidator(discountId);
+
+    console.log(`Discount detail: ${JSON.stringify(discountMetadata, null, 2)}`);
+
+    console.log(`Token metadata: ${JSON.stringify(await cask.tokens.getERC20Info(discountMetadata.address))}`)
 
     const dueNow = providerProfile.getDueNow(planId, discounts[0]);
     console.log(`Due now is ${dueNow}`);
 
-    console.log(`Creating subscription to provider ${providerWallet.address} for plan ${planId} with discount ${discounts[0]}`);
+    console.log(`Creating subscription to provider ${providerWallet.address} for plan ${planId} with discount ${discountId}`);
 
-    const resp = await cask.subscriptions.create({provider: providerWallet.address, planId, discountId: discounts[0]});
+    const resp = await cask.subscriptions.create({provider: providerWallet.address, planId, discountId: discountId});
 
     console.log(`response: ${JSON.stringify(resp, null, 2)}`);
 
