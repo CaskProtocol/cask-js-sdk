@@ -129,7 +129,7 @@ class ProviderProfile {
         }
 
         this.plans[planId] = {
-            planId,
+            planId: parseInt(planId),
             name,
             price: price.toString(),
             period,
@@ -166,12 +166,6 @@ class ProviderProfile {
         let discountInfo = this.discounts[discountId];
         if (!discountInfo) {
             throw new Error(`Unknown discount ${discountId}`);
-        }
-        if (discountInfo.discountType === 2) {
-            discountInfo = {
-                ...discountInfo,
-                ...utils.parseERC20DiscountValidator(discountId),
-            }
         }
 
         let value = discountInfo.value;
@@ -215,7 +209,7 @@ class ProviderProfile {
      * @param {bool} [args.isFixed=false] Set to true for value to be a fixed amount discount, false for value to represent a basis point percentage.
      * @param {Object} [args.metadata] Optional metadata object to attach to the discount definition.
      */
-    setDiscount({discountId, discountCode,
+    setDiscount({discountId, discountCode, description="",
                     discountERC20Address, discountERC20Decimals = 0, discountERC20MinBalance = 1,
                     discountNFTAddress, discountTokenType=null,
                     value, valueSimple, valueAsset, validAfter=0, expiresAt=0,
@@ -243,9 +237,14 @@ class ProviderProfile {
         } else if (isFixed && valueAsset) {
             value = valueAsset;
         }
+        let erc20Discount = {};
+        if (discountType === 2) {
+            erc20Discount = utils.parseERC20DiscountValidator(discountId);
+        }
 
         this.discounts[discountId] = {
             discountId,
+            description,
             value: value.toString(),
             validAfter,
             expiresAt,
@@ -255,7 +254,8 @@ class ProviderProfile {
             discountType,
             discountTokenType,
             isFixed,
-            metadata
+            metadata,
+            erc20Discount,
         };
     }
 
