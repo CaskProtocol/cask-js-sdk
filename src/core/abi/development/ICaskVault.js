@@ -195,6 +195,31 @@ export default {
         {
           "indexed": true,
           "internalType": "address",
+          "name": "participant",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum ICaskVault.FundingSource",
+          "name": "fundingSource",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "fundingAsset",
+          "type": "address"
+        }
+      ],
+      "name": "SetFundingSource",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
           "name": "from",
           "type": "address"
         },
@@ -386,6 +411,37 @@ export default {
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_address",
+          "type": "address"
+        }
+      ],
+      "name": "fundingSource",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "enum ICaskVault.FundingSource",
+              "name": "fundingSource",
+              "type": "uint8"
+            },
+            {
+              "internalType": "address",
+              "name": "fundingAsset",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ICaskVault.FundingProfile",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "getAllAssets",
       "outputs": [
@@ -573,6 +629,24 @@ export default {
         }
       ],
       "name": "protocolPayment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum ICaskVault.FundingSource",
+          "name": "_fundingSource",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "_fundingAsset",
+          "type": "address"
+        }
+      ],
+      "name": "setFundingSource",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
