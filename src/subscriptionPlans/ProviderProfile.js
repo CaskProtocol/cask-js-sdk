@@ -196,7 +196,7 @@ class ProviderProfile {
      * @param {number} [args.discountERC20Decimals=0] Number of decimals of token for ERC20 balance discount
      * @param {number} [args.discountERC20MinBalance=1] Min number of tokens required to be held for ERC20 balance discount
      * @param {string} [args.discountCode] Specify the raw Discount Code for discount instead of discountId
-     * @param {string} [args.discountCode] Specify the raw Discount Code for discount instead of discountId
+     * @param {string} [args.description] Human readable description of the discount to be displayed to end users
      * @param {number} [args.value] Either the BPS (basis points) or fixed value of the discount, depending on isFixed parameter
      * @param {number} [args.valueSimple] If using fixed discount, amount can be alternatively specified using valueSimple or valueAsset
      * @param {number} [args.valueAsset] If using fixed discount, amount can be alternatively specified using valueSimple or valueAsset
