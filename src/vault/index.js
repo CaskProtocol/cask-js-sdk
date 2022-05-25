@@ -328,9 +328,14 @@ class Vault {
             throw new Error("Cannot perform transaction without ethers signer");
         }
 
-        amountAsset = this.amountInAsset({asset: this.baseAsset, amountSimple, amountAsset});
+        let shares = ethers.BigNumber.from(await this.sharesForAmount({asset: this.baseAsset, amountSimple, amountAsset}));
+        const currentShares = await this.CaskVault.balanceOf(this.ethersConnection.address);
+        if (shares.gt(currentShares)) {
+            this.logger.warn(`Calculated shares ${shares} is more than address balance ${currentShares} - adjusting transfer down.`);
+            shares = currentShares;
+        }
 
-        const tx = await this.CaskVault.connect(this.ethersConnection.signer).transferValue(to, amountAsset);
+        const tx = await this.CaskVault.connect(this.ethersConnection.signer).transfer(to, shares);
         await tx.wait();
         return {tx};
     }
