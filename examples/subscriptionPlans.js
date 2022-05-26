@@ -45,6 +45,11 @@ async function publishProfile() {
     });
 
     providerProfile.setDiscount({
+        discountCode: 'SUMMER20',
+        value: 2000, // 20%,
+    });
+
+    providerProfile.setDiscount({
         description: "Save 50% when holding our token",
         discountERC20Address: '0x3f249f398D5aa6f528B97293ff8EDc2e0E0Ca54B', // mockERC20 dev token
         discountERC20Decimals: 18,
