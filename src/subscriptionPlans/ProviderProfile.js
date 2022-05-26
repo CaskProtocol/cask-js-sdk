@@ -170,7 +170,7 @@ class ProviderProfile {
 
         let value = discountInfo.value;
         if (discountInfo.isFixed) {
-            value: CaskUnits.formatUnits({
+            value = CaskUnits.formatUnits({
                 amount: value,
                 decimals: CaskUnits.BASE_ASSET_DECIMALS,
                 units: units || this.options.defaultUnits,
