@@ -52,8 +52,14 @@ function formatUnits({amount, asset, decimals, units, unitOptions={}}) {
     if (units === caskUnits.SIMPLE) {
         return parseFloat(ethers.utils.formatUnits(amount, decimals));
     } else if (units === caskUnits.NUMERAL) {
+        let roundingFunction = unitOptions.roundingFunction;
+        if (unitOptions.roundDown) {
+            roundingFunction = Math.floor;
+        } else if (unitOptions.roundUp) {
+            roundingFunction = Math.ceil;
+        }
         return numeral(parseFloat(ethers.utils.formatUnits(amount, decimals)))
-            .format(unitOptions.format || DEFAULT_NUMERAL_FORMAT);
+            .format(unitOptions.format || DEFAULT_NUMERAL_FORMAT, roundingFunction);
     } else if (units === caskUnits.ASSET) {
         return amount.toString();
     }

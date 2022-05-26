@@ -95,8 +95,8 @@ class ProviderProfile {
             price: CaskUnits.formatUnits({
                 amount: planInfo.price,
                 decimals: CaskUnits.BASE_ASSET_DECIMALS,
-                units,
-                unitOptions})
+                units: units || this.options.defaultUnits,
+                unitOptions: unitOptions || this.options.defaultUnitOptions})
         }
     }
 
@@ -128,9 +128,19 @@ class ProviderProfile {
             price = priceAsset;
         }
 
-        this.plans[planId] =
-            {planId, name, price: price.toString(), period, freeTrial,
-                maxActive, minPeriods, gracePeriod, canPause, canTransfer, metadata};
+        this.plans[planId] = {
+            planId: parseInt(planId),
+            name,
+            price: price.toString(),
+            period,
+            freeTrial,
+            maxActive,
+            minPeriods,
+            gracePeriod,
+            canPause,
+            canTransfer,
+            metadata
+        };
     }
 
     /**
@@ -143,27 +153,83 @@ class ProviderProfile {
     }
 
     /**
+     * Get a discount from the provider profile.
+     *
+     * @see The SDK guide for more details on unit formatting at {@link https://docs.cask.fi/developer-docs/javascript-sdk}
+     * @param {Object} args Function arguments
+     * @param {string} args.discountId Discount ID
+     * @param {string} [args.units] Units of output
+     * @param {Object} [args.unitOptions={}] Options passed to unit formatter.
+     * @return {Plan}
+     */
+    getDiscount(discountId, {units, unitOptions}={}) {
+        let discountInfo = this.discounts[discountId];
+        if (!discountInfo) {
+            throw new Error(`Unknown discount ${discountId}`);
+        }
+
+        let value = discountInfo.value;
+        if (discountInfo.isFixed) {
+            value = CaskUnits.formatUnits({
+                amount: value,
+                decimals: CaskUnits.BASE_ASSET_DECIMALS,
+                units: units || this.options.defaultUnits,
+                unitOptions: unitOptions || this.options.defaultUnitOptions})
+        }
+
+        return {
+            ...discountInfo,
+            value,
+        }
+    }
+
+    /**
      * Add/update a discount in the profile. Specify either the discountId or raw discountCode for the new discount.
+     * Must specify the discount identified as one of `discountId`, `discountCode`, 'discountNFTAddress'
+     * or `discountERC20Address`.
      *
      * @param {Object} args Function arguments
      * @param {string} [args.discountId] Discount ID of the new or existing discount
      * @param {string} [args.discountCode] Specify the raw Discount Code for discount instead of discountId
-     * @param {string} [args.value] Either the BPS (basis points) or fixed value of the discount, depending on isFixed parameter
-     * @param {string} [args.valueSimple] If using fixed discount, amount can be alternatively specified using valueSimple or valueAsset
-     * @param {string} [args.valueAsset] If using fixed discount, amount can be alternatively specified using valueSimple or valueAsset
-     * @param {string} [args.validAfter=0] Timestamp at which point discount becomes redeemable. Use 0 to allow immediate redemption.
-     * @param {string} [args.expiresAt=0] Timestamp at which point discount becomes non-redeemable. Use 0 for no expiration.
-     * @param {string} [args.maxUses=0] Max number of redemptions (per chain). 0 allows unlimited redemptions.
-     * @param {string} [args.planId=0] Limit discount to a specific plan ID. 0 allows redemption from any plan.
-     * @param {string} [args.applyPeriods=0] Number of periods discount applies for. Use 0 to set a discount that applies for the lifetime of the subscription.
-     * @param {string} [args.isFixed=false] Set to true for value to be a fixed amount discount, false for value to represent a basis point percentage.
-     * @param {string} [args.metadata] Optional metadata object to attach to the discount definition.
+     * @param {string} [args.discountNFTAddress] Contract address of token for NFT discount
+     * @param {string} [args.discountERC20Address] Contract address of token for ERC20 balance discount
+     * @param {number} [args.discountERC20Decimals=0] Number of decimals of token for ERC20 balance discount
+     * @param {number} [args.discountERC20MinBalance=1] Min number of tokens required to be held for ERC20 balance discount
+     * @param {string} [args.discountCode] Specify the raw Discount Code for discount instead of discountId
+     * @param {string} [args.description] Human readable description of the discount to be displayed to end users
+     * @param {number} [args.value] Either the BPS (basis points) or fixed value of the discount, depending on isFixed parameter
+     * @param {number} [args.valueSimple] If using fixed discount, amount can be alternatively specified using valueSimple or valueAsset
+     * @param {number} [args.valueAsset] If using fixed discount, amount can be alternatively specified using valueSimple or valueAsset
+     * @param {number} [args.validAfter=0] Timestamp at which point discount becomes redeemable. Use 0 to allow immediate redemption.
+     * @param {number} [args.expiresAt=0] Timestamp at which point discount becomes non-redeemable. Use 0 for no expiration.
+     * @param {number} [args.maxRedemptions=0] Max number of redemptions (per chain). 0 allows unlimited redemptions.
+     * @param {number} [args.planId=0] Limit discount to a specific plan ID. 0 allows redemption from any plan.
+     * @param {number} [args.applyPeriods=0] Number of periods discount applies for. Use 0 to set a discount that applies for the lifetime of the subscription.
+     * @param {number} [args.discountType=1] Discount type - 1 = code discount, 2 = ERC20 balance discount.
+     * @param {bool} [args.isFixed=false] Set to true for value to be a fixed amount discount, false for value to represent a basis point percentage.
+     * @param {Object} [args.metadata] Optional metadata object to attach to the discount definition.
      */
-    setDiscount({discountId, discountCode, value, valueSimple, valueAsset, validAfter=0, expiresAt=0,
-                    maxUses=0, planId=0, applyPeriods=0, isFixed=false, metadata={}})
+    setDiscount({discountId, discountCode, description="",
+                    discountERC20Address, discountERC20Decimals = 0, discountERC20MinBalance = 1,
+                    discountNFTAddress, discountTokenType=null,
+                    value, valueSimple, valueAsset, validAfter=0, expiresAt=0,
+                    maxRedemptions=0, planId=0, applyPeriods=0, discountType = 1, isFixed=false, metadata={}})
     {
         if (!discountId) {
-            discountId = utils.generateDiscountId(discountCode);
+            if (discountCode) {
+                discountId = utils.generateDiscountId(discountCode);
+            } else if (discountERC20Address) {
+                discountId = utils.generateERC20DiscountValidator(discountERC20Address, discountERC20Decimals,
+                    discountERC20MinBalance);
+                discountType = 2;
+                discountTokenType = 'erc20';
+            } else if (discountNFTAddress) {
+                discountId = utils.generateERC20DiscountValidator(discountNFTAddress, 0, 1);
+                discountType = 2;
+                discountTokenType = 'nft';
+            } else {
+                throw new Error(`Unable to determine ID for discount`)
+            }
         }
 
         if (isFixed && valueSimple) {
@@ -171,8 +237,26 @@ class ProviderProfile {
         } else if (isFixed && valueAsset) {
             value = valueAsset;
         }
+        let erc20Discount = {};
+        if (discountType === 2) {
+            erc20Discount = utils.parseERC20DiscountValidator(discountId);
+        }
 
-        this.discounts[discountId] = {value: value.toString(), validAfter, expiresAt, maxUses, planId, applyPeriods, isFixed, metadata};
+        this.discounts[discountId] = {
+            discountId,
+            description,
+            value: value.toString(),
+            validAfter,
+            expiresAt,
+            maxRedemptions,
+            planId,
+            applyPeriods,
+            discountType,
+            discountTokenType,
+            isFixed,
+            metadata,
+            erc20Discount,
+        };
     }
 
     /**
@@ -181,6 +265,30 @@ class ProviderProfile {
      */
     removeDiscount(discountId) {
         delete this.discounts[discountId];
+    }
+
+    getDueNow(planId, discountId, {units, unitOptions}={}) {
+        const planInfo = this.plans[planId];
+        const discountInfo = this.discounts[discountId];
+        if (discountInfo.planId !== 0 && discountInfo.planId !== planId) {
+            throw new Error(`The specified discount is not applicable for the specified plan`);
+        }
+
+        let price = '0';
+        if (planInfo.freeTrial === 0) {
+            price = ethers.BigNumber.from(planInfo.price);
+            if (discountInfo.isFixed) {
+                price = price.sub(discountInfo.value);
+            } else {
+                price = price.sub(price.mul(discountInfo.value).div('10000'));
+            }
+        }
+
+        return CaskUnits.formatUnits({
+            amount: price,
+            decimals: CaskUnits.BASE_ASSET_DECIMALS,
+            units: units || this.options.defaultUnits,
+            unitOptions: unitOptions || this.options.defaultUnitOptions})
     }
 
     /**

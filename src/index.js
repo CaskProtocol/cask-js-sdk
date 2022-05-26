@@ -20,6 +20,7 @@ import SubscriptionPlans from "./subscriptionPlans/index.js";
 import Events from "./events/index.js";
 import Prices from "./prices/index.js";
 import Query from "./query/index.js";
+import Tokens from "./tokens/index.js";
 
 /**
  * @overview CaskSDK is the primary entrypoint into the Cask SDK.
@@ -136,6 +137,12 @@ class CaskSDK {
      * @type {Query}
      */
     this.query = new Query(this.options);
+
+    /**
+     * Token metadata service instance.
+     * @type {Token}
+     */
+    this.tokens = new Tokens(this.options);
   }
 
   /**
@@ -165,6 +172,7 @@ class CaskSDK {
     promises.push(this.events.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.prices.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.tokens.init({ ethersConnection: this.ethersConnection }));
 
     await Promise.all(promises);
 
@@ -261,4 +269,5 @@ export {
     Prices,
     Vault,
     Query,
+    Tokens,
 }

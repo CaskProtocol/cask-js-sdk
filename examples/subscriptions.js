@@ -20,7 +20,6 @@ const cask = new CaskSDK({
 
 
 async function create() {
-    await cask.init();
 
     const planId = 100;
 
@@ -30,24 +29,23 @@ async function create() {
 
     console.log(`response: ${JSON.stringify(resp, null, 2)}`);
 
-    cask.stop();
-
     return resp;
 }
 
 
 async function get(subscriptionId) {
-    await cask.init();
 
     const resp = await cask.subscriptions.get(subscriptionId);
 
     console.log(`response: ${JSON.stringify(resp, null, 2)}`);
-
-    cask.stop();
 }
 
 
 (async () => {
+    await cask.init();
+
     const resp = await create();
     await get(resp.subscriptionId);
+
+    cask.stop();
 })();

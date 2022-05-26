@@ -155,6 +155,9 @@ function parseNetworkData(networkData) {
 }
 
 function encodeDiscountData(value, validAfter, expiresAt, maxRedemptions, planId, applyPeriods, discountType, isFixed) {
+    if (typeof(value) == 'string') {
+        value = ethers.BigNumber.from(value);
+    }
     const options =
         (isFixed ? 1 : 0);
 
@@ -221,7 +224,7 @@ function _discountsMerkleLeafHash(discount) {
             discount.value,
             discount.validAfter,
             discount.expiresAt,
-            discount.maxUses,
+            discount.maxRedemptions,
             discount.planId,
             discount.applyPeriods,
             discount.discountType,

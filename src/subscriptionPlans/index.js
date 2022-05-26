@@ -3,6 +3,7 @@ import {ethers} from 'ethers';
 import contracts from "../contracts/index.js";
 import EthersConnection from "../core/EthersConnection.js";
 import ProviderProfile from "./ProviderProfile.js";
+import utils from "../utils/index.js";
 
 
 /**
@@ -97,12 +98,17 @@ class SubscriptionPlans {
     /**
      * Load the (or create a new non-published) service provider profile for an address.
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
+     * @param [force=false] Force reloading profile even if it was previously loaded
      * @return {Promise<ProviderProfile>}
      */
-    async loadProfile({address}={}) {
+    async loadProfile({address, force=false}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
+        }
+
+        if (this.providerProfile && !force) {
+            return this.providerProfile;
         }
 
         const providerProfile = await this.CaskSubscriptionPlans.getProviderProfile(address);
@@ -113,7 +119,9 @@ class SubscriptionPlans {
                 address,
                 nonce: providerProfile.nonce,
                 registered: true,
-                debug: this.options.debug,
+                logLevel: this.options.logLevel,
+                defaultUnits: this.options.defaultUnits,
+                defaultUnitOptions: this.options.defaultUnitOptions,
             });
             await this.providerProfile.loadFromIPFS(providerProfile.cid);
         } else {
@@ -121,7 +129,9 @@ class SubscriptionPlans {
                 ipfs: this.options.ipfs,
                 address,
                 registered: false,
-                debug: this.options.debug,
+                logLevel: this.options.logLevel,
+                defaultUnits: this.options.defaultUnits,
+                defaultUnitOptions: this.options.defaultUnitOptions,
             });
         }
 
@@ -292,6 +302,59 @@ class SubscriptionPlans {
 
         await tx.wait();
         return {tx};
+    }
+
+    async findERC20BalanceDiscounts(address) {
+
+        if (!this.providerProfile) {
+            throw new Error("No providerProfile loaded - call loadProfile() first.");
+        }
+
+        const promises = Object.keys(this.providerProfile.discounts).map(async (discountId) => {
+            const discountInfo = this.providerProfile.discounts[discountId];
+            if (discountInfo.discountType === 2) {
+                const erc20DiscountInfo = utils.parseERC20DiscountValidator(discountId);
+                if (await this.checkERC20DiscountCurrentlyApplies(erc20DiscountInfo, address)) {
+                    return discountId;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        });
+
+        const results = await Promise.all(promises);
+
+        return results.filter((r) => r != null);
+    }
+
+    async checkERC20DiscountCurrentlyApplies(erc20DiscountInfo, address) {
+
+        const contract = contracts.ERC20({
+            tokenAddress: erc20DiscountInfo.address,
+            ethersConnection: this.ethersConnection
+        });
+
+        try {
+            let decimals = erc20DiscountInfo.decimals;
+            if (decimals === 255) {
+                decimals = await contract.decimals();
+            }
+
+            let balance = await contract.balanceOf(address);
+            if (decimals > 0) {
+                balance = balance.div(ethers.BigNumber.from('10').pow(decimals));
+            }
+
+            this.logger.debug(`Balance of ${balance} found for ERC20 discount on contract ${erc20DiscountInfo.address} for address ${address}`);
+
+            return balance.gte(ethers.BigNumber.from(erc20DiscountInfo.minBalance.toString()));
+
+        } catch (err) {
+            this.logger.warn(`Could not get balance for ERC20 discount on contract ${erc20DiscountInfo.address} for address ${address}`);
+            return false;
+        }
     }
 
 }

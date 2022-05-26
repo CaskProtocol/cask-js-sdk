@@ -19,8 +19,6 @@ const cask = new CaskSDK({
 
 async function publishProfile() {
 
-    await cask.init();
-
     const providerProfile = await cask.subscriptionPlans.loadProfile();
     console.log(`Provider ${cask.ethersConnection.address} profile CID before ${providerProfile.cid}`);
 
@@ -46,6 +44,26 @@ async function publishProfile() {
         }
     });
 
+    providerProfile.setDiscount({
+        discountCode: 'SUMMER20',
+        value: 2000, // 20%,
+    });
+
+    providerProfile.setDiscount({
+        description: "Save 50% when holding our token",
+        discountERC20Address: '0x3f249f398D5aa6f528B97293ff8EDc2e0E0Ca54B', // mockERC20 dev token
+        discountERC20Decimals: 18,
+        discountERC20MinBalance: 10,
+        value: 5000, // 50%,
+    });
+
+    providerProfile.setDiscount({
+        discountNFTAddress: '0xE5f04D368bED555D378563e36AcF39F3D4931139', // mock NFT dev token
+        value: 5000, // 50%,
+    });
+
+
+
     const tx = await cask.subscriptionPlans.publishProfile();
 
     console.log(`Provider ${cask.ethersConnection.address} profile CID now ${providerProfile.cid}`);
@@ -53,8 +71,6 @@ async function publishProfile() {
 }
 
 async function addPlanAndPublishProfile() {
-
-    await cask.init();
 
     const providerProfile = await cask.subscriptionPlans.loadProfile();
     console.log(`Provider ${cask.ethersConnection.address} profile CID loaded ${providerProfile.cid}`);
@@ -81,8 +97,6 @@ async function addPlanAndPublishProfile() {
 
 async function loadProfile() {
 
-    await cask.init();
-
     const providerProfile = await cask.subscriptionPlans.loadProfile();
     console.log(`Provider ${cask.ethersConnection.address} profile ${JSON.stringify(providerProfile.asProfileObject(), null, 2)}`);
 
@@ -96,7 +110,11 @@ async function loadProfile() {
 
 
 (async () => {
+    await cask.init();
+
     await publishProfile();
-    await addPlanAndPublishProfile();
+    // await addPlanAndPublishProfile();
     await loadProfile();
+
+    cask.stop();
 })();
