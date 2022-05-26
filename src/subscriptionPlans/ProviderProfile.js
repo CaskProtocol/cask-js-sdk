@@ -157,7 +157,7 @@ class ProviderProfile {
      *
      * @see The SDK guide for more details on unit formatting at {@link https://docs.cask.fi/developer-docs/javascript-sdk}
      * @param {Object} args Function arguments
-     * @param {number} args.discountId Discount ID
+     * @param {string} args.discountId Discount ID
      * @param {string} [args.units] Units of output
      * @param {Object} [args.unitOptions={}] Options passed to unit formatter.
      * @return {Plan}
