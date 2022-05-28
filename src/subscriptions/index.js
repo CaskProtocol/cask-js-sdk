@@ -220,7 +220,7 @@ class Subscriptions {
         }
 
         let discount;
-        if (ipfsData.discount) {
+        if (ipfsData.discount && subscriptionInfo.discountId !== '0x0000000000000000000000000000000000000000') {
             discount = ipfsData.discount;
             if (discount.isFixed) {
                 discount.value = CaskUnits.formatUnits({
@@ -324,11 +324,14 @@ class Subscriptions {
                 discountData,
                 providerProfile.discountMerkleRoot,
                 utils.discountsMerkleProof(utils.discountsList(providerProfile.discounts), discount));
+
+            if (!await this.subscriptionPlans.verifyDiscount(planId, discountId)) {
+                discount = null;
+                discountProof = utils.generateDiscountProof(0, 0, providerProfile.discountMerkleRoot);
+            }
+
         } else {
-            discountProof = utils.generateDiscountProof(
-                0,
-                0,
-                providerProfile.discountMerkleRoot);
+            discountProof = utils.generateDiscountProof(0, 0, providerProfile.discountMerkleRoot);
         }
 
         const subscriptionData = {

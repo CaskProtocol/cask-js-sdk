@@ -3,6 +3,17 @@ const ethers = require('ethers');
 const { CaskSDK } = require('../dist');
 
 
+/**
+ *
+ * To run this example, you need:
+ *
+ * Local chain running: `yarn hardhat node`
+ * Funded account: `yarn local fund`
+ * Funds deposited (run vault.js example)
+ * Subscription plans created (run subscriptionPlans.js example)
+ *
+ */
+
 const ethersProvider = new ethers.providers.JsonRpcProvider(process.env.EXAMPLES_PROVIDER_URL);
 const providerWallet = new ethers.Wallet(process.env.PROVIDER_WALLET_PK, ethersProvider);
 
@@ -39,7 +50,8 @@ async function create() {
 
     console.log(`Discount detail: ${JSON.stringify(discountMetadata, null, 2)}`);
 
-    console.log(`Token metadata: ${JSON.stringify(await cask.tokens.getERC20Info(discountMetadata.address), null, 2)}`);
+    // TODO: check type to know if erc20 balance vs nft
+    // console.log(`Token metadata: ${JSON.stringify(await cask.tokens.getERC20Info(discountMetadata.address), null, 2)}`);
 
     const dueNow = providerProfile.getDueNow(planId, discountId);
     console.log(`Due now is ${dueNow}`);
