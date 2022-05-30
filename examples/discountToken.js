@@ -46,6 +46,7 @@ async function create() {
         return;
     }
     const discountId = discounts[0];
+    const discountTokenValidator = discountId;
     const discountMetadata = CaskSDK.utils.parseERC20DiscountValidator(discountId);
 
     console.log(`Discount detail: ${JSON.stringify(discountMetadata, null, 2)}`);
@@ -58,7 +59,7 @@ async function create() {
 
     console.log(`Creating subscription to provider ${providerWallet.address} for plan ${planId} with discount ${discountId}`);
 
-    const resp = await cask.subscriptions.create({provider: providerWallet.address, planId, discountId: discountId});
+    const resp = await cask.subscriptions.create({provider: providerWallet.address, planId, discountTokenValidator});
 
     console.log(`response: ${JSON.stringify(resp, null, 2)}`);
 

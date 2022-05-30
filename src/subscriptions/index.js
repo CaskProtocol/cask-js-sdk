@@ -220,7 +220,10 @@ class Subscriptions {
         }
 
         let discount;
-        if (ipfsData.discount && subscriptionInfo.discountId !== '0x0000000000000000000000000000000000000000') {
+        if (ipfsData.discount &&
+            subscriptionInfo.subscription.discountId !==
+            '0x0000000000000000000000000000000000000000000000000000000000000000')
+        {
             discount = ipfsData.discount;
             if (discount.isFixed) {
                 discount.value = CaskUnits.formatUnits({
@@ -264,13 +267,14 @@ class Subscriptions {
      * @param {number} args.planId Plan ID for new subscription
      * @param {string} [args.ref] Optional bytes32 value to associate with subscription
      * @param {number} [args.cancelAt] Optional unix timestamp of when to automatically cancel subscription
-     * @param {string} [args.discountCode] Discount to apply to subscription
+     * @param {string} [args.discountCode] Discount code of discount to apply to subscription
+     * @param {string} [args.discountTokenValidator] Discount token validator for token discount to apply to subscription
      * @param {AuthSig} [args.authSig] AuthSig for attaching private data to subscription
      * @param {Object} [args.privateData] Private data to attach to subscription
      * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Subscriptions.CreateSubscriptionResult}
      */
-    async create({provider, planId, ref, cancelAt=0, discountCode, discountId,
+    async create({provider, planId, ref, cancelAt=0, discountCode, discountTokenValidator,
                      authSig={}, privateData={}, metadata={}})
     {
         if (!this.ethersConnection.signer) {
@@ -303,15 +307,17 @@ class Subscriptions {
             providerProfile.planMerkleRoot,
             utils.plansMerkleProof(utils.plansList(providerProfile.plans), plan));
 
+        let discountId;
         let discount;
-        let discountCodeValidator;
+        let discountValidator;
         let discountProof;
 
-        if (discountId) {
-            discountCodeValidator = discountId;
+        if (discountTokenValidator) {
+            discountId = discountTokenValidator;
+            discountValidator = discountTokenValidator;
         } else if (discountCode) {
             discountId = utils.generateDiscountId(discountCode);
-            discountCodeValidator = utils.generateDiscountCodeValidator(discountCode);
+            discountValidator = utils.generateDiscountCodeValidator(discountCode);
         }
         discount = providerProfile.discounts[discountId];
         if (discount) {
@@ -320,7 +326,7 @@ class Subscriptions {
                 discount.discountType, discount.isFixed);
 
             discountProof = utils.generateDiscountProof(
-                discountCodeValidator,
+                discountValidator,
                 discountData,
                 providerProfile.discountMerkleRoot,
                 utils.discountsMerkleProof(utils.discountsList(providerProfile.discounts), discount));
@@ -457,13 +463,15 @@ class Subscriptions {
 
     /**
      * Change a subscription, such as plan change, the discount or metadata.
-     * @param subscriptionId
-     * @param planId
-     * @param discountCode
-     * @param metadata
+     * @param subscriptionId ID of subscription to change
+     * @param {Object} args change function options
+     * @param {number} args.planId Plan ID for new subscription
+     * @param {string} [args.discountCode] Discount code of discount to apply to subscription
+     * @param {string} [args.discountTokenValidator] Discount token validator for token discount to apply to subscription
+     * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Promise<{ref, tx: *, provider, chainId, planId, subscriptionId, consumer: (*)}>}
      */
-    async change(subscriptionId, {planId, discountCode, discountId, metadata={}}) {
+    async change(subscriptionId, {planId, discountCode, discountTokenValidator, metadata={}}) {
 
         if (!this.ethersConnection.signer) {
             throw new Error("Cannot perform transaction without ethers signer");
@@ -495,15 +503,17 @@ class Subscriptions {
             providerProfile.planMerkleRoot,
             utils.plansMerkleProof(utils.plansList(providerProfile.plans), plan));
 
+        let discountId;
         let discount;
-        let discountCodeValidator;
+        let discountValidator;
         let discountProof;
 
-        if (discountId) {
-            discountCodeValidator = discountId;
+        if (discountTokenValidator) {
+            discountId = discountTokenValidator;
+            discountValidator = discountTokenValidator;
         } else if (discountCode) {
             discountId = utils.generateDiscountId(discountCode);
-            discountCodeValidator = utils.generateDiscountCodeValidator(discountCode);
+            discountValidator = utils.generateDiscountCodeValidator(discountCode);
         }
         discount = providerProfile.discounts[discountId];
         if (discount) {
@@ -512,15 +522,18 @@ class Subscriptions {
                 discount.discountType, discount.isFixed);
 
             discountProof = utils.generateDiscountProof(
-                discountCodeValidator,
+                discountValidator,
                 discountData,
                 providerProfile.discountMerkleRoot,
                 utils.discountsMerkleProof(utils.discountsList(providerProfile.discounts), discount));
+
+            if (!await this.subscriptionPlans.verifyDiscount(planId, discountId)) {
+                discount = null;
+                discountProof = utils.generateDiscountProof(0, 0, providerProfile.discountMerkleRoot);
+            }
+
         } else {
-            discountProof = utils.generateDiscountProof(
-                0,
-                0,
-                providerProfile.discountMerkleRoot);
+            discountProof = utils.generateDiscountProof(0, 0, providerProfile.discountMerkleRoot);
         }
 
         const subscriptionData = {
@@ -534,7 +547,7 @@ class Subscriptions {
             providerMetadata: providerProfile.metadata,
             metadata,
         }
-        const subscriptionCid = await this.ipfs.save(subscriptionData)
+        const subscriptionCid = await this.ipfs.save(subscriptionData);
 
         const tx = await this.CaskSubscriptions.connect(this.ethersConnection.signer).changeSubscriptionPlan(
             subscriptionId,
