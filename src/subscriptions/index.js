@@ -392,6 +392,7 @@ class Subscriptions {
             ref,
             chainId: this.ethersConnection.chainId,
             subscriptionId: event.args.subscriptionId.toHexString(),
+            discountId: event.args.discountId.toHexString(),
         }
     }
 
