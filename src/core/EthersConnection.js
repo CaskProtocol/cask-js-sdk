@@ -5,6 +5,9 @@ import chains from "./chains.js";
 import defaultChains from "./defaultChains.js";
 import environments from "./environments.js";
 
+import {Biconomy} from "@biconomy/mexa";
+
+
 const DEFAULT_ENVIRONMENT = process.env.CASK_ENV || environments.TESTNET;
 
 /**
@@ -30,6 +33,10 @@ class EthersConnection {
         };
 
         this.logger = new Logger('CaskSDK::EthersConnection', this.options.logLevel);
+
+        this.useBiconomy = this.options.useBiconomy;
+        this.biconomyApiKey = this.options.biconomyApiKey;
+        this.biconomyDebug = this.options.biconomyDebug;
 
         this.environment = this.options.environment || DEFAULT_ENVIRONMENT;
         this.connections = this.options.connections;
@@ -77,7 +84,14 @@ class EthersConnection {
         try {
             if (ethers.Signer.isSigner(signer)) {
                 this.address = await signer.getAddress();
-                this.signer = signer;
+                if (this.useBiconomy) {
+                    this.biconomyProvider = new Biconomy(signer, {
+                        apiKey: this.biconomyApiKey,
+                        debug: this.biconomyDebug});
+                    this.signer = new ethers.providers.Web3Provider(this.biconomyProvider);
+                } else {
+                    this.signer = signer;
+                }
             }
         } catch {
             this.address = undefined;
@@ -120,7 +134,14 @@ class EthersConnection {
             try {
                 if (ethers.Signer.isSigner(signer)) {
                     this.address = await signer.getAddress();
-                    this.signer = signer;
+                    if (this.useBiconomy) {
+                        this.biconomyProvider = new Biconomy(signer, {
+                            apiKey: this.biconomyApiKey,
+                            debug: this.biconomyDebug});
+                        this.signer = new ethers.providers.Web3Provider(this.biconomyProvider);
+                    } else {
+                        this.signer = signer;
+                    }
                 }
             } catch {
                 this.address = undefined;
@@ -158,7 +179,26 @@ class EthersConnection {
             return handler(this.chainId, this.signer, this.address)
         });
         await Promise.all(promises);
-        this.logger.debug(`Switching to chain ${chainId} is complete.`);
+
+        if (this.useBiconomy) {
+            let biconomyReadyResolve;
+            let biconomyReadyReject;
+
+            this.biconomyProvider.onEvent(this.biconomyProvider.READY, () => {
+                this.logger.debug(`Biconomy enabled: Switching to chain ${chainId} is complete.`);
+                biconomyReadyResolve();
+            }).onEvent(this.biconomyProvider.ERROR, (error, message) => {
+                this.logger.warn(`Biconomy error ${message}: ${error}.`);
+                biconomyReadyReject(error);
+            });
+
+            return new Promise((resolve, reject) => {
+                biconomyReadyResolve = resolve;
+                biconomyReadyReject = reject;
+            });
+        } else {
+            this.logger.debug(`Switching to chain ${chainId} is complete.`);
+        }
     }
 
     /**
