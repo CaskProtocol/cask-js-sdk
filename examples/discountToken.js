@@ -46,13 +46,22 @@ async function create() {
         return;
     }
     const discountId = discounts[0];
-    const discountTokenValidator = discountId;
-    const discountMetadata = CaskSDK.utils.parseERC20DiscountValidator(discountId);
+    const discount = providerProfile.getDiscount(discountId);
+    if (!discount) {
+        console.log(`Could not load discount details for discount ${discountId}`);
+    }
 
+    const discountTokenValidator = discountId;
+    const discountMetadata = CaskSDK.utils.parseERC20DiscountValidator(discountTokenValidator);
     console.log(`Discount detail: ${JSON.stringify(discountMetadata, null, 2)}`);
 
-    // TODO: check type to know if erc20 balance vs nft
-    // console.log(`Token metadata: ${JSON.stringify(await cask.tokens.getERC20Info(discountMetadata.address), null, 2)}`);
+    if (discount?.discountTokenType === 'erc20') {
+        console.log(`Token metadata: ${JSON.stringify(await cask.tokens.getERC20Info(discountMetadata.address), null, 2)}`);
+    } else if (discount?.discountTokenType === 'nft') {
+        console.log(`NFT metadata: ${JSON.stringify(await cask.tokens.getNFTInfo(discountMetadata.address), null, 2)}`);
+    } else {
+        console.log(`Unrecognized discountTokenType ${discount.discountTokenType}`);
+    }
 
     const dueNow = providerProfile.getDueNow(planId, discountId);
     console.log(`Due now is ${dueNow}`);
