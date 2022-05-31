@@ -140,13 +140,21 @@ class SubscriptionPlans {
 
     /**
      * Get the number of redemptions a specific plan/discountId has already had.
-     * @param planId Plan ID
      * @param discountId Discount ID
      * @return {Promise<string>}
      */
-    async getDiscountRedemptions(planId, discountId) {
+    async getDiscountRedemptions(discountId) {
+        if (!this.providerProfile) {
+            throw new Error("No providerProfile loaded - call loadProfile() first.");
+        }
+
+        const discount = this.providerProfile.discounts[discountId];
+        if (!discount) {
+            throw new Error("Unknown discount");
+        }
+
         const redemptions = await this.CaskSubscriptionPlans
-            .getDiscountRedemptions(this.providerProfile.address, planId, discountId);
+            .getDiscountRedemptions(this.providerProfile.address, discount.planId, discountId);
         return redemptions.toString();
     }
 
@@ -158,6 +166,9 @@ class SubscriptionPlans {
      * @return {Promise<boolean>}
      */
     async verifyDiscount(planId, discountId) {
+        if (!this.providerProfile) {
+            throw new Error("No providerProfile loaded - call loadProfile() first.");
+        }
 
         const discount = this.providerProfile.discounts[discountId];
         if (!discount) {
@@ -179,7 +190,7 @@ class SubscriptionPlans {
         }
 
         if (discount.maxRedemptions > 0){
-            const redemptions = await this.getDiscountRedemptions(planId, discountId);
+            const redemptions = await this.getDiscountRedemptions(discountId);
             if (ethers.BigNumber.from(redemptions).gte(discount.maxRedemptions)) {
                 throw new Error("No remaining discount redemptions")
             }
@@ -279,7 +290,6 @@ class SubscriptionPlans {
      * @return {Promise<{tx: *}>}
      */
     async publishProfile() {
-
         if (!this.providerProfile) {
             throw new Error("No providerProfile loaded - call loadProfile() first.");
         }
@@ -305,7 +315,6 @@ class SubscriptionPlans {
     }
 
     async findERC20BalanceDiscounts(address) {
-
         if (!this.providerProfile) {
             throw new Error("No providerProfile loaded - call loadProfile() first.");
         }
