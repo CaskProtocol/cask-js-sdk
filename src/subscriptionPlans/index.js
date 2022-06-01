@@ -314,14 +314,14 @@ class SubscriptionPlans {
         return {tx};
     }
 
-    async findERC20BalanceDiscounts(address) {
+    async findERC20BalanceDiscounts(address, planId) {
         if (!this.providerProfile) {
             throw new Error("No providerProfile loaded - call loadProfile() first.");
         }
 
         const promises = Object.keys(this.providerProfile.discounts).map(async (discountId) => {
             const discountInfo = this.providerProfile.discounts[discountId];
-            if (discountInfo.discountType === 2) {
+            if ((discountInfo.planId === 0 || planId === discountInfo.planId) && discountInfo.discountType === 2) {
                 const erc20DiscountInfo = utils.parseERC20DiscountValidator(discountId);
                 if (await this.checkERC20DiscountCurrentlyApplies(erc20DiscountInfo, address)) {
                     return discountId;

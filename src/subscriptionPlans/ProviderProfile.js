@@ -267,19 +267,26 @@ class ProviderProfile {
         delete this.discounts[discountId];
     }
 
-    getDueNow(planId, discountId, {units, unitOptions}={}) {
+    getDueNow(planId, discountId=null, {units, unitOptions}={}) {
         const planInfo = this.plans[planId];
-        const discountInfo = this.discounts[discountId];
-        if (discountInfo.planId !== 0 && discountInfo.planId !== planId) {
-            throw new Error(`The specified discount is not applicable for the specified plan`);
+
+        let discountInfo;
+        if (discountId) {
+            discountInfo = this.discounts[discountId];
+            if (!discountInfo) {
+                throw new Error(`Unknown discount`);
+            }
+            if (discountInfo.planId !== 0 && discountInfo.planId !== planId) {
+                throw new Error(`The specified discount is not applicable for the specified plan`);
+            }
         }
 
         let price = '0';
         if (planInfo.freeTrial === 0) {
             price = ethers.BigNumber.from(planInfo.price);
-            if (discountInfo.isFixed) {
+            if (discountInfo && discountInfo.isFixed) {
                 price = price.sub(discountInfo.value);
-            } else {
+            } else if (discountInfo) {
                 price = price.sub(price.mul(discountInfo.value).div('10000'));
             }
         }

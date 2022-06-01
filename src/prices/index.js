@@ -74,7 +74,7 @@ class Prices {
     _initFeed() {
         let vaultReadyResolve;
 
-        this.vault.onAssetsLoaded( async() => {
+        this.vault.onAssetsLoaded(async () => {
             if (this.options.interval > 0) {
                 this.logger.info(`Starting price refreshing at interval ${this.options.interval}`);
                 if (this.timer) {

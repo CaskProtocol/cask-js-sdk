@@ -158,7 +158,7 @@ class EthersConnection {
             return handler(this.chainId, this.signer, this.address)
         });
         await Promise.all(promises);
-        this.logger.debug(`Switching to chain ${chainId} is complete.`);
+        this.logger.debug(`Switching to chain ${chainId} using address ${this.address} is complete.`);
     }
 
     /**

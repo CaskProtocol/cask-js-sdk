@@ -76,6 +76,7 @@ class Vault {
 
     async _initContracts(chainId) {
         this.assetMap = {};
+        this.baseAsset = null;
 
         this.CaskVault = contracts.CaskVault({ethersConnection: this.ethersConnection});
 
