@@ -84,19 +84,23 @@ class EthersConnection {
         try {
             if (ethers.Signer.isSigner(signer)) {
                 this.address = await signer.getAddress();
-                if (this.useBiconomy) {
-                    this.biconomyProvider = new Biconomy(signer, {
-                        apiKey: this.biconomyApiKey,
-                        debug: this.biconomyDebug});
-                    this.signer = new ethers.providers.Web3Provider(this.biconomyProvider);
-                } else {
-                    this.signer = signer;
-                }
+                this.signer = signer;
             }
         } catch {
             this.address = undefined;
             this.signer = undefined;
         }
+
+        if (this.useBiconomy) {
+            this.logger.debug(`Wrapping signer in Biconomy.`);
+            this.biconomy = new Biconomy(this.provider, {
+                signer: this.signer,
+                apiKey: this.biconomyApiKey,
+                debug: this.biconomyDebug
+            });
+            this.signer = this.biconomy;
+        }
+
         this.logger.trace(`Switching signer to wallet ${this.address}.`);
         const promises = this.onSwitchSignerCallbacks.map(async (handler) => {
             return handler(this.signer, this.address)
@@ -134,14 +138,7 @@ class EthersConnection {
             try {
                 if (ethers.Signer.isSigner(signer)) {
                     this.address = await signer.getAddress();
-                    if (this.useBiconomy) {
-                        this.biconomyProvider = new Biconomy(signer, {
-                            apiKey: this.biconomyApiKey,
-                            debug: this.biconomyDebug});
-                        this.signer = new ethers.providers.Web3Provider(this.biconomyProvider);
-                    } else {
-                        this.signer = signer;
-                    }
+                    this.signer = signer;
                 }
             } catch {
                 this.address = undefined;
@@ -175,6 +172,17 @@ class EthersConnection {
 
         this.chainId = chainId;
 
+        if (this.useBiconomy) {
+            this.logger.debug(`Wrapping signer in Biconomy.`);
+            console.dir(this.signer);
+            this.biconomy = new Biconomy(this.provider, {
+                signer: this.signer,
+                apiKey: this.biconomyApiKey,
+                debug: this.biconomyDebug
+            });
+            this.signer = this.biconomy;
+        }
+
         const promises = this.onSwitchChainCallbacks.map(async (handler) => {
             return handler(this.chainId, this.signer, this.address)
         });
@@ -184,10 +192,10 @@ class EthersConnection {
             let biconomyReadyResolve;
             let biconomyReadyReject;
 
-            this.biconomyProvider.onEvent(this.biconomyProvider.READY, () => {
+            this.biconomy.onEvent(this.biconomy.READY, () => {
                 this.logger.debug(`Biconomy enabled: Switching to chain ${chainId} is complete.`);
                 biconomyReadyResolve();
-            }).onEvent(this.biconomyProvider.ERROR, (error, message) => {
+            }).onEvent(this.biconomy.ERROR, (error, message) => {
                 this.logger.warn(`Biconomy error ${message}: ${error}.`);
                 biconomyReadyReject(error);
             });
