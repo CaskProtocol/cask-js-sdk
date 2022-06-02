@@ -20,6 +20,7 @@ const deployments = {
     CaskSubscriptions: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x7899118A8A3EAe4cDd97Cb2Ea9E52a5b78da3cB6",
+            [chains.AVAX_TESTNET.chainId]: "0x28E372eff469b18Bc86Fb9f0C496b219bde39E81",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
@@ -40,6 +41,7 @@ const deployments = {
     CaskSubscriptionPlans: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x3E9B8E9D60Abc50b032cdc42Ef2F6CBaBce17983",
+            [chains.AVAX_TESTNET.chainId]: "0x06bd2FD3784E1cEe11969caA67CDb0803DcF5869",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
@@ -60,6 +62,7 @@ const deployments = {
     CaskVault: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0xc924CaAFe6759F92215Dadf326FF4fAb158f6C41",
+            [chains.AVAX_TESTNET.chainId]: "0x9d628d298D917BF9642Bb45D594B2075f661373D",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
@@ -77,6 +80,7 @@ const deployments = {
     CaskToken: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
         },
         [environments.PRODUCTION]: {
             [chains.ETH_MAINNET.chainId]: '0x0645314c1Afd4d9711d609e3e755265aBaBc95Eb',
@@ -95,6 +99,7 @@ const deployments = {
     CaskAirdrop: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',

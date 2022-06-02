@@ -195,7 +195,9 @@ class Subscriptions {
      */
     async get(subscriptionId, {decryptPrivateData=false, authSig={}, units, unitOptions}={}) {
         const subscriptionInfo = await this.CaskSubscriptions.getSubscription(subscriptionId);
-        if (!subscriptionInfo) {
+        if (!subscriptionInfo ||
+            subscriptionInfo?.subscription?.provider === '0x0000000000000000000000000000000000000000')
+        {
             throw new Error("Subscription not found");
         }
 
