@@ -284,10 +284,15 @@ class ProviderProfile {
         let price = '0';
         if (planInfo.freeTrial === 0) {
             price = ethers.BigNumber.from(planInfo.price);
+            const discountVal = ethers.BigNumber.from(discountInfo.value);
             if (discountInfo && discountInfo.isFixed) {
-                price = price.sub(discountInfo.value);
+                if (price.gt(discountVal)) {
+                    price = price.sub(discountVal);
+                } else {
+                    price = ethers.BigNumber.from('0');
+                }
             } else if (discountInfo) {
-                price = price.sub(price.mul(discountInfo.value).div('10000'));
+                price = price.sub(price.mul(discountVal).div('10000'));
             }
         }
 

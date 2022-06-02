@@ -49,6 +49,7 @@ class Vault {
          */
         this.assetMap = {};
 
+        this.assetsLoaded = false;
 
         this.onAssetsLoadedCallbacks = [];
     }
@@ -76,7 +77,7 @@ class Vault {
 
     async _initContracts(chainId) {
         this.assetMap = {};
-        this.baseAsset = null;
+        this.assetsLoaded = false;
 
         this.CaskVault = contracts.CaskVault({ethersConnection: this.ethersConnection});
 
@@ -92,7 +93,7 @@ class Vault {
      * @param handler
      */
     async onAssetsLoaded(handler) {
-        if (this.baseAsset) {
+        if (this.assetsLoaded) {
             await handler();
         } else {
             this.onAssetsLoadedCallbacks.push(handler);
@@ -103,6 +104,7 @@ class Vault {
      * Load all the vault assets into memory
      */
     async loadVaultAssets() {
+        this.assetsLoaded = false;
         this.logger.debug(`Loading vault assets.`);
         const allAssets = await this.CaskVault.getAllAssets();
         const allPromises = allAssets.map(async (asset) => {
@@ -130,6 +132,7 @@ class Vault {
             return asset;
         });
         await Promise.all(allPromises);
+        this.assetsLoaded = true;
         this.logger.debug(`Loaded ${Object.keys(this.assetMap).length} vault assets.`);
     }
 
