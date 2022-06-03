@@ -168,7 +168,7 @@ viewBox="0 0 784.37 1277.39"
     chainId: 43114,
     hexChainId: '0xA86A',
     token: "AVAX",
-    name: "Avalance",
+    name: "Avalanche",
     shortName: 'avalanche',
     defaultRpcUrl: "https://api.avax.network/ext/bc/C/rpc",
     explorerUrl: "https://snowtrace.io/",
