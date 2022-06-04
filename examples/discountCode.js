@@ -33,10 +33,12 @@ const cask = new CaskSDK({
 async function create() {
 
     const planId = 100;
-    const discountCode = '10poff';
+    const discountCode = 'SUMMER20';
 
     const providerProfile = await cask.subscriptionPlans.loadProfile({address: providerWallet.address});
 
+    const plan = providerProfile.getPlan(planId);
+    console.log(`Using plan ${JSON.stringify(plan, null, 2)}`);
 
     const discountId = CaskSDK.utils.generateDiscountId(discountCode);
     const discount = providerProfile.getDiscount(discountId);

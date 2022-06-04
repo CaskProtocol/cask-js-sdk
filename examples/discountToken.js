@@ -38,6 +38,9 @@ async function create() {
 
     const providerProfile = await cask.subscriptionPlans.loadProfile({address: providerWallet.address});
 
+    const plan = providerProfile.getPlan(planId);
+    console.log(`Using plan ${JSON.stringify(plan, null, 2)}`);
+
     const discounts = await cask.subscriptionPlans.findERC20BalanceDiscounts(consumerAddress);
 
     console.log(`Looking for ERC20 balance discounts for address ${consumerAddress}: ${discounts}`);
