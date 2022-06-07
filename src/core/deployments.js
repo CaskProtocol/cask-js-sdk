@@ -24,7 +24,6 @@ const deployments = {
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
-            [chains.AVAX_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x22f23a383b0CA05c56ee75610183B5d236F2B81d',
@@ -46,7 +45,6 @@ const deployments = {
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
-            [chains.AVAX_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xEe5153E1383551F67d59b5fdC5562e3DCe519e81',
@@ -68,7 +66,6 @@ const deployments = {
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
-            [chains.AVAX_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x61E53693d81A38e72AAe0B2aC5f9B2dbb2B5ac56',
