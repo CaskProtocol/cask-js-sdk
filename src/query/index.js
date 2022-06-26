@@ -93,15 +93,12 @@ class Query {
     transactionHistory({
                            first=10,
                            skip=0,
-                           where='',
+                           where={},
                            orderBy='timestamp',
                            orderDirection='desc'
                        }={})
     {
-
-        if (typeof(where) === 'object') {
-            where = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
-        }
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
 
         return this.rawQuery(`
 query Query {
@@ -110,7 +107,7 @@ query Query {
         skip: ${skip}, 
         orderBy: ${orderBy}, 
         orderDirection: ${orderDirection},
-        where: {${where}}
+        where: {${whereString}}
     ) {
         id
         type
@@ -130,64 +127,78 @@ query Query {
     subscriptions({
                       first=10,
                       skip=0,
-                      where='',
+                      where={},
                       orderBy='createdAt',
                       orderDirection='desc',
-                      includeCanceled = false
+                      includeCanceled = false,
+                      status,
                   }={})
     {
-        const whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
-
-        if (!where) {
-            where = {currentOwner: this.currentWalletAddress().toLowerCase()};
-        }
-        if (typeof(where) === 'object') {
-            where = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+        where = {
+            currentOwner: this.currentWalletAddress().toLowerCase(),
+            ...where
         }
 
-        return this.rawQuery(`
-query Query {
-  caskSubscriptions(
-    first: ${first}
-    skip: ${skip}
-    orderBy: ${orderBy}
-    orderDirection: ${orderDirection}
-    where: {${where}${whereStatus}}
-  ) {
-    id
-    currentOwner {
-        id
-    }
-    provider {
-        id
-    }
-    price
-    period
-    status
-    createdAt
-    renewAt
-    discountId
-  }
-}`);
+        return this.subscriptionQuery({
+            first,
+            skip,
+            where,
+            orderBy,
+            orderDirection,
+            includeCanceled,
+            status,
+        });
     }
 
     subscribers({
                       first=10,
                       skip=0,
-                      where='',
+                      where={},
                       orderBy='createdAt',
                       orderDirection='desc',
-                      includeCanceled = false
+                      includeCanceled = false,
+                      status,
                   }={})
     {
-        const whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
 
-        if (!where) {
-            where = {provider: this.currentWalletAddress().toLowerCase()};
+        where = {
+            provider: this.currentWalletAddress().toLowerCase(),
+            ...where
         }
-        if (typeof(where) === 'object') {
-            where = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+
+        return this.subscriptionQuery({
+            first,
+            skip,
+            where,
+            orderBy,
+            orderDirection,
+            includeCanceled,
+            status,
+        })
+    }
+
+    subscriptionQuery({
+                    first=10,
+                    skip=0,
+                    where={},
+                    orderBy='createdAt',
+                    orderDirection='desc',
+                    includeCanceled = false,
+                    status,
+                }={})
+    {
+        let whereStatus;
+        if (status) {
+            if (Array.isArray(status)) {
+                whereStatus = `status_in:[${status.join(',')}]`;
+            } else {
+                whereStatus = status;
+            }
+        } else {
+            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
         }
+
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
 
         return this.rawQuery(`
 query Query {
@@ -196,7 +207,7 @@ query Query {
     skip: ${skip}
     orderBy: ${orderBy}
     orderDirection: ${orderDirection}
-    where: {${where}${whereStatus}}
+    where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
   ) {
     id
     currentOwner {
@@ -204,6 +215,10 @@ query Query {
     }
     provider {
         id
+    }
+    plan {
+        id
+        planId
     }
     price
     period
@@ -214,7 +229,6 @@ query Query {
   }
 }`);
     }
-
 }
 
 export default Query;

@@ -45,6 +45,26 @@ const contracts = {
             ethersConnection.provider);
     },
     /**
+     * Cask DCA contract.
+     * @type ethers.Contract
+     */
+    CaskDCA: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskDCA[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskDCA[ethersConnection.environment],
+            ethersConnection.provider);
+    },
+    /**
+     * Cask P2P contract.
+     * @type ethers.Contract
+     */
+    CaskP2P: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskP2P[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskP2P[ethersConnection.environment],
+            ethersConnection.provider);
+    },
+    /**
      * Chainlink price oracle. Uses either the supplied provider, or the connection from the ethersConnection.
      * @type ethers.Contract
      */
@@ -72,6 +92,16 @@ const contracts = {
         return new ethers.Contract(
             tokenAddress,
             abi.ERC721,
+            provider || ethersConnection.provider);
+    },
+    /**
+     * Get an IUniswapV2Router02 router instance. Uses either the supplied provider, or the connection from the ethersConnection.
+     * @type ethers.Contract
+     */
+    IUniswapV2Router02: ({routerAddress, ethersConnection, provider}) => {
+        return new ethers.Contract(
+            routerAddress,
+            abi.IUniswapV2Router02,
             provider || ethersConnection.provider);
     },
 }

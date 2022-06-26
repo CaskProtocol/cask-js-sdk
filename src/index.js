@@ -21,6 +21,8 @@ import Events from "./events/index.js";
 import Prices from "./prices/index.js";
 import Query from "./query/index.js";
 import Tokens from "./tokens/index.js";
+import DCA from "./dca/index.js";
+import P2P from "./p2p/index.js";
 
 /**
  * @overview CaskSDK is the primary entrypoint into the Cask SDK.
@@ -91,6 +93,22 @@ class CaskSDK {
     PENDING_PAUSE: 6
   }
 
+  static dcaStatus = {
+    NONE: 0,
+    ACTIVE: 1,
+    PAUSED: 2,
+    CANCELED: 3,
+    COMPLETE: 4,
+  }
+
+  static p2pStatus = {
+    NONE: 0,
+    ACTIVE: 1,
+    PAUSED: 2,
+    CANCELED: 3,
+    COMPLETE: 4,
+  }
+
   /**
    * Create an instance of the CaskSDK
    * @param options
@@ -140,9 +158,21 @@ class CaskSDK {
 
     /**
      * Token metadata service instance.
-     * @type {Token}
+     * @type {Tokens}
      */
     this.tokens = new Tokens(this.options);
+
+    /**
+     * DCA service instance.
+     * @type {DCA}
+     */
+    this.dca = new DCA(this.options);
+
+    /**
+     * P2P service instance.
+     * @type {P2P}
+     */
+    this.p2p = new P2P(this.options);
   }
 
   /**
@@ -169,6 +199,8 @@ class CaskSDK {
     promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.subscriptionPlans.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.subscriptions.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.dca.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.p2p.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.events.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.prices.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
@@ -180,6 +212,91 @@ class CaskSDK {
       await this.ethersConnection.init({ chainId });
     }
     this.logger.info(`Cask SDK initialization complete.`);
+  }
+
+  /**
+   * Initialize the blockchain connection(s).
+   *
+   * @param {Object} args Function arguments
+   * @param {EthersConnection} [args.ethersConnection] EthersConnection instance
+   * @param {number} [args.chainId=options.environment] ID of chain to use
+   * @param {Signer} [args.signer=options.connections.signer] Signer to use on new chain.
+   */
+  async initSubscription({ ethersConnection, chainId , signer} = {}) {
+    this.logger.info(`Initializing Cask SDK.`);
+    if (this.ethersConnection) {
+      await this.ethersConnection.switchChain(chainId, signer);
+      return;
+    }
+
+    if (!ethersConnection) {
+      this.ethersConnection = new EthersConnection(this.options);
+    }
+
+    const promises = [];
+
+    promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.subscriptionPlans.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.subscriptions.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.events.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.prices.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.tokens.init({ ethersConnection: this.ethersConnection }));
+
+    await Promise.all(promises);
+
+    if (!ethersConnection) {
+      await this.ethersConnection.init({ chainId });
+    }
+    this.logger.info(`Cask SDK initialization complete.`);
+  }
+
+  async initDCA({ ethersConnection, chainId , signer} = {}) {
+    this.logger.info(`Initializing Cask DCA SDK.`);
+    if (this.ethersConnection) {
+      await this.ethersConnection.switchChain(chainId, signer);
+      return;
+    }
+
+    if (!ethersConnection) {
+      this.ethersConnection = new EthersConnection(this.options);
+    }
+
+    const promises = [];
+
+    promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.dca.init({ ethersConnection: this.ethersConnection }));
+
+    await Promise.all(promises);
+
+    if (!ethersConnection) {
+      await this.ethersConnection.init({ chainId });
+    }
+    this.logger.info(`Cask DCA SDK initialization complete.`);
+  }
+
+  async initP2P({ ethersConnection, chainId , signer} = {}) {
+    this.logger.info(`Initializing Cask P2P SDK.`);
+    if (this.ethersConnection) {
+      await this.ethersConnection.switchChain(chainId, signer);
+      return;
+    }
+
+    if (!ethersConnection) {
+      this.ethersConnection = new EthersConnection(this.options);
+    }
+
+    const promises = [];
+
+    promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.p2p.init({ ethersConnection: this.ethersConnection }));
+
+    await Promise.all(promises);
+
+    if (!ethersConnection) {
+      await this.ethersConnection.init({ chainId });
+    }
+    this.logger.info(`Cask P2P SDK initialization complete.`);
   }
 
   /**
@@ -270,4 +387,6 @@ export {
     Vault,
     Query,
     Tokens,
+    DCA,
+    P2P,
 }

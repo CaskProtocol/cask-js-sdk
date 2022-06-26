@@ -4,6 +4,7 @@ import contracts from "../contracts/index.js";
 import enc from "../enc/index.js";
 import utils from "../utils/index.js";
 import CaskUnits from "../core/units.js";
+import Query from "../query/index.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 import SubscriptionPlans from "../subscriptionPlans/index.js";
@@ -69,6 +70,14 @@ class Subscriptions {
             this.options.cache.subscriptionPlans = this.subscriptionPlans;
         }
 
+        if (this.options.cache?.query) {
+            this.query = this.options.cache?.query;
+        } else {
+            this.query = new Query(this.options);
+            this.initQuery = true;
+            this.options.cache.query = this.query;
+        }
+
         if (this.options.cache?.secureData) {
             this.secureData = this.options.cache.secureData;
         } else {
@@ -102,6 +111,9 @@ class Subscriptions {
 
         if (this.initSubscriptionPlans) {
             await this.subscriptionPlans.init({ethersConnection: this.ethersConnection});
+        }
+        if (this.initQuery) {
+            await this.query.init({ethersConnection: this.ethersConnection});
         }
         if (this.initSecureData) {
             await this.secureData.init({ethersConnection: this.ethersConnection});
@@ -263,12 +275,74 @@ class Subscriptions {
     }
 
     /**
+     * Get all subscriptions for a given consumer/provider
+     *
+     * @param {string} consumer Consumer address
+     * @param {string} provider Provider address
+     * @param {Object} args Optional function arguments
+     * @param {number} [args.planId] Limit subscriptions to only those for a specific PlanID
+     * @param {boolean} [args.onlyActiveOrTrailing=true] Only include active or trailing subscriptions
+     * @param {boolean} [args.includeCanceled=false] Include canceled subscriptions
+     */
+    async getAll(consumer, provider, {planId,onlyActiveOrTrailing=true,includeCanceled=false}={}) {
+        let status;
+        if (onlyActiveOrTrailing) {
+            status = ['Active','Trialing'];
+        }
+        let where = {
+            provider: provider.toLowerCase(),
+            currentOwner: consumer.toLowerCase(),
+        }
+        if (planId) {
+            where.plan = `${provider.toLowerCase()}-${planId}`;
+        }
+        const results = await this.query.subscriptionQuery({
+            where,
+            includeCanceled,
+            status
+        });
+
+        // perform on-chain retrieval of each subscription found in the subgraph data
+        const promises = results.data.caskSubscriptions.map(async (s) => this.get(s.id));
+        return Promise.all(promises);
+    }
+
+    /**
+     * Return the number of active/trialing subscriptions a consumer has to a provider including
+     * optionally to a specific plan. Data is sourced exclusively from the subgraph. If on-chain
+     * validation is required - `getAll()` can be used instead.
+     *
+     * @param {string} consumer Consumer address
+     * @param {string} provider Provider address
+     * @param {number} [planId] Check if consumer is subscribed to a specific plan
+     */
+    async activeSubscriptionCount(consumer, provider, planId=0) {
+        const status = ['Active','Trialing'];
+        const where = {
+            provider: provider.toLowerCase(),
+            currentOwner: consumer.toLowerCase(),
+        }
+        if (planId) {
+            where.plan = `${provider.toLowerCase()}-${planId}`;
+        }
+        const results = await this.query.subscriptionQuery({where, status});
+
+        return results.data.caskSubscriptions.length;
+    }
+
+    /**
      * Create a new subscription.
+     *
      * @param {Object} args Function arguments
      * @param {string} args.provider Address of service provider
      * @param {number} args.planId Plan ID for new subscription
      * @param {string} [args.ref] Optional bytes32 value to associate with subscription
      * @param {number} [args.cancelAt] Optional unix timestamp of when to automatically cancel subscription
+     * @param {string} [args.name] Name for NFT - defaults to auto generated name
+     * @param {string} [args.description] Description for NFT - defaults to auto generated description
+     * @param {string} [args.image] URL for NFT image - defaults to provider icon URL if not supplied
+     * @param {string} [args.external_url] URL for NFT - defaults to provider website URL if not supplied
+     * @param {Object} [args.attributes] Map of attributes to store with IPFS NFT data
      * @param {string} [args.discountCode] Discount code of discount to apply to subscription
      * @param {string} [args.discountTokenValidator] Discount token validator for token discount to apply to subscription
      * @param {AuthSig} [args.authSig] AuthSig for attaching private data to subscription
@@ -276,7 +350,8 @@ class Subscriptions {
      * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Subscriptions.CreateSubscriptionResult}
      */
-    async create({provider, planId, ref, cancelAt=0, discountCode, discountTokenValidator,
+    async create({provider, planId, ref, cancelAt=0, image, external_url, attributes={}, name, description,
+                     discountCode, discountTokenValidator,
                      authSig={}, privateData={}, metadata={}})
     {
         if (!this.ethersConnection.signer) {
@@ -344,7 +419,11 @@ class Subscriptions {
 
         const subscriptionData = {
             version: 1,
-            image: providerProfile.metadata.iconUrl,
+            image: image || providerProfile?.metadata?.iconUrl,
+            name: name || `Subscription to ${providerProfile?.metadata?.name}`,
+            description: description || `Subscription to ${providerProfile?.metadata?.name} for plan ${plan.name}. Powered by Cask Protocol - https://www.cask.fi`,
+            attributes,
+            external_url: external_url || providerProfile?.metadata?.websiteUrl,
             chainId: this.ethersConnection.chainId,
             ref,
             planId,
@@ -352,7 +431,7 @@ class Subscriptions {
             provider,
             discountId: discount ? discountId : undefined,
             discount,
-            providerMetadata: providerProfile.metadata,
+            providerMetadata: providerProfile?.metadata,
             metadata,
         }
 
@@ -471,10 +550,17 @@ class Subscriptions {
      * @param {number} args.planId Plan ID for new subscription
      * @param {string} [args.discountCode] Discount code of discount to apply to subscription
      * @param {string} [args.discountTokenValidator] Discount token validator for token discount to apply to subscription
+     * @param {string} [args.name] Name for NFT - defaults to auto generated name
+     * @param {string} [args.description] Description for NFT - defaults to auto generated description
+     * @param {string} [args.image] URL for NFT image - defaults to provider icon URL if not supplied
+     * @param {string} [args.external_url] URL for NFT - defaults to provider website URL if not supplied
+     * @param {Object} [args.attributes] Map of attributes to store with IPFS NFT data
      * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Promise<{ref, tx: *, provider, chainId, planId, subscriptionId, consumer: (*)}>}
      */
-    async change(subscriptionId, {planId, discountCode, discountTokenValidator, metadata={}}) {
+    async change(subscriptionId, {planId, discountCode, discountTokenValidator,
+        image, external_url, attributes={}, name, description, metadata={}})
+    {
 
         if (!this.ethersConnection.signer) {
             throw new Error("Cannot perform transaction without ethers signer");
@@ -483,6 +569,14 @@ class Subscriptions {
         const subscriptionInfo = await this.CaskSubscriptions.getSubscription(subscriptionId);
         if (!subscriptionInfo) {
             throw new Error("Subscription not found");
+        }
+
+        let ipfsData = {};
+        if (subscriptionInfo.subscription?.cid) {
+            ipfsData = await this.ipfs.load(subscriptionInfo.subscription.cid);
+            if (!ipfsData) {
+                throw new Error("Unable to load IPFS subscription data");
+            }
         }
 
         const providerProfile = await this.subscriptionPlans
@@ -541,13 +635,17 @@ class Subscriptions {
 
         const subscriptionData = {
             version: 1,
-            image: providerProfile.metadata.iconUrl,
+            image: image || ipfsData.image || providerProfile?.metadata?.iconUrl,
+            name: name || ipfsData.name || `Subscription to ${providerProfile?.metadata?.name}`,
+            description: description || ipfsData.description || `Subscription to ${providerProfile?.metadata?.name} for plan ${plan.name}. Powered by Cask Protocol - https://www.cask.fi`,
+            attributes: attributes || ipfsData.attributes,
+            external_url: external_url || ipfsData.external_url || providerProfile?.metadata?.websiteUrl,
             chainId: this.ethersConnection.chainId,
             ref: subscriptionInfo.subscription.ref,
             plan,
             provider,
             discountId: discount ? discountId : undefined,
-            providerMetadata: providerProfile.metadata,
+            providerMetadata: providerProfile?.metadata,
             metadata,
         }
         const subscriptionCid = await this.ipfs.save(subscriptionData);

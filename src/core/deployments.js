@@ -77,6 +77,48 @@ const deployments = {
                 '0x5e8C289404E9B17be7FfE7FcBa673f5AC802cc06',
         },
     },
+    /**
+     * CaskDCA contract address for a given environment/chain deployment.
+     */
+    CaskDCA: {
+        [environments.TESTNET]: {
+            [chains.POLYGON_MUMBAI.chainId]: "",
+            [chains.AVAX_TESTNET.chainId]: "",
+        },
+        [environments.PRODUCTION]: {
+            [chains.POLYGON_MAINNET.chainId]: '',
+        },
+        [environments.DEVELOPMENT]: {
+            [chains.ETH_HARDHAT.chainId]: '0x3c3718d2d17770435626463e65F95A707Fc4D3BF',
+        },
+        [environments.INTERNAL]: {
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
+            '',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
+            '',
+        },
+    },
+    /**
+     * CaskDCA contract address for a given environment/chain deployment.
+     */
+    CaskP2P: {
+        [environments.TESTNET]: {
+            [chains.POLYGON_MUMBAI.chainId]: "",
+            [chains.AVAX_TESTNET.chainId]: "",
+        },
+        [environments.PRODUCTION]: {
+            [chains.POLYGON_MAINNET.chainId]: '',
+        },
+        [environments.DEVELOPMENT]: {
+            [chains.ETH_HARDHAT.chainId]: '0x764eE2aBf3a86632C551C8c730a0034D036e1984',
+        },
+        [environments.INTERNAL]: {
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
+            '',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
+            '',
+        },
+    },
     CaskToken: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
