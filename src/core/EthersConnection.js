@@ -4,6 +4,7 @@ import deployments from "./deployments.js";
 import chains from "./chains.js";
 import defaultChains from "./defaultChains.js";
 import environments from "./environments.js";
+import meta from "../meta/index.js";
 
 const DEFAULT_ENVIRONMENT = process.env.CASK_ENV || environments.TESTNET;
 
@@ -35,6 +36,11 @@ class EthersConnection {
         this.connections = this.options.connections;
         this.onSwitchChainCallbacks = [];
         this.onSwitchSignerCallbacks = [];
+
+        this.meta = new meta.Meta({
+            ...options.meta,
+            logLevel: this.options.logLevel
+        });
     }
 
     /**
@@ -78,6 +84,7 @@ class EthersConnection {
             if (ethers.Signer.isSigner(signer)) {
                 this.address = await signer.getAddress();
                 this.signer = signer;
+                await this.meta.init(this);
             }
         } catch {
             this.address = undefined;
@@ -153,6 +160,8 @@ class EthersConnection {
         }
 
         this.chainId = chainId;
+
+        await this.meta.init(this);
 
         const promises = this.onSwitchChainCallbacks.map(async (handler) => {
             return handler(this.chainId, this.signer, this.address)

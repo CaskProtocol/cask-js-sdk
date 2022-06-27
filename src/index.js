@@ -52,6 +52,11 @@ import Tokens from "./tokens/index.js";
  *         pinataApiKey: process.env.PINATA_API_KEY,
  *         pinataApiSecret: process.env.PINATA_API_SECRET,
  *     },
+ *     meta: {
+ *         biconomyApiKey: {
+ *             [CaskSDK.chains.POLYGON_MUMBAI]: process.env.BICONOMY_API_KEY,
+ *         },
+ *     },
  *     environment: CaskSDK.environments.TESTNET,
  * });
  *
