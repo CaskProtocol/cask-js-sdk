@@ -87,6 +87,22 @@ class Meta {
 
                 ethersConnection.signer = this.biconomy.getEthersProvider().getSigner();
                 this.logger.info(`Cask Meta service successfully integrated with Biconomy.`);
+
+                let biconomyReadyResolve;
+                let biconomyReadyReject;
+
+                this.biconomy.onEvent(this.biconomy.READY, () => {
+                    this.logger.info(`Biconomy initialization complete.`);
+                    biconomyReadyResolve();
+                }).onEvent(this.biconomy.ERROR, (error, message) => {
+                    this.logger.warn(`Biconomy initializtion error ${message}: ${error}.`);
+                    biconomyReadyReject(error);
+                });
+
+                return new Promise((resolve, reject) => {
+                    biconomyReadyResolve = resolve;
+                    biconomyReadyReject = reject;
+                });
                 break;
             default:
                 throw('Invalid Meta provider: ' + this.metaProvider);
