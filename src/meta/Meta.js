@@ -2,6 +2,7 @@ import providers from "./providers.js";
 import {Biconomy} from "@biconomy/mexa";
 import chains from "../core/chains.js";
 import Logger from "../utils/Logger.js";
+import {ethers} from "ethers";
 
 /**
  * Represents a connection to a service for relaying meta transactions.
@@ -22,9 +23,11 @@ class Meta {
     constructor(options={}) {
         this.options = options;
         this.metaProvider = providers.NONE;
+        this.gasLimitMargin = 1;
 
         if (options.biconomyApiKey) {
             this.metaProvider = providers.BICONOMY;
+            this.gasLimitMargin = 1.15; // increase gasLimit by 15% to cover relay operations
         }
 
         this.logger = new Logger('CaskSDK::Meta', options.logLevel);
@@ -67,8 +70,19 @@ class Meta {
                         debug: this.options.logLevel === 'debug',
                     });
                     this.logger.info(`Biconomy instantiated.`);
+
+                    ethersConnection.onEstimateGas(async (request, gas) => {
+                        if (gas && gas.toNumber() && this.gasLimitMargin) {
+                            let gasLimit = gas?.toNumber();
+                            let newGas = gasLimit * this.gasLimitMargin;
+                            return ethers.BigNumber.from(parseInt(newGas));
+                        }
+                        return gas;
+                    });
+                    this.logger.info(`Biconomy estimateGas patched.`);
                 } catch (error) {
-                    console.dir(error)
+                    this.logger.info(`Biconomy failed to initialize.`);
+                    console.dir(error);
                 }
 
                 ethersConnection.signer = this.biconomy.getEthersProvider().getSigner();
