@@ -64,7 +64,7 @@ class Meta {
                 }
 
                 try {
-                    this.biconomy = new Biconomy(ethersConnection.signer.provider.provider, {
+                    this.biconomy = new Biconomy(ethersConnection.signer.provider, {
                         walletProvider: ethersConnection.signer.provider.provider,
                         apiKey: this.options.biconomyApiKey[ethersConnection.chainId],
                         debug: this.options.logLevel === 'debug',
