@@ -4,6 +4,7 @@ import deployments from "./deployments.js";
 import chains from "./chains.js";
 import defaultChains from "./defaultChains.js";
 import environments from "./environments.js";
+import meta from "../meta/index.js";
 
 const DEFAULT_ENVIRONMENT = process.env.CASK_ENV || environments.TESTNET;
 
@@ -35,6 +36,12 @@ class EthersConnection {
         this.connections = this.options.connections;
         this.onSwitchChainCallbacks = [];
         this.onSwitchSignerCallbacks = [];
+        this.onEstimateGasCallback = null;
+
+        this.meta = new meta.Meta({
+            ...options.meta,
+            logLevel: this.options.logLevel
+        });
     }
 
     /**
@@ -51,6 +58,14 @@ class EthersConnection {
      */
     onSwitchSigner(handler) {
         this.onSwitchSignerCallbacks.push(handler);
+    }
+
+    /**
+     * Register a handler to receive a callback when the EthersConnection estimates gas.
+     * @param handler Callback handler
+     */
+     onEstimateGas(handler) {
+        this.onEstimateGasCallback = handler;
     }
 
     /**
@@ -78,6 +93,7 @@ class EthersConnection {
             if (ethers.Signer.isSigner(signer)) {
                 this.address = await signer.getAddress();
                 this.signer = signer;
+                await this.meta.init(this);
             }
         } catch {
             this.address = undefined;
@@ -154,6 +170,8 @@ class EthersConnection {
 
         this.chainId = chainId;
 
+        await this.meta.init(this);
+
         const promises = this.onSwitchChainCallbacks.map(async (handler) => {
             return handler(this.chainId, this.signer, this.address)
         });
@@ -174,6 +192,38 @@ class EthersConnection {
         return this.signer.signMessage(message)
     }
 
+    /**
+     * Send a transaction with the currently configured signer.
+     * @param transaction Transaction to send
+     * @return {string} TransactionResponse
+     * @async
+     */
+    async sendTransaction(transaction) {
+        if (!this.signer) {
+            throw new Error("Cannot send transaction without a signer");
+        }
+        return await this.signer.sendTransaction({...transaction, gasLimit: this.estimateGas(transaction)});
+    }
+
+    /**
+     * Estimate gas for a transaction.
+     * @param request Object of args passed to sendTransaction
+     * @return {number} Estimated amount of gas needed
+     * @async
+     */
+    async estimateGas(request) {
+        if (!this.signer) {
+            throw new Error("Cannot estimate gas without a signer");
+        }
+        let gas = await this.signer.estimateGas(request);
+
+        if (this.onEstimateGasCallback) {
+            this.logger.debug(`Executing onEstimateGas callback.`);
+            gas = await this.onEstimateGasCallback(request, gas);
+        }
+
+        return gas;
+    }
 }
 
 function loadEthersProvider(urlOrProvider) {

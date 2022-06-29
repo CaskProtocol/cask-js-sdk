@@ -248,11 +248,13 @@ class Vault {
 
         let tx;
         if (to) {
-            tx = await this.CaskVault.connect(this.ethersConnection.signer)
-                .depositTo(to, asset.address, amountAsset);
+            tx = await this.ethersConnection.sendTransaction(
+                await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.depositTo(to, asset.address, amountAsset)
+            );
         } else {
-            tx = await this.CaskVault.connect(this.ethersConnection.signer)
-                .deposit(asset.address, amountAsset);
+            tx = await this.ethersConnection.sendTransaction(
+                await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.deposit(asset.address, amountAsset)
+            );
         }
         await tx.wait();
         return {tx};
