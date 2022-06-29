@@ -27,7 +27,7 @@ class Meta {
 
         if (options.biconomyApiKey) {
             this.metaProvider = providers.BICONOMY;
-            this.gasLimitMargin = 1.15; // increase gasLimit by 15% to cover relay operations
+            this.gasLimitMargin = 1.25; // increase gasLimit by 25% to cover relay operations
         }
 
         this.logger = new Logger('CaskSDK::Meta', options.logLevel);
