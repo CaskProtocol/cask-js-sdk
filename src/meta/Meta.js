@@ -81,8 +81,7 @@ class Meta {
                     });
                     this.logger.info(`Biconomy estimateGas patched.`);
                 } catch (error) {
-                    this.logger.info(`Biconomy failed to initialize.`);
-                    console.dir(error);
+                    this.logger.warn(`Biconomy failed to initialize: ${error}.`);
                 }
 
                 ethersConnection.signer = this.biconomy.getEthersProvider().getSigner();
