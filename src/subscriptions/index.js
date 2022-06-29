@@ -452,13 +452,16 @@ class Subscriptions {
 
         const subscriptionCid = await this.ipfs.save(subscriptionData)
 
-        const tx = await this.CaskSubscriptions.connect(this.ethersConnection.signer).createSubscription(
-            providerProfile.nonce,
-            plansProof,
-            discountProof,
-            cancelAt,
-            providerProfile.signedRoots,
-            subscriptionCid);
+        const tx = await this.ethersConnection.sendTransaction(
+            await this.CaskSubscriptions.connect(this.ethersConnection.signer).populateTransaction.createSubscription(
+                providerProfile.nonce,
+                plansProof,
+                discountProof,
+                cancelAt,
+                providerProfile.signedRoots,
+                subscriptionCid
+            )
+        );
 
         const events = (await tx.wait()).events || [];
         const event = events.find((e) => e.event === "SubscriptionCreated");
