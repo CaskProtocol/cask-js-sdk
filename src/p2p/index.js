@@ -83,24 +83,37 @@ class P2P {
 
 
     /**
-     * Get a map of P2P flows for a specified address
-     * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
+     * Get a map of P2Ps for a specified address
      * @param [limit=10] Limit
      * @param [offset=0] Offset
+     * @param [orderBy=createdAt] Order by
+     * @param [orderDirection=asc] Order direction, one of asc or desc
      * @return {Promise<*>}
      */
-    getUserP2PList({address, limit=10, offset=0}={}) {
+    async getUserP2PList({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
         }
 
-        return this.CaskP2P.getUserP2PList(address, limit, offset);
+        const query = `
+query Query {
+  caskP2P(
+    where: {user: "${address.toLowerCase()}"}
+    first: ${limit}
+    skip: ${offset}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+  ) {
+    id
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskP2P.map((record) => record.id);
     }
 
     /**
-     * Get the current number of P2P flows for an address.
-     * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
+     * Get the current number of P2Ps for an address.
      * @return {Promise<*>}
      */
     async getUserP2PCount({address}={}) {
@@ -109,7 +122,14 @@ class P2P {
             throw new Error("address not specified or detectable");
         }
 
-        return (await this.CaskP2P.getUserP2PCount(address)).toString();
+        const query = `
+query Query {
+    caskConsumer(id: "${address.toLowerCase()}") {
+        totalP2PCount
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return parseInt(results.data.caskConsumer.totalP2PCount);
     }
 
     /**

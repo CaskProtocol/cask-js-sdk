@@ -106,26 +106,38 @@ class DCA {
         });
     }
 
-
     /**
      * Get a map of DCAs for a specified address
-     * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @param [limit=10] Limit
      * @param [offset=0] Offset
+     * @param [orderBy=createdAt] Order by
+     * @param [orderDirection=asc] Order direction, one of asc or desc
      * @return {Promise<*>}
      */
-    getUserDCAList({address, limit=10, offset=0}={}) {
+    async getUserDCAList({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
         }
 
-        return this.CaskDCA.getUserDCAList(address, limit, offset);
+        const query = `
+query Query {
+  caskDCA(
+    where: {user: "${address.toLowerCase()}"}
+    first: ${limit}
+    skip: ${offset}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+  ) {
+    id
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskDCA.map((record) => record.id);
     }
 
     /**
      * Get the current number of DCAs for an address.
-     * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @return {Promise<*>}
      */
     async getUserDCACount({address}={}) {
@@ -134,7 +146,14 @@ class DCA {
             throw new Error("address not specified or detectable");
         }
 
-        return (await this.CaskDCA.getUserDCACount(address)).toString();
+        const query = `
+query Query {
+    caskConsumer(id: "${address.toLowerCase()}") {
+        totalDCACount
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return parseInt(results.data.caskConsumer.totalDCACount);
     }
 
     /**
@@ -173,7 +192,6 @@ class DCA {
             maxPrice: dcaInfo.maxPrice,
         }
     }
-
 
     /**
      * Create a new DCA.

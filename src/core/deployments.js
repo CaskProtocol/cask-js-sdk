@@ -92,10 +92,10 @@ const deployments = {
             [chains.ETH_HARDHAT.chainId]: '0x3c3718d2d17770435626463e65F95A707Fc4D3BF',
         },
         [environments.INTERNAL]: {
-            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
-            '',
-            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
-            '',
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_DCA ||
+                '0x41Eb18BA90c2c955f1987BD3AeA6feb0F70e0e49',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_DCA ||
+                '0x02b5953b90087d5e0A8e9a74364a3e60cfbc9872',
         },
     },
     /**
@@ -113,10 +113,10 @@ const deployments = {
             [chains.ETH_HARDHAT.chainId]: '0x764eE2aBf3a86632C551C8c730a0034D036e1984',
         },
         [environments.INTERNAL]: {
-            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
-            '',
-            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
-            '',
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_P2P ||
+                '0x92b34C07bD6B77A88d91919469c540a7e1b269e4',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_P2P ||
+                '0xDa70B55FEF2Ad61a289eC57d27E8e9f85144A298',
         },
     },
     CaskToken: {
