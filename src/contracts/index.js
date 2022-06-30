@@ -21,7 +21,7 @@ const contracts = {
     CaskVault: ({ethersConnection}) => {
         return new ethers.Contract(
             deployments.CaskVault[ethersConnection.environment][ethersConnection.chainId],
-            abi.CaskVault[ethersConnection.environment],
+            abi.CaskVault,
             ethersConnection.provider);
     },
     /**
@@ -31,7 +31,7 @@ const contracts = {
     CaskSubscriptions: ({ethersConnection}) => {
         return new ethers.Contract(
             deployments.CaskSubscriptions[ethersConnection.environment][ethersConnection.chainId],
-            abi.CaskSubscriptions[ethersConnection.environment],
+            abi.CaskSubscriptions,
             ethersConnection.provider);
     },
     /**
@@ -41,7 +41,7 @@ const contracts = {
     CaskSubscriptionPlans: ({ethersConnection}) => {
         return new ethers.Contract(
             deployments.CaskSubscriptionPlans[ethersConnection.environment][ethersConnection.chainId],
-            abi.CaskSubscriptionPlans[ethersConnection.environment],
+            abi.CaskSubscriptionPlans,
             ethersConnection.provider);
     },
     /**
@@ -51,7 +51,7 @@ const contracts = {
     CaskDCA: ({ethersConnection}) => {
         return new ethers.Contract(
             deployments.CaskDCA[ethersConnection.environment][ethersConnection.chainId],
-            abi.CaskDCA[ethersConnection.environment],
+            abi.CaskDCA,
             ethersConnection.provider);
     },
     /**
@@ -61,7 +61,7 @@ const contracts = {
     CaskP2P: ({ethersConnection}) => {
         return new ethers.Contract(
             deployments.CaskP2P[ethersConnection.environment][ethersConnection.chainId],
-            abi.CaskP2P[ethersConnection.environment],
+            abi.CaskP2P,
             ethersConnection.provider);
     },
     /**

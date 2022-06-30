@@ -350,26 +350,15 @@ query Query {
     }
 
     /**
-     * Return the number of active/trialing subscriptions a consumer has to a provider including
-     * optionally to a specific plan. Data is sourced exclusively from the subgraph. If on-chain
-     * validation is required - `getAll()` can be used instead.
+     * Return the number of active/trialing subscriptions a consumer has to a specific provider and plan.
      *
      * @param {string} consumer Consumer address
      * @param {string} provider Provider address
-     * @param {number} [planId] Check if consumer is subscribed to a specific plan
+     * @param {number} [planId] Plan ID
      */
-    async activeSubscriptionCount(consumer, provider, planId=0) {
-        const status = ['Active','Trialing'];
-        const where = {
-            provider: provider.toLowerCase(),
-            currentOwner: consumer.toLowerCase(),
-        }
-        if (planId) {
-            where.plan = `${provider.toLowerCase()}-${planId}`;
-        }
-        const results = await this.query.subscriptionQuery({where, status});
-
-        return results.data.caskSubscriptions.length;
+    async activeSubscriptionCount(consumer, provider, planId) {
+        const resp = await this.CaskSubscriptions.getActiveSubscriptionCount(consumer, provider, planId);
+        return parseInt(resp) || 0;
     }
 
     /**
