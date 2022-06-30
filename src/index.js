@@ -126,10 +126,22 @@ class CaskSDK {
     this.options.cache = {};
 
     /**
+     * Query service instance.
+     * @type {Query}
+     */
+    this.query = new Query(this.options);
+
+    /**
      * Vault service instance.
      * @type {Vault}
      */
     this.vault = new Vault(this.options);
+
+    /**
+     * Events service instance.
+     * @type {Events}
+     */
+    this.events = new Events(this.options);
 
     /**
      * Subscription Plans service instance.
@@ -144,22 +156,10 @@ class CaskSDK {
     this.subscriptions = new Subscriptions(this.options);
 
     /**
-     * Events service instance.
-     * @type {Events}
-     */
-    this.events = new Events(this.options);
-
-    /**
      * Prices service instance.
      * @type {Prices}
      */
     this.prices = new Prices(this.options);
-
-    /**
-     * Query service instance.
-     * @type {Query}
-     */
-    this.query = new Query(this.options);
 
     /**
      * Token metadata service instance.
@@ -201,14 +201,15 @@ class CaskSDK {
 
     const promises = [];
 
+    promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.subscriptionPlans.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.subscriptions.init({ ethersConnection: this.ethersConnection }));
-    promises.push(this.dca.init({ ethersConnection: this.ethersConnection }));
-    promises.push(this.p2p.init({ ethersConnection: this.ethersConnection }));
+    // promises.push(this.dca.init({ ethersConnection: this.ethersConnection }));
+    // promises.push(this.p2p.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.events.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.prices.init({ ethersConnection: this.ethersConnection }));
-    promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
+
     promises.push(this.tokens.init({ ethersConnection: this.ethersConnection }));
 
     await Promise.all(promises);

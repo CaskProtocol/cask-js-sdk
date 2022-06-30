@@ -6,7 +6,6 @@
  * @property {string} token Native chain token
  * @property {string} defaultRpcUrl Default RPC URL for chain
  * @property {string} explorerUrl Web explorer URL for chain
- * @property {string} subgraphUrl Cask subgraph URL for chain (if a subgraph is available)
  * @property {string} litName Name of chain in the Lit Protocol
  * @property {string} logo SVG logo for chain
  */
@@ -66,7 +65,6 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'polygon',
     defaultRpcUrl: "https://matic-mainnet.chainstacklabs.com",
     explorerUrl: "https://polygonscan.com",
-    subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-polygon",
     litName: 'polygon',
     transakName: 'polygon',
     transakToken: 'USDC',
@@ -94,7 +92,6 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'mumbai',
     defaultRpcUrl: "https://rpc-mumbai.maticvigil.com",
     explorerUrl: "https://mumbai.polygonscan.com",
-    subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-mumbai",
     litName: 'mumbai',
     biconomyEnabled: true,
     logo: `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -179,7 +176,6 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'avalanche',
     defaultRpcUrl: "https://api.avax.network/ext/bc/C/rpc",
     explorerUrl: "https://snowtrace.io",
-    subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-avalanche",
     litName: 'avalanche',
     transakName: 'avaxcchain',
     transakToken: 'USDC',
@@ -197,7 +193,6 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'fuji',
     defaultRpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
     explorerUrl: "https://testnet.snowtrace.io",
-    subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji",
     biconomyEnabled: true,
     logo: `<svg width="1503" height="1504" viewBox="0 0 1503 1504" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="287" y="258" width="928" height="844" fill="white"/>

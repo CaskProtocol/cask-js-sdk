@@ -134,16 +134,30 @@ class Subscriptions {
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @param [limit=10] Limit
      * @param [offset=0] Offset
+     * @param [orderBy=createdAt] Order by
+     * @param [orderDirection=asc] Order direction, one of asc or desc
      * @return {Promise<*>}
      */
-    async getConsumerSubscriptions({address, limit=10, offset=0}={}) {
+    async getConsumerSubscriptions({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
         }
 
-        const resp = await this.CaskSubscriptions.getConsumerSubscriptions(address, limit, offset);
-        return resp.map((id) => id.toHexString());
+        const query = `
+query Query {
+  caskSubscriptions(
+    where: {currentOwner: "${address.toLowerCase()}"}
+    first: ${limit}
+    skip: ${offset}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+  ) {
+    id
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskSubscriptions.map((record) => record.id);
     }
 
     /**
@@ -165,16 +179,30 @@ class Subscriptions {
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @param [limit=10] Limit
      * @param [offset=0] Offset
+     * @param [orderBy=createdAt] Order by
+     * @param [orderDirection=asc] Order direction, one of asc or desc
      * @return {Promise<*>}
      */
-    async getProviderSubscriptions({address, limit=10, offset=0}={}) {
+    async getProviderSubscriptions({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
         }
 
-        const resp = await this.CaskSubscriptions.getProviderSubscriptions(address, limit, offset);
-        return resp.map((id) => id.toHexString());
+        const query = `
+query Query {
+  caskSubscriptions(
+    where: {provider: "${address.toLowerCase()}"}
+    first: ${limit}
+    skip: ${offset}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+  ) {
+    id
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskSubscriptions.map((record) => record.id);
     }
 
     /**

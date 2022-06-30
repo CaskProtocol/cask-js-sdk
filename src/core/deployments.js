@@ -155,6 +155,26 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_AIRDROP,
             [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_AIRDROP,
         },
+    },
+    /**
+     * Subgraph URLs for a given environment/chain deployment.
+     */
+    SubgraphUrl: {
+        [environments.TESTNET]: {
+            [chains.POLYGON_MUMBAI.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-mumbai",
+            [chains.AVAX_TESTNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji",
+        },
+        [environments.PRODUCTION]: {
+            [chains.POLYGON_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-polygon",
+            [chains.AVAX_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-avalanche",
+        },
+        [environments.DEVELOPMENT]: {
+            [chains.ETH_HARDHAT.chainId]: null,
+        },
+        [environments.INTERNAL]: {
+            [chains.POLYGON_MUMBAI.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-mumbai-internal",
+            [chains.AVAX_TESTNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji-internal",
+        },
     }
 }
 

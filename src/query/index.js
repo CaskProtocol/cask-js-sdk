@@ -1,7 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache, gql } from '@apollo/client/core';
 import fetch from 'cross-fetch';
 import Logger from "../utils/Logger.js";
-import Chains from "../core/chains.js";
+import deployments from "../core/deployments.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 
@@ -55,15 +55,17 @@ class Query {
     }
 
     _initApollo() {
-        const chainInfo = Chains.lookupChain(this.ethersConnection.chainId);
-        if (this.options.subgraphUrl || chainInfo.subgraphUrl) {
+        const subgraphUrl = this.options.subgraphUrl ||
+            deployments.SubgraphUrl[this.ethersConnection.environment][this.ethersConnection.chainId];
+        if (subgraphUrl) {
+            this.logger.debug(`Using subgraphUrl ${subgraphUrl}`)
             this.apolloClient = new ApolloClient({
-                link: new HttpLink({ uri: this.options.subgraphUrl || chainInfo.subgraphUrl, fetch }),
+                link: new HttpLink({ uri: subgraphUrl, fetch }),
                 cache: new InMemoryCache(),
                 ...this.options?.apolloOptions,
             });
         } else {
-            this.logger.warn(`No subgraphUrl available for chain ${this.ethersConnection.chainId} - no query service available`);
+            this.logger.warn(`No subgraph URL available for deployment ${this.ethersConnection.environment}/${this.ethersConnection.chainId} - no query service available`);
         }
     }
 
