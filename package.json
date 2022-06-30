@@ -1,6 +1,6 @@
 {
   "name": "@caskprotocol/sdk",
-  "version": "1.1.19",
+  "version": "1.1.20",
   "description": "Cask Protocol JS SDK",
   "license": "MIT",
   "engines": {
