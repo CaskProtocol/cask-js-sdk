@@ -171,7 +171,14 @@ query Query {
             throw new Error("address not specified or detectable");
         }
 
-        return (await this.CaskSubscriptions.getConsumerSubscriptionCount(address)).toString();
+        const query = `
+query Query {
+    caskConsumer(id: "${address.toLowerCase()}") {
+        totalSubscriptionCount
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return parseInt(results.data.caskConsumer.totalSubscriptionCount);
     }
 
     /**
@@ -218,7 +225,14 @@ query Query {
             throw new Error("address not specified or detectable");
         }
 
-        return (await this.CaskSubscriptions.getProviderSubscriptionCount(address, includeCanceled, planId)).toString();
+        const query = `
+query Query {
+    caskProvider(id: "${address.toLowerCase()}") {
+        totalSubscriptionCount
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return parseInt(results.data.caskProvider.totalSubscriptionCount) || 0;
     }
 
     /**
