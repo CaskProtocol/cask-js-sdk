@@ -185,6 +185,12 @@ export default {
           "internalType": "address",
           "name": "user",
           "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum ICaskDCA.SkipReason",
+          "name": "skipReason",
+          "type": "uint8"
         }
       ],
       "name": "DCASkipped",
@@ -458,6 +464,24 @@ export default {
         }
       ],
       "name": "managerProcessed",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_dcaId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "enum ICaskDCA.SkipReason",
+          "name": "_skipReason",
+          "type": "uint8"
+        }
+      ],
+      "name": "managerSkipped",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
