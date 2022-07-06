@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import Logger from "../utils/Logger.js";
 import ipfs from "../ipfs/index.js";
 import contracts from "../contracts/index.js";
@@ -178,7 +179,7 @@ query Query {
     }
 }`;
         const results = await this.query.rawQuery(query);
-        return parseInt(results.data.caskConsumer.totalSubscriptionCount);
+        return parseInt(results.data.caskConsumer?.totalSubscriptionCount) || 0;
     }
 
     /**
@@ -232,7 +233,7 @@ query Query {
     }
 }`;
         const results = await this.query.rawQuery(query);
-        return parseInt(results.data.caskProvider.totalSubscriptionCount) || 0;
+        return parseInt(results.data.caskProvider?.totalSubscriptionCount) || 0;
     }
 
     /**
@@ -240,7 +241,7 @@ query Query {
      *
      * @see The SDK guide for more details on unit formatting at {@link https://docs.cask.fi/developer-docs/javascript-sdk}
      * @param subscriptionId
-     * @param [options] Addtional Options
+     * @param [options] Additional Options
      * @param {boolean} [options.decryptPrivateData=false] Decrypt private data (if present)
      * @param {AuthSig} [options.authSig] Authsig for private data decryption
      * @param {string} [options.units] Units of output
@@ -347,6 +348,34 @@ query Query {
         // perform on-chain retrieval of each subscription found in the subgraph data
         const promises = results.data.caskSubscriptions.map(async (s) => this.get(s.id));
         return Promise.all(promises);
+    }
+
+    /**
+     * Get history for a subscription
+     *
+     * @param {string} subscriptionId Subscription ID
+     */
+    async getHistory(subscriptionId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+        subscriptionId = ethers.BigNumber.from(subscriptionId);
+
+        const query = `
+query Query {
+    caskTransactions(
+        where: {subscriptionId: "${subscriptionId.toString()}"}
+        first: ${limit}
+        skip: ${offset}
+        orderBy: ${orderBy}
+        orderDirection: ${orderDirection}
+    ) {
+        timestamp
+        type
+        provider {
+           id
+        }
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskTransactions;
     }
 
     /**
@@ -515,10 +544,12 @@ query Query {
      * Attach transferrable private data to a subscription.
      * @param subscriptionId
      * @param data
-     * @param authSig
+     * @param [options] Additional Options
+     * @param {object} [authSig] LIT authsig
+     * @param [privacy=enc.mode.TRANSFERRABLE] privacy setting for attached data.
      * @return {Promise<{tx: *}>}
      */
-    async attachData(subscriptionId, data, authSig={}) {
+    async attachData(subscriptionId, data, {authSig={}, privacy=enc.mode.TRANSFERRABLE}={}) {
 
         const subscriptionInfo = await this.CaskSubscriptions.getSubscription(subscriptionId);
         if (!subscriptionInfo) {
@@ -529,7 +560,7 @@ query Query {
             subscriptionId,
             consumer: subscriptionInfo.currentOwner,
             provider: subscriptionInfo.subscription.provider,
-            privacy: enc.mode.TRANSFERRABLE,
+            privacy,
             data,
             authSig});
 
@@ -550,10 +581,12 @@ query Query {
     /**
      * Get the transferrable private data attached to a subscription.
      * @param subscriptionId
-     * @param authSig
+     * @param [options] Additional Options
+     * @param {object} [authSig] LIT authsig
+     * @param [privacy=enc.mode.TRANSFERRABLE] privacy setting for attached data.
      * @return {Promise<*>}
      */
-    async getAttachedData(subscriptionId, authSig={}) {
+    async getAttachedData(subscriptionId, {authSig={}, privacy=enc.mode.TRANSFERRABLE}={}) {
 
         const subscriptionInfo = await this.CaskSubscriptions.getSubscription(subscriptionId);
         if (!subscriptionInfo) {
@@ -572,7 +605,7 @@ query Query {
             subscriptionId,
             consumer: subscriptionInfo.currentOwner,
             provider: subscriptionInfo.subscription.provider,
-            privacy: enc.mode.TRANSFERRABLE,
+            privacy,
             encData: ipfsData.data,
             authSig});
     }

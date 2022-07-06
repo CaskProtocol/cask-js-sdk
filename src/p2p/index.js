@@ -4,6 +4,7 @@ import CaskUnits from "../core/units.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 import {ethers} from "ethers";
+import Query from "../query";
 
 
 
@@ -53,6 +54,14 @@ class P2P {
         }
         this.options.cache.p2p = this;
 
+        if (this.options.cache?.query) {
+            this.query = this.options.cache?.query;
+        } else {
+            this.query = new Query(this.options);
+            this.initQuery = true;
+            this.options.cache.query = this.query;
+        }
+
     }
 
     /**
@@ -69,6 +78,10 @@ class P2P {
             this.ethersConnection = ethersConnection;
         }
         this.ethersConnection.onSwitchChain(async() => { await this._initContracts() });
+
+        if (this.initQuery) {
+            await this.query.init({ethersConnection: this.ethersConnection});
+        }
 
         if (!ethersConnection) {
             await this.ethersConnection.init();
@@ -163,6 +176,28 @@ query Query {
         }
     }
 
+    /**
+     * Get history for a P2P flow
+     *
+     * @param {string} dcaId P2P ID
+     */
+    async getHistory(p2pId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+        const query = `
+query Query {
+    caskTransactions(
+        where: {p2pId: "${p2pId}"}
+        first: ${limit}
+        skip: ${offset}
+        orderBy: ${orderBy}
+        orderDirection: ${orderDirection}
+    ) {
+        timestamp
+        type
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskTransactions;
+    }
 
     /**
      * Create a new P2P.

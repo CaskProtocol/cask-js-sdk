@@ -7,6 +7,7 @@ import CaskUnits from "../core/units.js";
 import EthersConnection from "../core/EthersConnection.js";
 import Vault from "../vault";
 import {ethers} from "ethers";
+import Query from "../query";
 
 
 
@@ -58,6 +59,14 @@ class DCA {
         }
         this.options.cache.dca = this;
 
+        if (this.options.cache?.query) {
+            this.query = this.options.cache?.query;
+        } else {
+            this.query = new Query(this.options);
+            this.initQuery = true;
+            this.options.cache.query = this.query;
+        }
+
         if (this.options.cache.vault) {
             this.vault = this.options.cache.vault
         } else {
@@ -82,6 +91,9 @@ class DCA {
         }
         this.ethersConnection.onSwitchChain(async() => { await this._initContracts() });
 
+        if (this.initQuery) {
+            await this.query.init({ethersConnection: this.ethersConnection});
+        }
         if (this.initVault) {
             await this.vault.init({ethersConnection: this.ethersConnection});
         }
@@ -191,6 +203,29 @@ query Query {
             minPrice: dcaInfo.minPrice,
             maxPrice: dcaInfo.maxPrice,
         }
+    }
+
+    /**
+     * Get history for a DCA
+     *
+     * @param {string} dcaId DCA ID
+     */
+    async getHistory(dcaId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+        const query = `
+query Query {
+    caskTransactions(
+        where: {dcaId: "${dcaId}"}
+        first: ${limit}
+        skip: ${offset}
+        orderBy: ${orderBy}
+        orderDirection: ${orderDirection}
+    ) {
+        timestamp
+        type
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskTransactions;
     }
 
     /**

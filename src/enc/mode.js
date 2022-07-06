@@ -10,14 +10,19 @@
  */
 const mode = {
     /**
-     * Data is only available to original subscription creator.
+     * Data is only available to original subscription creator and the service provider.
      */
     PRIVATE: 'private',
 
     /**
-     * Data is available to current subscription NFT owner.
+     * Data is available to current subscription NFT owner and the service provider.
      */
     TRANSFERRABLE: 'transferrable',
+
+    /**
+     * Data is available only to the service provider.
+     */
+    PROVIDER: 'provider',
 }
 
 export default mode;
