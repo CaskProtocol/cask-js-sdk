@@ -213,19 +213,24 @@ query Query {
     async getHistory(dcaId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
         const query = `
 query Query {
-    caskTransactions(
+    caskDCAEvents(
         where: {dcaId: "${dcaId}"}
         first: ${limit}
         skip: ${offset}
         orderBy: ${orderBy}
         orderDirection: ${orderDirection}
     ) {
+        txnId
         timestamp
         type
+        assetAddress
+        amount
+        buyQty
+        skipReason
     }
 }`;
         const results = await this.query.rawQuery(query);
-        return results.data.caskTransactions;
+        return results.data.caskDCAEvents;
     }
 
     /**

@@ -184,19 +184,21 @@ query Query {
     async getHistory(p2pId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
         const query = `
 query Query {
-    caskTransactions(
+    caskP2PEvents(
         where: {p2pId: "${p2pId}"}
         first: ${limit}
         skip: ${offset}
         orderBy: ${orderBy}
         orderDirection: ${orderDirection}
     ) {
+        txnId
         timestamp
         type
+        amount
     }
 }`;
         const results = await this.query.rawQuery(query);
-        return results.data.caskTransactions;
+        return results.data.caskP2PEvents;
     }
 
     /**

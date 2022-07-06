@@ -360,22 +360,24 @@ query Query {
 
         const query = `
 query Query {
-    caskTransactions(
+    caskSubscriptionEvents(
         where: {subscriptionId: "${subscriptionId.toString()}"}
         first: ${limit}
         skip: ${offset}
         orderBy: ${orderBy}
         orderDirection: ${orderDirection}
     ) {
+        txnId
         timestamp
         type
         provider {
            id
         }
+        planId
     }
 }`;
         const results = await this.query.rawQuery(query);
-        return results.data.caskTransactions;
+        return results.data.caskSubscriptionEvents;
     }
 
     /**
