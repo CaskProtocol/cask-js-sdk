@@ -132,6 +132,7 @@ class EthersConnection {
                 signer = loadEthersProvider(configuredSigner);
             }
         }
+        const newSigner = signer !== this.signer;
         if (signer) {
             try {
                 if (ethers.Signer.isSigner(signer)) {
@@ -172,10 +173,19 @@ class EthersConnection {
 
         await this.meta.init(this);
 
-        const promises = this.onSwitchChainCallbacks.map(async (handler) => {
+        const chainPromises = this.onSwitchChainCallbacks.map(async (handler) => {
             return handler(this.chainId, this.signer, this.address)
         });
-        await Promise.all(promises);
+        await Promise.all(chainPromises);
+
+        if (signer) {
+            const signerPromises = this.onSwitchSignerCallbacks.map(async (handler) => {
+                return handler(this.signer, this.address)
+            });
+            await Promise.all(signerPromises);
+            this.logger.debug(`Switch to signer ${this.address} complete.`);
+        }
+
         this.logger.debug(`Switching to chain ${chainId} using address ${this.address} is complete.`);
     }
 
