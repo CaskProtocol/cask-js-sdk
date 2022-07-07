@@ -92,6 +92,12 @@ class Query {
         });
     }
 
+    /**
+     * Get all flows for an address
+     * @param {Object} args Function arguments
+     * @param {string} [args.address=this.ethersConnection.address] Address of user
+     * @return {Promise<*>}
+     */
     async flows({address}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
