@@ -270,7 +270,7 @@ query Query {
             if (Array.isArray(status)) {
                 whereStatus = `status_in:[${status.join(',')}]`;
             } else {
-                whereStatus = status;
+                whereStatus = `status: ${status}`;
             }
         } else {
             whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
@@ -288,22 +288,119 @@ query Query {
     where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
   ) {
     id
+    createdAt
+    status
+    cid
+    cancelAt
     currentOwner {
-        id
+      id
     }
-    provider {
-        id
-    }
+    discountId
+    period
     plan {
-        id
-        planId
+      planId
     }
     price
-    period
-    status
-    createdAt
+    provider {
+      id
+    }
+    ref
     renewAt
-    discountId
+    renewCount
+  }
+}`);
+    }
+
+    dcaQuery({
+                          first=10,
+                          skip=0,
+                          where={},
+                          orderBy='createdAt',
+                          orderDirection='desc',
+                          status,
+                      }={})
+    {
+        let whereStatus = '';
+        if (status) {
+            if (Array.isArray(status)) {
+                whereStatus = `status_in:[${status.join(',')}]`;
+            } else {
+                whereStatus = `status: ${status}`;
+            }
+        }
+
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+
+        return this.rawQuery(`
+query Query {
+  caskDCAs(
+    first: ${first}
+    skip: ${skip}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+    where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
+  ) {
+    id
+    createdAt
+    period
+    amount
+    maxPrice
+    minPrice
+    numBuys
+    numSkips
+    outputAsset
+    currentQty
+    currentAmount
+    cancelAt
+    processAt
+    slippageBps
+    status
+    to
+    totalAmount
+  }
+}`);
+    }
+
+    p2pQuery({
+                 first=10,
+                 skip=0,
+                 where={},
+                 orderBy='createdAt',
+                 orderDirection='desc',
+                 status,
+             }={})
+    {
+        let whereStatus = '';
+        if (status) {
+            if (Array.isArray(status)) {
+                whereStatus = `status_in:[${status.join(',')}]`;
+            } else {
+                whereStatus = `status: ${status}`;
+            }
+        }
+
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+
+        return this.rawQuery(`
+query Query {
+  caskP2Ps(
+    first: ${first}
+    skip: ${skip}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+    where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
+  ) {
+    id
+    period
+    createdAt
+    amount
+    cancelAt
+    currentAmount
+    numPayments
+    numSkips
+    status
+    to
+    totalAmount
   }
 }`);
     }
