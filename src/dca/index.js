@@ -5,9 +5,9 @@ import utils from "../utils/index.js";
 import CaskUnits from "../core/units.js";
 
 import EthersConnection from "../core/EthersConnection.js";
-import Vault from "../vault";
+import Vault from "../vault/index.js";
 import {ethers} from "ethers";
-import Query from "../query";
+import Query from "../query/index.js";
 
 
 
@@ -63,7 +63,6 @@ class DCA {
             this.query = this.options.cache?.query;
         } else {
             this.query = new Query(this.options);
-            this.initQuery = true;
             this.options.cache.query = this.query;
         }
 
@@ -71,7 +70,6 @@ class DCA {
             this.vault = this.options.cache.vault
         } else {
             this.vault = new Vault(options);
-            this.initVault = true;
             this.options.cache.vault = this.vault;
         }
     }
@@ -91,10 +89,10 @@ class DCA {
         }
         this.ethersConnection.onSwitchChain(async() => { await this._initContracts() });
 
-        if (this.initQuery) {
+        if (!this.query.ethersConnection) {
             await this.query.init({ethersConnection: this.ethersConnection});
         }
-        if (this.initVault) {
+        if (!this.vault.ethersConnection) {
             await this.vault.init({ethersConnection: this.ethersConnection});
         }
         if (!ethersConnection) {

@@ -88,6 +88,11 @@ class CaskSDK {
   static ipfs = ipfs;
   static utils = utils;
 
+  static fundingSource = {
+    CASK: 0, // Cask wallet
+    PERSONAL: 1, // personal wallet
+  }
+
   static subscriptionStatus = {
     NONE: 0,
     TRIALING: 1,
@@ -241,12 +246,12 @@ class CaskSDK {
 
     const promises = [];
 
+    promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.subscriptionPlans.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.subscriptions.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.events.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.prices.init({ ethersConnection: this.ethersConnection }));
-    promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.tokens.init({ ethersConnection: this.ethersConnection }));
 
     await Promise.all(promises);
@@ -270,6 +275,7 @@ class CaskSDK {
 
     const promises = [];
 
+    promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.dca.init({ ethersConnection: this.ethersConnection }));
 
@@ -294,6 +300,7 @@ class CaskSDK {
 
     const promises = [];
 
+    promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.p2p.init({ ethersConnection: this.ethersConnection }));
 

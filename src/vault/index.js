@@ -172,6 +172,37 @@ class Vault {
     }
 
     /**
+     * Get current allowance the vault can access of an asset for a given address.
+     * @param {Object} args Function arguments
+     * @param {Vault.Asset|string} args.asset Asset
+     * @param {string} [args.units] Units of output
+     * @param {Object} [args.unitOptions={}] Options passed to unit formatter.
+     * @return {Promise<boolean>}
+     */
+    async allowance({asset, address, units, unitOptions}) {
+        asset = this.getAsset(asset);
+
+        address = address || this.ethersConnection.address;
+        if (!address) {
+            throw new Error("address not specified or detectable");
+        }
+
+        let erc20Token = contracts.ERC20({
+            tokenAddress: asset.address,
+            ethersConnection: this.ethersConnection,
+        });
+
+        const amount = await erc20Token.allowance(address, this.CaskVault.address);
+
+        return CaskUnits.formatUnits({
+            amount,
+            asset,
+            units: units || this.options.defaultUnits,
+            unitOptions: unitOptions || this.options.defaultUnitOptions,
+        });
+    }
+
+    /**
      * Check if an approval is needed for a certain amount of an asset before a deposit can take place.
      * @param {Object} args Function arguments
      * @param {Vault.Asset|string} args.asset Asset
@@ -182,20 +213,10 @@ class Vault {
     async needApproval({asset, address, amountSimple, amountAsset}) {
         asset = this.getAsset(asset);
 
-        address = address || this.ethersConnection.address;
-        if (!address) {
-            throw new Error("address not specified or detectable");
-        }
-
         amountAsset = ethers.BigNumber.from(
             this.amountInAsset({asset, amountSimple, amountAsset}));
 
-        let erc20Token = contracts.ERC20({
-            tokenAddress: asset.address,
-            ethersConnection: this.ethersConnection,
-        });
-
-        const allowance = await erc20Token.allowance(address, this.CaskVault.address);
+        const allowance = await this.allowance({asset, address, units: CaskUnits.ASSET});
 
         return allowance.lt(amountAsset);
     }
@@ -344,6 +365,42 @@ class Vault {
         const tx = await this.CaskVault.connect(this.ethersConnection.signer).transfer(to, shares);
         await tx.wait();
         return {tx};
+    }
+
+    /**
+     * Set funding source of current signer to use for vault payments.
+     * @param {Object} args Function arguments
+     * @param {number} args.fundingSource Funding source
+     * @param {Vault.Asset|string} args.asset Asset
+     * @return {Promise<{tx}>}
+     */
+    async setFundingSource({fundingSource, asset=this.baseAsset}) {
+        asset = this.getAsset(asset);
+
+        if (!this.ethersConnection.signer) {
+            throw new Error("Cannot perform transaction without ethers signer");
+        }
+
+        const tx = await this.ethersConnection.sendTransaction(
+            await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.setFundingSource(fundingSource, asset.address)
+        );
+        await tx.wait();
+        return {tx};
+    }
+
+    /**
+     * Get funding source for an address.
+     * @param {Object} args Function arguments
+     * @param {string} [args.address=this.ethersConnection.address] Address
+     * @return {Promise<{*}>}
+     */
+    async getFundingSource({address}={}) {
+        address = address || this.ethersConnection.address;
+        if (!address) {
+            throw new Error("address not specified or detectable");
+        }
+
+        return await this.CaskVault.fundingSource(address);
     }
 
     /**

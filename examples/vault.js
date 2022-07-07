@@ -18,6 +18,20 @@ const cask = new CaskSDK({
 });
 
 
+async function fundingSource() {
+
+    const currentSource = await cask.vault.getFundingSource();
+    console.log(`currentSource: ${JSON.stringify(currentSource, null, 2)}`);
+
+    // const result = await cask.vault.setFundingSource({fundingSource: CaskSDK.fundingSource.PERSONAL, asset: 'USDT'});
+    const result = await cask.vault.setFundingSource({fundingSource: CaskSDK.fundingSource.CASK});
+    console.log(`Result: ${JSON.stringify(result, null, 2)}`);
+
+    const newSource = await cask.vault.getFundingSource();
+    console.log(`newSource: ${JSON.stringify(newSource, null, 2)}`);
+
+}
+
 async function deposit() {
 
     const depositAsset = 'USDT';
@@ -80,11 +94,22 @@ async function withdraw() {
     console.log(`After withdraw ${withdrawalAsset} balance: ${balance}`);
 }
 
+async function allowance() {
+
+    const asset = 'DAI';
+
+    const allowance = await cask.vault.allowance({asset, units: CaskSDK.units.SIMPLE});
+    console.log(`Allowance of ${asset}: ${allowance}`);
+
+}
+
 (async () => {
     await cask.init();
 
-    await deposit();
-    await withdraw();
+    await fundingSource();
+    // await deposit();
+    // await withdraw();
+    // await allowance();
 
     cask.stop();
 })();

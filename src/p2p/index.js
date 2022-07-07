@@ -4,7 +4,7 @@ import CaskUnits from "../core/units.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 import {ethers} from "ethers";
-import Query from "../query";
+import Query from "../query/index.js";
 
 
 
@@ -58,7 +58,6 @@ class P2P {
             this.query = this.options.cache?.query;
         } else {
             this.query = new Query(this.options);
-            this.initQuery = true;
             this.options.cache.query = this.query;
         }
 
@@ -79,7 +78,7 @@ class P2P {
         }
         this.ethersConnection.onSwitchChain(async() => { await this._initContracts() });
 
-        if (this.initQuery) {
+        if (!this.query.ethersConnection) {
             await this.query.init({ethersConnection: this.ethersConnection});
         }
 

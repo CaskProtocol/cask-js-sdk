@@ -67,7 +67,6 @@ class Subscriptions {
             this.subscriptionPlans = this.options.cache?.subscriptionPlans;
         } else {
             this.subscriptionPlans = new SubscriptionPlans(this.options);
-            this.initSubscriptionPlans = true;
             this.options.cache.subscriptionPlans = this.subscriptionPlans;
         }
 
@@ -75,7 +74,6 @@ class Subscriptions {
             this.query = this.options.cache?.query;
         } else {
             this.query = new Query(this.options);
-            this.initQuery = true;
             this.options.cache.query = this.query;
         }
 
@@ -83,7 +81,6 @@ class Subscriptions {
             this.secureData = this.options.cache.secureData;
         } else {
             this.secureData = new enc.SecureData(options.enc);
-            this.initSecureData = true;
             this.options.cache.secureData = this.secureData;
         }
 
@@ -110,13 +107,13 @@ class Subscriptions {
         }
         this.ethersConnection.onSwitchChain(async(chainId) => { await this._initContracts(chainId) });
 
-        if (this.initSubscriptionPlans) {
+        if (!this.subscriptionPlans.ethersConnection) {
             await this.subscriptionPlans.init({ethersConnection: this.ethersConnection});
         }
-        if (this.initQuery) {
+        if (!this.query.ethersConnection) {
             await this.query.init({ethersConnection: this.ethersConnection});
         }
-        if (this.initSecureData) {
+        if (!this.secureData.ethersConnection) {
             await this.secureData.init({ethersConnection: this.ethersConnection});
         }
 
