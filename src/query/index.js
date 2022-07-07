@@ -92,6 +92,76 @@ class Query {
         });
     }
 
+    async flows({address}={}) {
+        address = address || this.ethersConnection.address;
+        if (!address) {
+            throw new Error("address not specified or detectable");
+        }
+
+        const query = `
+query Query {
+  caskDCAs(where: {user: "${address.toLowerCase()}"}) {
+    id
+    createdAt
+    period
+    amount
+    maxPrice
+    minPrice
+    numBuys
+    numSkips
+    outputAsset
+    currentQty
+    currentAmount
+    cancelAt
+    processAt
+    slippageBps
+    status
+    to
+    totalAmount
+  }
+  caskP2Ps(where: {user: "${address.toLowerCase()}"}) {
+    id
+    period
+    createdAt
+    amount
+    cancelAt
+    currentAmount
+    numPayments
+    numSkips
+    status
+    to
+    totalAmount
+  }
+  caskSubscriptions(
+    where: {currentOwner: "${address.toLowerCase()}"}
+  ) {
+    id
+    createdAt
+    status
+    cid
+    cancelAt
+    currentOwner {
+      id
+    }
+    discountId
+    period
+    plan {
+      planId
+    }
+    price
+    provider {
+      id
+    }
+    ref
+    renewAt
+    renewCount
+  }
+}
+`
+        const results = await this.rawQuery(query);
+        return results.data
+    }
+
     transactionHistory({
                            first=10,
                            skip=0,

@@ -13,23 +13,28 @@ const cask = new CaskSDK({
         pinataApiKey: process.env.PINATA_API_KEY,
         pinataApiSecret: process.env.PINATA_API_SECRET,
     },
-    environment: CaskSDK.environments.TESTNET,
+    environment: CaskSDK.environments.INTERNAL,
     logLevel: 'debug',
 });
 
 async function transactionHistory() {
-
-    await cask.init();
-
     let result = await cask.query.transactionHistory();
     console.log(`Transaction History: ${JSON.stringify(result, null, 2)}`);
 
     result = await cask.query.subscriptions({includeCanceled: true});
     console.log(`Subscriptions: ${JSON.stringify(result, null, 2)}`);
+}
 
-    cask.stop();
+async function flows() {
+    const results = await cask.query.flows();
+    console.log(`Data: ${JSON.stringify(results, null, 2)}`);
 }
 
 (async () => {
-    await transactionHistory();
+    await cask.init();
+
+    // await transactionHistory();
+    await flows();
+
+    cask.stop();
 })();
