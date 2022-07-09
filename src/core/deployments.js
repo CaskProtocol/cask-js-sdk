@@ -26,7 +26,7 @@ const deployments = {
             [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x22f23a383b0CA05c56ee75610183B5d236F2B81d',
+            [chains.ETH_HARDHAT.chainId]: '0xb651068Ace267cc30Ca77c91284772AD8315B4E6',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTIONS ||
@@ -47,7 +47,7 @@ const deployments = {
             [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0xEe5153E1383551F67d59b5fdC5562e3DCe519e81',
+            [chains.ETH_HARDHAT.chainId]: '0xA80D4D3d0b2C9c38912459F2E674416973a9A161',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTION_PLANS ||
@@ -89,7 +89,7 @@ const deployments = {
             [chains.POLYGON_MAINNET.chainId]: '',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x3c3718d2d17770435626463e65F95A707Fc4D3BF',
+            [chains.ETH_HARDHAT.chainId]: '0xF4EED3670EB74651D55EaA4f1832410eF0cbc519',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_DCA ||
@@ -110,7 +110,7 @@ const deployments = {
             [chains.POLYGON_MAINNET.chainId]: '',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x764eE2aBf3a86632C551C8c730a0034D036e1984',
+            [chains.ETH_HARDHAT.chainId]: '0xc979978f89B11A6684Cc7C6384141322001Dc6E2',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_P2P ||
@@ -131,7 +131,7 @@ const deployments = {
             [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
         },
         [environments.DEVELOPMENT]: {
-            [chains.ETH_HARDHAT.chainId]: '0x9BD32FE5C1b4DEb0304CcB3fCccCe210cAd86Bc8',
+            [chains.ETH_HARDHAT.chainId]: '0x0000000000000000000000000000000000000000',
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_TOKEN,

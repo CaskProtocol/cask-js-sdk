@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import Logger from "../utils/Logger.js";
 import contracts from "../contracts/index.js";
 import CaskUnits from "../core/units.js";
+import meta from "../meta/index.js";
 import EthersConnection from "../core/EthersConnection.js";
 
 /**
@@ -268,15 +269,24 @@ class Vault {
         amountAsset = this.amountInAsset({asset, amountSimple, amountAsset});
 
         let tx;
-        if (to) {
-            tx = await this.ethersConnection.sendTransaction(
-                await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.depositTo(to, asset.address, amountAsset)
-            );
+        if (this.ethersConnection.meta.metaProvider !== meta.providers.NONE) {
+            if (to) {
+                tx = await this.ethersConnection.sendTransaction(
+                    await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.depositTo(to, asset.address, amountAsset)
+                );
+            } else {
+                tx = await this.ethersConnection.sendTransaction(
+                    await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.deposit(asset.address, amountAsset)
+                );
+            }
         } else {
-            tx = await this.ethersConnection.sendTransaction(
-                await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.deposit(asset.address, amountAsset)
-            );
+            if (to) {
+                tx = await this.CaskVault.connect(this.ethersConnection.signer).depositTo(to, asset.address, amountAsset);
+            } else {
+                tx = await this.CaskVault.connect(this.ethersConnection.signer).deposit(asset.address, amountAsset);
+            }
         }
+
         await tx.wait();
         return {tx};
     }
@@ -381,9 +391,15 @@ class Vault {
             throw new Error("Cannot perform transaction without ethers signer");
         }
 
-        const tx = await this.ethersConnection.sendTransaction(
-            await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.setFundingSource(fundingSource, asset.address)
-        );
+        let tx;
+        if (this.ethersConnection.meta.metaProvider !== meta.providers.NONE) {
+            tx = await this.ethersConnection.sendTransaction(
+                await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.setFundingSource(fundingSource, asset.address)
+            );
+        } else {
+            tx = await this.CaskVault.connect(this.ethersConnection.signer).setFundingSource(fundingSource, asset.address);
+        }
+
         await tx.wait();
         return {tx};
     }

@@ -3,15 +3,15 @@ import { MerkleTree } from "merkletreejs";
 import keccak256 from "keccak256";
 
 
-function _dcaMerkleLeafHash(asset) {
+function dcaAssetspecHash(asset) {
     return ethers.utils.keccak256(ethers.utils.defaultAbiCoder.encode(
-        [ "address[]" ],
-        [ [asset.router.toLowerCase(), asset.priceFeed.toLowerCase(), ...asset.path.map((p) => p.toLowerCase())] ]
+        [ "address", "address", "address[]" ],
+        [ asset.router.toLowerCase(), asset.priceFeed.toLowerCase(), asset.path.map((p) => p.toLowerCase()) ]
     ));
 }
 
 function _dcaMerkleTree(assetList) {
-    const elements = assetList.map((asset) => _dcaMerkleLeafHash(asset));
+    const elements = assetList.map((asset) => dcaAssetspecHash(asset));
     return new MerkleTree(elements, keccak256, { sort: true });
 }
 
@@ -22,12 +22,12 @@ function dcaMerkleRoot(assetList) {
 
 function dcaMerkleProof(assetList, asset) {
     const merkleTree = _dcaMerkleTree(assetList);
-    return merkleTree.getHexProof(_dcaMerkleLeafHash(asset));
+    return merkleTree.getHexProof(dcaAssetspecHash(asset));
 }
 
 function dcaMerkleVerify(assetList, asset, proof) {
     const merkleTree = _dcaMerkleTree(assetList);
-    const leaf = _dcaMerkleLeafHash(asset);
+    const leaf = dcaAssetspecHash(asset);
     return merkleTree.verify(proof, leaf, merkleTree.getHexRoot());
 }
 
@@ -39,6 +39,7 @@ function getDCAAsset(assetList, asset) {
 
 export default {
     // dca helpers
+    dcaAssetspecHash,
     dcaMerkleRoot,
     dcaMerkleProof,
     dcaMerkleVerify,

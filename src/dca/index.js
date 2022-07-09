@@ -3,6 +3,7 @@ import Logger from "../utils/Logger.js";
 import contracts from "../contracts/index.js";
 import utils from "../utils/index.js";
 import CaskUnits from "../core/units.js";
+import chains from "../core/chains.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 import Vault from "../vault/index.js";
@@ -52,7 +53,8 @@ class DCA {
 
         this.logger = new Logger('CaskSDK::DCA', this.options.logLevel);
 
-        this.manifestUrl = this.options.manifestUrl || 'https://dcamanifest.cask.fi/';
+        this.manifestBaseUrl = this.options.manifestBaseUrl || 'https://dcamanifest.cask.fi';
+        this.manifestUrl = this.options.manifestUrl;
 
         if (!this.options?.cache) {
             this.options.cache = {};
@@ -273,7 +275,7 @@ query Query {
             ...assetInfo.path.map((a) => a.toLowerCase())
         ];
 
-        const merkleProof = utils.dcaMerkleProof(this.dcaManifest, assetInfo);
+        const merkleProof = utils.dcaMerkleProof(this.dcaManifest.assets, assetInfo);
 
         const tx = await this.CaskDCA.connect(this.ethersConnection.signer).createDCA(
             assetSpec,
@@ -366,12 +368,22 @@ query Query {
             return this.dcaManifest;
         }
 
-        if (!this.manifestUrl) {
+        let manifestUrl = this.manifestUrl;
+        if (!manifestUrl) {
+            if (this.manifestBaseUrl) {
+                const chainInfo = chains.lookupChain(this.ethersConnection.chainId);
+                manifestUrl = `${this.manifestBaseUrl}/${chainInfo.shortName}.json`;
+            }
+        }
+
+        if (manifestUrl) {
+            this.logger.debug(`Loading DCA manifest from ${manifestUrl}`);
+        } else {
             throw new Error("No manifestUrl configured - cannot load asset manifest");
         }
 
         const fetchPromise = new Promise((resolve, reject) => {
-            fetch(this.manifestUrl)
+            fetch(manifestUrl)
                 .then(response => response.json())
                 .then(data => resolve(data))
                 .catch(err => reject(err));
@@ -388,7 +400,7 @@ query Query {
     async getAssetDefinition(asset) {
         await this.loadDCAManifest();
 
-        return this.dcaManifest.find((a) =>
+        return this.dcaManifest.assets.find((a) =>
             a.chainId === this.ethersConnection.chainId &&
             a.path[a.path.length-1].toLowerCase() === asset.toLowerCase()
         )

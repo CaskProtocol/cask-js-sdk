@@ -15,27 +15,62 @@ const cask = new CaskSDK({
     logLevel: 'debug',
 });
 
+const usdcAddress = '0x4F91541C5BB7b2bE0eFfc05063f77808Eb0Bf09d';
+const abcAddress = '0x29B6DC0B6fBA74Da04Ff026c45f88D795516E26F';
+const mockOracleAddress = '0x91F55b3d46FA66D14E34DAa8CB55C55EcCDf4BF0';
+const mockRouterAddress = '0x43AE7EDaaCD6Eb97d45A24b14736047f75230114';
+
+
+async function dcaManifest() {
+    const manifest = await cask.dca.loadDCAManifest();
+    console.log(`dcaManifest: ${JSON.stringify(manifest, null, 2)}`);
+
+}
+
+function manualManifest() {
+
+    cask.dca.dcaManifest = {
+        assets: [
+            {
+                "inputAssetSymbol": "USDC",
+                "outputAssetSymbol": "ABC",
+                "routerName": "MockRouter",
+                "router": mockRouterAddress,
+                "priceFeed": mockOracleAddress,
+                "path": [usdcAddress, abcAddress],
+                "chainId": cask.currentChain()
+            },
+            {
+                "inputAssetSymbol": "USDC",
+                "outputAssetSymbol": "WMATIC",
+                "routerName": "MockRouter",
+                "router": mockRouterAddress,
+                "priceFeed": mockOracleAddress,
+                "path": [usdcAddress, usdcAddress], // purposely incorrect path to have second item in manifest
+                "chainId": cask.currentChain()
+            }
+        ]
+    }
+}
+
 async function dcaMerkleRoot() {
-    const merkleRoot = CaskSDK.utils.dcaMerkleRoot(cask.dca.dcaManifest);
+    const merkleRoot = CaskSDK.utils.dcaMerkleRoot(cask.dca.dcaManifest.assets);
     console.log(`MerkleRoot: ${merkleRoot}`);
 }
 
 async function createDCA() {
     console.log(`Asset manifest: ${JSON.stringify(cask.dca.dcaManifest, null, 2)}`);
 
-    const assetAddress = '0xa6f94eDa23569bdceDf0C9c14EbE08cb5162A811';
-
-    const asset = await cask.dca.getAssetDefinition(assetAddress);
+    const asset = await cask.dca.getAssetDefinition(abcAddress);
 
     console.log(`Asset definition: ${JSON.stringify(asset, null, 2)}`);
 
     const resp = await cask.dca.create({
-        asset: assetAddress,
-        amount: 10000000,
-        period: 86400});
+        asset: abcAddress,
+        amount: 10000000, //  10 usdc
+        period: 86400}); // 1 day
 
     console.log(`Create Response: ${JSON.stringify(resp, null, 2)}`);
-
 
     const getResp = await cask.dca.get(resp.dcaId);
     console.log(`Get Response: ${JSON.stringify(getResp, null, 2)}`);
@@ -50,30 +85,11 @@ async function dcaHistory(dcaId) {
 (async () => {
     await cask.initDCA();
 
-    cask.dca.dcaManifest = [
-        {
-            "inputAssetSymbol": "USDC",
-            "outputAssetSymbol": "ABC",
-            "routerName": "MockRouter",
-            "router": "0x8954afa98594b838bda56fe4c12a09d7739d179b",
-            "priceFeed": "0x0FCAa9c899EC5A91eBc3D5Dd869De833b06fB046",
-            "path": ["0xFA126fc0cd23Db1f634C914C54306769585Aa1EB","0xa6f94eDa23569bdceDf0C9c14EbE08cb5162A811"],
-            "chainId": 80001
-        },
-        {
-            "inputAssetSymbol": "USDC",
-            "outputAssetSymbol": "WMATIC",
-            "routerName": "MockRouter",
-            "router": "0x8954afa98594b838bda56fe4c12a09d7739d179b",
-            "priceFeed": "0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada",
-            "path": ["0xFA126fc0cd23Db1f634C914C54306769585Aa1EB","0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889"],
-            "chainId": 80001
-        }
-    ];
-
-    // await dcaMerkleRoot();
-    // await createDCA();
-    await dcaHistory('0x6ae1adddae1df13c44052527418d75ae6659f7ed585b63d5ee87fdbca58cf3a4');
+    manualManifest();
+    await dcaMerkleRoot();
+    // await dcaManifest();
+    await createDCA();
+    // await dcaHistory('0x6ae1adddae1df13c44052527418d75ae6659f7ed585b63d5ee87fdbca58cf3a4');
 
     cask.stop();
 })();
