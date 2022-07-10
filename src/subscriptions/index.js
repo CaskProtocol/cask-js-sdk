@@ -9,6 +9,7 @@ import Query from "../query/index.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 import SubscriptionPlans from "../subscriptionPlans/index.js";
+import meta from "../meta";
 
 /**
  * @memberOf Subscriptions
@@ -511,16 +512,27 @@ query Query {
 
         const subscriptionCid = await this.ipfs.save(subscriptionData)
 
-        const tx = await this.ethersConnection.sendTransaction(
-            await this.CaskSubscriptions.connect(this.ethersConnection.signer).populateTransaction.createSubscription(
+        let tx;
+        if (this.ethersConnection.meta.metaProvider !== meta.providers.NONE) {
+            tx = await this.ethersConnection.sendTransaction(
+                await this.CaskSubscriptions.connect(this.ethersConnection.signer).populateTransaction.createSubscription(
+                    providerProfile.nonce,
+                    plansProof,
+                    discountProof,
+                    cancelAt,
+                    providerProfile.signedRoots,
+                    subscriptionCid
+                )
+            );
+        } else {
+            tx = await this.CaskSubscriptions.connect(this.ethersConnection.signer).createSubscription(
                 providerProfile.nonce,
                 plansProof,
                 discountProof,
                 cancelAt,
                 providerProfile.signedRoots,
-                subscriptionCid
-            )
-        );
+                subscriptionCid);
+        }
 
         const events = (await tx.wait()).events || [];
         const event = events.find((e) => e.event === "SubscriptionCreated");
