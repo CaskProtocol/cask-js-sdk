@@ -36,7 +36,6 @@ class Prices {
             this.vault = this.options.cache.vault
         } else {
             this.vault = new Vault(options);
-            this.initVault = true;
             this.options.cache.vault = this.vault;
         }
 
@@ -62,7 +61,7 @@ class Prices {
         this.ethersConnection.onSwitchChain(async() => { await this._initFeed() });
         this.ethersConnection.onSwitchSigner(async() => { await this._signerChanged() });
 
-        if (this.initVault) {
+        if (!this.vault.ethersConnection) {
             await this.vault.init({ethersConnection: this.ethersConnection});
         }
         if (!ethersConnection) {

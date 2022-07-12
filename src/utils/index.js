@@ -1,4 +1,5 @@
 import plans from "./plans.js";
+import dca from "./dca.js";
 
 /**
  * General helpers and utilities
@@ -8,4 +9,5 @@ import plans from "./plans.js";
 
 export default {
     ...plans,
+    ...dca,
 }

@@ -148,6 +148,11 @@ class SecureData {
         subscriptionId,
         provider
       );
+    } else if (privacy === mode.PROVIDER) {
+      accessControlConditions = this.litACCProvider(
+          chainInfo.litName,
+          provider
+      );
     }
 
     try {
@@ -214,6 +219,11 @@ class SecureData {
         chainInfo.litName,
         subscriptionId,
         provider
+      );
+    } else if (privacy === mode.PROVIDER) {
+      accessControlConditions = this.litACCProvider(
+          chainInfo.litName,
+          provider
       );
     }
 
@@ -282,6 +292,22 @@ class SecureData {
         },
       },
       { operator: "or" },
+      {
+        contractAddress: "",
+        standardContractType: "",
+        chain,
+        method: "",
+        parameters: [":userAddress"],
+        returnValueTest: {
+          comparator: "=",
+          value: provider,
+        },
+      },
+    ];
+  }
+
+  litACCProvider(chain, provider) {
+    return [
       {
         contractAddress: "",
         standardContractType: "",

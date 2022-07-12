@@ -1,12 +1,15 @@
+import { ethers } from "ethers";
 import Logger from "../utils/Logger.js";
 import ipfs from "../ipfs/index.js";
 import contracts from "../contracts/index.js";
 import enc from "../enc/index.js";
 import utils from "../utils/index.js";
 import CaskUnits from "../core/units.js";
+import Query from "../query/index.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 import SubscriptionPlans from "../subscriptionPlans/index.js";
+import meta from "../meta";
 
 /**
  * @memberOf Subscriptions
@@ -65,15 +68,20 @@ class Subscriptions {
             this.subscriptionPlans = this.options.cache?.subscriptionPlans;
         } else {
             this.subscriptionPlans = new SubscriptionPlans(this.options);
-            this.initSubscriptionPlans = true;
             this.options.cache.subscriptionPlans = this.subscriptionPlans;
+        }
+
+        if (this.options.cache?.query) {
+            this.query = this.options.cache?.query;
+        } else {
+            this.query = new Query(this.options);
+            this.options.cache.query = this.query;
         }
 
         if (this.options.cache?.secureData) {
             this.secureData = this.options.cache.secureData;
         } else {
             this.secureData = new enc.SecureData(options.enc);
-            this.initSecureData = true;
             this.options.cache.secureData = this.secureData;
         }
 
@@ -100,10 +108,13 @@ class Subscriptions {
         }
         this.ethersConnection.onSwitchChain(async(chainId) => { await this._initContracts(chainId) });
 
-        if (this.initSubscriptionPlans) {
+        if (!this.subscriptionPlans.ethersConnection) {
             await this.subscriptionPlans.init({ethersConnection: this.ethersConnection});
         }
-        if (this.initSecureData) {
+        if (!this.query.ethersConnection) {
+            await this.query.init({ethersConnection: this.ethersConnection});
+        }
+        if (!this.secureData.ethersConnection) {
             await this.secureData.init({ethersConnection: this.ethersConnection});
         }
 
@@ -122,16 +133,30 @@ class Subscriptions {
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @param [limit=10] Limit
      * @param [offset=0] Offset
+     * @param [orderBy=createdAt] Order by
+     * @param [orderDirection=asc] Order direction, one of asc or desc
      * @return {Promise<*>}
      */
-    async getConsumerSubscriptions({address, limit=10, offset=0}={}) {
+    async getConsumerSubscriptions({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
         }
 
-        const resp = await this.CaskSubscriptions.getConsumerSubscriptions(address, limit, offset);
-        return resp.map((id) => id.toHexString());
+        const query = `
+query Query {
+  caskSubscriptions(
+    where: {currentOwner: "${address.toLowerCase()}"}
+    first: ${limit}
+    skip: ${offset}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+  ) {
+    id
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskSubscriptions.map((record) => record.id);
     }
 
     /**
@@ -145,7 +170,14 @@ class Subscriptions {
             throw new Error("address not specified or detectable");
         }
 
-        return (await this.CaskSubscriptions.getConsumerSubscriptionCount(address)).toString();
+        const query = `
+query Query {
+    caskConsumer(id: "${address.toLowerCase()}") {
+        totalSubscriptionCount
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return parseInt(results.data.caskConsumer?.totalSubscriptionCount) || 0;
     }
 
     /**
@@ -153,16 +185,30 @@ class Subscriptions {
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @param [limit=10] Limit
      * @param [offset=0] Offset
+     * @param [orderBy=createdAt] Order by
+     * @param [orderDirection=asc] Order direction, one of asc or desc
      * @return {Promise<*>}
      */
-    async getProviderSubscriptions({address, limit=10, offset=0}={}) {
+    async getProviderSubscriptions({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
         }
 
-        const resp = await this.CaskSubscriptions.getProviderSubscriptions(address, limit, offset);
-        return resp.map((id) => id.toHexString());
+        const query = `
+query Query {
+  caskSubscriptions(
+    where: {provider: "${address.toLowerCase()}"}
+    first: ${limit}
+    skip: ${offset}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+  ) {
+    id
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskSubscriptions.map((record) => record.id);
     }
 
     /**
@@ -178,7 +224,14 @@ class Subscriptions {
             throw new Error("address not specified or detectable");
         }
 
-        return (await this.CaskSubscriptions.getProviderSubscriptionCount(address, includeCanceled, planId)).toString();
+        const query = `
+query Query {
+    caskProvider(id: "${address.toLowerCase()}") {
+        totalSubscriptionCount
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return parseInt(results.data.caskProvider?.totalSubscriptionCount) || 0;
     }
 
     /**
@@ -186,7 +239,7 @@ class Subscriptions {
      *
      * @see The SDK guide for more details on unit formatting at {@link https://docs.cask.fi/developer-docs/javascript-sdk}
      * @param subscriptionId
-     * @param [options] Addtional Options
+     * @param [options] Additional Options
      * @param {boolean} [options.decryptPrivateData=false] Decrypt private data (if present)
      * @param {AuthSig} [options.authSig] Authsig for private data decryption
      * @param {string} [options.units] Units of output
@@ -263,12 +316,93 @@ class Subscriptions {
     }
 
     /**
+     * Get all subscriptions for a given consumer/provider
+     *
+     * @param {string} consumer Consumer address
+     * @param {string} provider Provider address
+     * @param {Object} args Optional function arguments
+     * @param {number} [args.planId] Limit subscriptions to only those for a specific PlanID
+     * @param {boolean} [args.onlyActiveOrTrailing=true] Only include active or trailing subscriptions
+     * @param {boolean} [args.includeCanceled=false] Include canceled subscriptions
+     */
+    async getAll(consumer, provider, {planId,onlyActiveOrTrailing=true,includeCanceled=false}={}) {
+        let status;
+        if (onlyActiveOrTrailing) {
+            status = ['Active','Trialing'];
+        }
+        let where = {
+            provider: provider.toLowerCase(),
+            currentOwner: consumer.toLowerCase(),
+        }
+        if (planId) {
+            where.plan = `${provider.toLowerCase()}-${planId}`;
+        }
+        const results = await this.query.subscriptionQuery({
+            where,
+            includeCanceled,
+            status
+        });
+
+        // perform on-chain retrieval of each subscription found in the subgraph data
+        const promises = results.data.caskSubscriptions.map(async (s) => this.get(s.id));
+        return Promise.all(promises);
+    }
+
+    /**
+     * Get history for a subscription
+     *
+     * @param {string} subscriptionId Subscription ID
+     */
+    async getHistory(subscriptionId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+        subscriptionId = ethers.BigNumber.from(subscriptionId);
+
+        const query = `
+query Query {
+    caskSubscriptionEvents(
+        where: {subscriptionId: "${subscriptionId.toString()}"}
+        first: ${limit}
+        skip: ${offset}
+        orderBy: ${orderBy}
+        orderDirection: ${orderDirection}
+    ) {
+        txnId
+        timestamp
+        type
+        provider {
+           id
+        }
+        planId
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskSubscriptionEvents;
+    }
+
+    /**
+     * Return the number of active/trialing subscriptions a consumer has to a specific provider and plan.
+     *
+     * @param {string} consumer Consumer address
+     * @param {string} provider Provider address
+     * @param {number} [planId] Plan ID
+     */
+    async activeSubscriptionCount(consumer, provider, planId) {
+        const resp = await this.CaskSubscriptions.getActiveSubscriptionCount(consumer, provider, planId);
+        return parseInt(resp) || 0;
+    }
+
+    /**
      * Create a new subscription.
+     *
      * @param {Object} args Function arguments
      * @param {string} args.provider Address of service provider
      * @param {number} args.planId Plan ID for new subscription
      * @param {string} [args.ref] Optional bytes32 value to associate with subscription
      * @param {number} [args.cancelAt] Optional unix timestamp of when to automatically cancel subscription
+     * @param {string} [args.name] Name for NFT - defaults to auto generated name
+     * @param {string} [args.description] Description for NFT - defaults to auto generated description
+     * @param {string} [args.image] URL for NFT image - defaults to provider icon URL if not supplied
+     * @param {string} [args.external_url] URL for NFT - defaults to provider website URL if not supplied
+     * @param {Object} [args.attributes] Map of attributes to store with IPFS NFT data
      * @param {string} [args.discountCode] Discount code of discount to apply to subscription
      * @param {string} [args.discountTokenValidator] Discount token validator for token discount to apply to subscription
      * @param {AuthSig} [args.authSig] AuthSig for attaching private data to subscription
@@ -276,7 +410,8 @@ class Subscriptions {
      * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Subscriptions.CreateSubscriptionResult}
      */
-    async create({provider, planId, ref, cancelAt=0, discountCode, discountTokenValidator,
+    async create({provider, planId, ref, cancelAt=0, image, external_url, attributes={}, name, description,
+                     discountCode, discountTokenValidator,
                      authSig={}, privateData={}, metadata={}})
     {
         if (!this.ethersConnection.signer) {
@@ -344,7 +479,11 @@ class Subscriptions {
 
         const subscriptionData = {
             version: 1,
-            image: providerProfile.metadata.iconUrl,
+            image: image || providerProfile?.metadata?.iconUrl,
+            name: name || `Subscription to ${providerProfile?.metadata?.name}`,
+            description: description || `Subscription to ${providerProfile?.metadata?.name} for plan ${plan.name}. Powered by Cask Protocol - https://www.cask.fi`,
+            attributes,
+            external_url: external_url || providerProfile?.metadata?.websiteUrl,
             chainId: this.ethersConnection.chainId,
             ref,
             planId,
@@ -352,7 +491,7 @@ class Subscriptions {
             provider,
             discountId: discount ? discountId : undefined,
             discount,
-            providerMetadata: providerProfile.metadata,
+            providerMetadata: providerProfile?.metadata,
             metadata,
         }
 
@@ -373,16 +512,27 @@ class Subscriptions {
 
         const subscriptionCid = await this.ipfs.save(subscriptionData)
 
-        const tx = await this.ethersConnection.sendTransaction(
-            await this.CaskSubscriptions.connect(this.ethersConnection.signer).populateTransaction.createSubscription(
+        let tx;
+        if (this.ethersConnection.meta.metaProvider !== meta.providers.NONE) {
+            tx = await this.ethersConnection.sendTransaction(
+                await this.CaskSubscriptions.connect(this.ethersConnection.signer).populateTransaction.createSubscription(
+                    providerProfile.nonce,
+                    plansProof,
+                    discountProof,
+                    cancelAt,
+                    providerProfile.signedRoots,
+                    subscriptionCid
+                )
+            );
+        } else {
+            tx = await this.CaskSubscriptions.connect(this.ethersConnection.signer).createSubscription(
                 providerProfile.nonce,
                 plansProof,
                 discountProof,
                 cancelAt,
                 providerProfile.signedRoots,
-                subscriptionCid
-            )
-        );
+                subscriptionCid);
+        }
 
         const events = (await tx.wait()).events || [];
         const event = events.find((e) => e.event === "SubscriptionCreated");
@@ -405,10 +555,12 @@ class Subscriptions {
      * Attach transferrable private data to a subscription.
      * @param subscriptionId
      * @param data
-     * @param authSig
+     * @param [options] Additional Options
+     * @param {object} [authSig] LIT authsig
+     * @param [privacy=enc.mode.TRANSFERRABLE] privacy setting for attached data.
      * @return {Promise<{tx: *}>}
      */
-    async attachData(subscriptionId, data, authSig={}) {
+    async attachData(subscriptionId, data, {authSig={}, privacy=enc.mode.TRANSFERRABLE}={}) {
 
         const subscriptionInfo = await this.CaskSubscriptions.getSubscription(subscriptionId);
         if (!subscriptionInfo) {
@@ -419,7 +571,7 @@ class Subscriptions {
             subscriptionId,
             consumer: subscriptionInfo.currentOwner,
             provider: subscriptionInfo.subscription.provider,
-            privacy: enc.mode.TRANSFERRABLE,
+            privacy,
             data,
             authSig});
 
@@ -440,10 +592,12 @@ class Subscriptions {
     /**
      * Get the transferrable private data attached to a subscription.
      * @param subscriptionId
-     * @param authSig
+     * @param [options] Additional Options
+     * @param {object} [authSig] LIT authsig
+     * @param [privacy=enc.mode.TRANSFERRABLE] privacy setting for attached data.
      * @return {Promise<*>}
      */
-    async getAttachedData(subscriptionId, authSig={}) {
+    async getAttachedData(subscriptionId, {authSig={}, privacy=enc.mode.TRANSFERRABLE}={}) {
 
         const subscriptionInfo = await this.CaskSubscriptions.getSubscription(subscriptionId);
         if (!subscriptionInfo) {
@@ -462,7 +616,7 @@ class Subscriptions {
             subscriptionId,
             consumer: subscriptionInfo.currentOwner,
             provider: subscriptionInfo.subscription.provider,
-            privacy: enc.mode.TRANSFERRABLE,
+            privacy,
             encData: ipfsData.data,
             authSig});
     }
@@ -474,10 +628,17 @@ class Subscriptions {
      * @param {number} args.planId Plan ID for new subscription
      * @param {string} [args.discountCode] Discount code of discount to apply to subscription
      * @param {string} [args.discountTokenValidator] Discount token validator for token discount to apply to subscription
+     * @param {string} [args.name] Name for NFT - defaults to auto generated name
+     * @param {string} [args.description] Description for NFT - defaults to auto generated description
+     * @param {string} [args.image] URL for NFT image - defaults to provider icon URL if not supplied
+     * @param {string} [args.external_url] URL for NFT - defaults to provider website URL if not supplied
+     * @param {Object} [args.attributes] Map of attributes to store with IPFS NFT data
      * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Promise<{ref, tx: *, provider, chainId, planId, subscriptionId, consumer: (*)}>}
      */
-    async change(subscriptionId, {planId, discountCode, discountTokenValidator, metadata={}}) {
+    async change(subscriptionId, {planId, discountCode, discountTokenValidator,
+        image, external_url, attributes={}, name, description, metadata={}})
+    {
 
         if (!this.ethersConnection.signer) {
             throw new Error("Cannot perform transaction without ethers signer");
@@ -486,6 +647,14 @@ class Subscriptions {
         const subscriptionInfo = await this.CaskSubscriptions.getSubscription(subscriptionId);
         if (!subscriptionInfo) {
             throw new Error("Subscription not found");
+        }
+
+        let ipfsData = {};
+        if (subscriptionInfo.subscription?.cid) {
+            ipfsData = await this.ipfs.load(subscriptionInfo.subscription.cid);
+            if (!ipfsData) {
+                throw new Error("Unable to load IPFS subscription data");
+            }
         }
 
         const providerProfile = await this.subscriptionPlans
@@ -544,13 +713,17 @@ class Subscriptions {
 
         const subscriptionData = {
             version: 1,
-            image: providerProfile.metadata.iconUrl,
+            image: image || ipfsData.image || providerProfile?.metadata?.iconUrl,
+            name: name || ipfsData.name || `Subscription to ${providerProfile?.metadata?.name}`,
+            description: description || ipfsData.description || `Subscription to ${providerProfile?.metadata?.name} for plan ${plan.name}. Powered by Cask Protocol - https://www.cask.fi`,
+            attributes: attributes || ipfsData.attributes,
+            external_url: external_url || ipfsData.external_url || providerProfile?.metadata?.websiteUrl,
             chainId: this.ethersConnection.chainId,
             ref: subscriptionInfo.subscription.ref,
             plan,
             provider,
             discountId: discount ? discountId : undefined,
-            providerMetadata: providerProfile.metadata,
+            providerMetadata: providerProfile?.metadata,
             metadata,
         }
         const subscriptionCid = await this.ipfs.save(subscriptionData);

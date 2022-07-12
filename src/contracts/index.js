@@ -21,7 +21,7 @@ const contracts = {
     CaskVault: ({ethersConnection}) => {
         return new ethers.Contract(
             deployments.CaskVault[ethersConnection.environment][ethersConnection.chainId],
-            abi.CaskVault[ethersConnection.environment],
+            abi.CaskVault,
             ethersConnection.provider);
     },
     /**
@@ -31,7 +31,7 @@ const contracts = {
     CaskSubscriptions: ({ethersConnection}) => {
         return new ethers.Contract(
             deployments.CaskSubscriptions[ethersConnection.environment][ethersConnection.chainId],
-            abi.CaskSubscriptions[ethersConnection.environment],
+            abi.CaskSubscriptions,
             ethersConnection.provider);
     },
     /**
@@ -41,7 +41,27 @@ const contracts = {
     CaskSubscriptionPlans: ({ethersConnection}) => {
         return new ethers.Contract(
             deployments.CaskSubscriptionPlans[ethersConnection.environment][ethersConnection.chainId],
-            abi.CaskSubscriptionPlans[ethersConnection.environment],
+            abi.CaskSubscriptionPlans,
+            ethersConnection.provider);
+    },
+    /**
+     * Cask DCA contract.
+     * @type ethers.Contract
+     */
+    CaskDCA: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskDCA[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskDCA,
+            ethersConnection.provider);
+    },
+    /**
+     * Cask P2P contract.
+     * @type ethers.Contract
+     */
+    CaskP2P: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskP2P[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskP2P,
             ethersConnection.provider);
     },
     /**
@@ -72,6 +92,16 @@ const contracts = {
         return new ethers.Contract(
             tokenAddress,
             abi.ERC721,
+            provider || ethersConnection.provider);
+    },
+    /**
+     * Get an IUniswapV2Router02 router instance. Uses either the supplied provider, or the connection from the ethersConnection.
+     * @type ethers.Contract
+     */
+    IUniswapV2Router02: ({routerAddress, ethersConnection, provider}) => {
+        return new ethers.Contract(
+            routerAddress,
+            abi.IUniswapV2Router02,
             provider || ethersConnection.provider);
     },
 }

@@ -9,6 +9,19 @@ export default {
         {
           "indexed": true,
           "internalType": "address",
+          "name": "protocol",
+          "type": "address"
+        }
+      ],
+      "name": "AddProtocol",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
           "name": "asset",
           "type": "address"
         }
@@ -195,6 +208,32 @@ export default {
         {
           "indexed": true,
           "internalType": "address",
+          "name": "protocol",
+          "type": "address"
+        }
+      ],
+      "name": "RemoveProtocol",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "feeDistributor",
+          "type": "address"
+        }
+      ],
+      "name": "SetFeeDistributor",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
           "name": "participant",
           "type": "address"
         },
@@ -212,6 +251,45 @@ export default {
         }
       ],
       "name": "SetFundingSource",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "maxPriceFeedAge",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetMaxPriceFeedAge",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "minDeposit",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetMinDeposit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "feeDistributor",
+          "type": "address"
+        }
+      ],
+      "name": "SetTrustedForwarder",
       "type": "event"
     },
     {

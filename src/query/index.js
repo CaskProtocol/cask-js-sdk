@@ -1,7 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache, gql } from '@apollo/client/core';
 import fetch from 'cross-fetch';
 import Logger from "../utils/Logger.js";
-import Chains from "../core/chains.js";
+import deployments from "../core/deployments.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 
@@ -55,15 +55,17 @@ class Query {
     }
 
     _initApollo() {
-        const chainInfo = Chains.lookupChain(this.ethersConnection.chainId);
-        if (this.options.subgraphUrl || chainInfo.subgraphUrl) {
+        const subgraphUrl = this.options.subgraphUrl ||
+            deployments.SubgraphUrl[this.ethersConnection.environment][this.ethersConnection.chainId];
+        if (subgraphUrl) {
+            this.logger.debug(`Using subgraphUrl ${subgraphUrl}`)
             this.apolloClient = new ApolloClient({
-                link: new HttpLink({ uri: this.options.subgraphUrl || chainInfo.subgraphUrl, fetch }),
+                link: new HttpLink({ uri: subgraphUrl, fetch }),
                 cache: new InMemoryCache(),
                 ...this.options?.apolloOptions,
             });
         } else {
-            this.logger.warn(`No subgraphUrl available for chain ${this.ethersConnection.chainId} - no query service available`);
+            this.logger.warn(`No subgraph URL available for deployment ${this.ethersConnection.environment}/${this.ethersConnection.chainId} - no query service available`);
         }
     }
 
@@ -90,18 +92,91 @@ class Query {
         });
     }
 
+    /**
+     * Get all flows for an address
+     * @param {Object} args Function arguments
+     * @param {string} [args.address=this.ethersConnection.address] Address of user
+     * @return {Promise<*>}
+     */
+    async flows({address}={}) {
+        address = address || this.ethersConnection.address;
+        if (!address) {
+            throw new Error("address not specified or detectable");
+        }
+
+        const query = `
+query Query {
+  caskDCAs(where: {user: "${address.toLowerCase()}"}) {
+    id
+    createdAt
+    period
+    amount
+    maxPrice
+    minPrice
+    numBuys
+    numSkips
+    outputAsset
+    currentQty
+    currentAmount
+    cancelAt
+    processAt
+    slippageBps
+    status
+    to
+    totalAmount
+  }
+  caskP2Ps(where: {user: "${address.toLowerCase()}"}) {
+    id
+    period
+    createdAt
+    amount
+    cancelAt
+    currentAmount
+    numPayments
+    numSkips
+    status
+    to
+    totalAmount
+  }
+  caskSubscriptions(
+    where: {currentOwner: "${address.toLowerCase()}"}
+  ) {
+    id
+    createdAt
+    status
+    cid
+    cancelAt
+    currentOwner {
+      id
+    }
+    discountId
+    period
+    plan {
+      planId
+    }
+    price
+    provider {
+      id
+    }
+    ref
+    renewAt
+    renewCount
+  }
+}
+`
+        const results = await this.rawQuery(query);
+        return results.data
+    }
+
     transactionHistory({
                            first=10,
                            skip=0,
-                           where='',
+                           where={},
                            orderBy='timestamp',
                            orderDirection='desc'
                        }={})
     {
-
-        if (typeof(where) === 'object') {
-            where = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
-        }
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
 
         return this.rawQuery(`
 query Query {
@@ -110,7 +185,7 @@ query Query {
         skip: ${skip}, 
         orderBy: ${orderBy}, 
         orderDirection: ${orderDirection},
-        where: {${where}}
+        where: {${whereString}}
     ) {
         id
         type
@@ -130,64 +205,78 @@ query Query {
     subscriptions({
                       first=10,
                       skip=0,
-                      where='',
+                      where={},
                       orderBy='createdAt',
                       orderDirection='desc',
-                      includeCanceled = false
+                      includeCanceled = false,
+                      status,
                   }={})
     {
-        const whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
-
-        if (!where) {
-            where = {currentOwner: this.currentWalletAddress().toLowerCase()};
-        }
-        if (typeof(where) === 'object') {
-            where = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+        where = {
+            currentOwner: this.currentWalletAddress().toLowerCase(),
+            ...where
         }
 
-        return this.rawQuery(`
-query Query {
-  caskSubscriptions(
-    first: ${first}
-    skip: ${skip}
-    orderBy: ${orderBy}
-    orderDirection: ${orderDirection}
-    where: {${where}${whereStatus}}
-  ) {
-    id
-    currentOwner {
-        id
-    }
-    provider {
-        id
-    }
-    price
-    period
-    status
-    createdAt
-    renewAt
-    discountId
-  }
-}`);
+        return this.subscriptionQuery({
+            first,
+            skip,
+            where,
+            orderBy,
+            orderDirection,
+            includeCanceled,
+            status,
+        });
     }
 
     subscribers({
                       first=10,
                       skip=0,
-                      where='',
+                      where={},
                       orderBy='createdAt',
                       orderDirection='desc',
-                      includeCanceled = false
+                      includeCanceled = false,
+                      status,
                   }={})
     {
-        const whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
 
-        if (!where) {
-            where = {provider: this.currentWalletAddress().toLowerCase()};
+        where = {
+            provider: this.currentWalletAddress().toLowerCase(),
+            ...where
         }
-        if (typeof(where) === 'object') {
-            where = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+
+        return this.subscriptionQuery({
+            first,
+            skip,
+            where,
+            orderBy,
+            orderDirection,
+            includeCanceled,
+            status,
+        })
+    }
+
+    subscriptionQuery({
+                    first=10,
+                    skip=0,
+                    where={},
+                    orderBy='createdAt',
+                    orderDirection='desc',
+                    includeCanceled = false,
+                    status,
+                }={})
+    {
+        let whereStatus;
+        if (status) {
+            if (Array.isArray(status)) {
+                whereStatus = `status_in:[${status.join(',')}]`;
+            } else {
+                whereStatus = `status: ${status}`;
+            }
+        } else {
+            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
         }
+
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
 
         return this.rawQuery(`
 query Query {
@@ -196,25 +285,125 @@ query Query {
     skip: ${skip}
     orderBy: ${orderBy}
     orderDirection: ${orderDirection}
-    where: {${where}${whereStatus}}
+    where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
   ) {
     id
+    createdAt
+    status
+    cid
+    cancelAt
     currentOwner {
-        id
+      id
     }
-    provider {
-        id
+    discountId
+    period
+    plan {
+      planId
     }
     price
-    period
-    status
-    createdAt
+    provider {
+      id
+    }
+    ref
     renewAt
-    discountId
+    renewCount
   }
 }`);
     }
 
+    dcaQuery({
+                          first=10,
+                          skip=0,
+                          where={},
+                          orderBy='createdAt',
+                          orderDirection='desc',
+                          status,
+                      }={})
+    {
+        let whereStatus = '';
+        if (status) {
+            if (Array.isArray(status)) {
+                whereStatus = `status_in:[${status.join(',')}]`;
+            } else {
+                whereStatus = `status: ${status}`;
+            }
+        }
+
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+
+        return this.rawQuery(`
+query Query {
+  caskDCAs(
+    first: ${first}
+    skip: ${skip}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+    where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
+  ) {
+    id
+    createdAt
+    period
+    amount
+    maxPrice
+    minPrice
+    numBuys
+    numSkips
+    outputAsset
+    currentQty
+    currentAmount
+    cancelAt
+    processAt
+    slippageBps
+    status
+    to
+    totalAmount
+  }
+}`);
+    }
+
+    p2pQuery({
+                 first=10,
+                 skip=0,
+                 where={},
+                 orderBy='createdAt',
+                 orderDirection='desc',
+                 status,
+             }={})
+    {
+        let whereStatus = '';
+        if (status) {
+            if (Array.isArray(status)) {
+                whereStatus = `status_in:[${status.join(',')}]`;
+            } else {
+                whereStatus = `status: ${status}`;
+            }
+        }
+
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+
+        return this.rawQuery(`
+query Query {
+  caskP2Ps(
+    first: ${first}
+    skip: ${skip}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+    where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
+  ) {
+    id
+    period
+    createdAt
+    amount
+    cancelAt
+    currentAmount
+    numPayments
+    numSkips
+    status
+    to
+    totalAmount
+  }
+}`);
+    }
 }
 
 export default Query;

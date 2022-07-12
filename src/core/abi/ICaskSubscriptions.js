@@ -715,6 +715,35 @@ export default {
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "_consumer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_provider",
+          "type": "address"
+        },
+        {
+          "internalType": "uint32",
+          "name": "_planId",
+          "type": "uint32"
+        }
+      ],
+      "name": "getActiveSubscriptionCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "uint256",
           "name": "tokenId",
           "type": "uint256"
@@ -737,9 +766,14 @@ export default {
           "internalType": "address",
           "name": "_consumer",
           "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_idx",
+          "type": "uint256"
         }
       ],
-      "name": "getConsumerSubscriptionCount",
+      "name": "getConsumerSubscription",
       "outputs": [
         {
           "internalType": "uint256",
@@ -756,24 +790,14 @@ export default {
           "internalType": "address",
           "name": "_consumer",
           "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "limit",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "offset",
-          "type": "uint256"
         }
       ],
-      "name": "getConsumerSubscriptions",
+      "name": "getConsumerSubscriptionCount",
       "outputs": [
         {
-          "internalType": "uint256[]",
+          "internalType": "uint256",
           "name": "",
-          "type": "uint256[]"
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -806,17 +830,12 @@ export default {
           "type": "address"
         },
         {
-          "internalType": "bool",
-          "name": "_includeCanceled",
-          "type": "bool"
-        },
-        {
-          "internalType": "uint32",
-          "name": "_planId",
-          "type": "uint32"
+          "internalType": "uint256",
+          "name": "_idx",
+          "type": "uint256"
         }
       ],
-      "name": "getProviderSubscriptionCount",
+      "name": "getProviderSubscription",
       "outputs": [
         {
           "internalType": "uint256",
@@ -835,22 +854,22 @@ export default {
           "type": "address"
         },
         {
-          "internalType": "uint256",
-          "name": "limit",
-          "type": "uint256"
+          "internalType": "bool",
+          "name": "_includeCanceled",
+          "type": "bool"
         },
         {
-          "internalType": "uint256",
-          "name": "offset",
-          "type": "uint256"
+          "internalType": "uint32",
+          "name": "_planId",
+          "type": "uint32"
         }
       ],
-      "name": "getProviderSubscriptions",
+      "name": "getProviderSubscriptionCount",
       "outputs": [
         {
-          "internalType": "uint256[]",
+          "internalType": "uint256",
           "name": "",
-          "type": "uint256[]"
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",

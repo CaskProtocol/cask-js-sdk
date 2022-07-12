@@ -6,7 +6,6 @@
  * @property {string} token Native chain token
  * @property {string} defaultRpcUrl Default RPC URL for chain
  * @property {string} explorerUrl Web explorer URL for chain
- * @property {string} subgraphUrl Cask subgraph URL for chain (if a subgraph is available)
  * @property {string} litName Name of chain in the Lit Protocol
  * @property {string} logo SVG logo for chain
  */
@@ -66,10 +65,10 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'polygon',
     defaultRpcUrl: "https://matic-mainnet.chainstacklabs.com",
     explorerUrl: "https://polygonscan.com",
-    subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-polygon",
     litName: 'polygon',
     transakName: 'polygon',
     transakToken: 'USDC',
+    biconomyEnabled: true,
     logo: `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 38.4 33.5" style="enable-background:new 0 0 38.4 33.5;" xml:space="preserve">
 <style type="text/css">
@@ -93,7 +92,6 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'mumbai',
     defaultRpcUrl: "https://rpc-mumbai.maticvigil.com",
     explorerUrl: "https://mumbai.polygonscan.com",
-    subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-mumbai",
     litName: 'mumbai',
     biconomyEnabled: true,
     logo: `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -122,6 +120,7 @@ viewBox="0 0 784.37 1277.39"
     litName: 'bsc',
     transakName: 'bsc',
     transakToken: 'BUSD',
+    biconomyEnabled: true,
     logo: `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 2496 2496" style="enable-background:new 0 0 2496 2496;" xml:space="preserve">
 <g>
@@ -149,6 +148,7 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'bsc_testnet',
     defaultRpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
     explorerUrl: "https://testnet.bscscan.com",
+    biconomyEnabled: true,
     logo: `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 2496 2496" style="enable-background:new 0 0 2496 2496;" xml:space="preserve">
 <g>
@@ -176,10 +176,10 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'avalanche',
     defaultRpcUrl: "https://api.avax.network/ext/bc/C/rpc",
     explorerUrl: "https://snowtrace.io",
-    subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-avalanche",
     litName: 'avalanche',
     transakName: 'avaxcchain',
     transakToken: 'USDC',
+    biconomyEnabled: true,
     logo: `<svg width="1503" height="1504" viewBox="0 0 1503 1504" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="287" y="258" width="928" height="844" fill="white"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M1502.5 752C1502.5 1166.77 1166.27 1503 751.5 1503C336.734 1503 0.5 1166.77 0.5 752C0.5 337.234 336.734 1 751.5 1C1166.27 1 1502.5 337.234 1502.5 752ZM538.688 1050.86H392.94C362.314 1050.86 347.186 1050.86 337.962 1044.96C327.999 1038.5 321.911 1027.8 321.173 1015.99C320.619 1005.11 328.184 991.822 343.312 965.255L703.182 330.935C718.495 303.999 726.243 290.531 736.021 285.55C746.537 280.2 759.083 280.2 769.599 285.55C779.377 290.531 787.126 303.999 802.438 330.935L876.42 460.079L876.797 460.738C893.336 489.635 901.723 504.289 905.385 519.669C909.443 536.458 909.443 554.169 905.385 570.958C901.695 586.455 893.393 601.215 876.604 630.549L687.573 964.702L687.084 965.558C670.436 994.693 661.999 1009.46 650.306 1020.6C637.576 1032.78 622.263 1041.63 605.474 1046.62C590.161 1050.86 573.004 1050.86 538.688 1050.86ZM906.75 1050.86H1115.59C1146.4 1050.86 1161.9 1050.86 1171.13 1044.78C1181.09 1038.32 1187.36 1027.43 1187.92 1015.63C1188.45 1005.1 1181.05 992.33 1166.55 967.307C1166.05 966.455 1165.55 965.588 1165.04 964.706L1060.43 785.75L1059.24 783.735C1044.54 758.877 1037.12 746.324 1027.59 741.472C1017.08 736.121 1004.71 736.121 994.199 741.472C984.605 746.453 976.857 759.552 961.544 785.934L857.306 964.891L856.949 965.507C841.69 991.847 834.064 1005.01 834.614 1015.81C835.352 1027.62 841.44 1038.5 851.402 1044.96C860.443 1050.86 875.94 1050.86 906.75 1050.86Z" fill="#E84142"/>
@@ -193,7 +193,6 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'fuji',
     defaultRpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
     explorerUrl: "https://testnet.snowtrace.io",
-    subgraphUrl: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji",
     biconomyEnabled: true,
     logo: `<svg width="1503" height="1504" viewBox="0 0 1503 1504" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="287" y="258" width="928" height="844" fill="white"/>
@@ -208,6 +207,7 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'fantom',
     defaultRpcUrl: "https://rpc.ftm.tools",
     explorerUrl: "https://ftmscan.com",
+    biconomyEnabled: true,
     litName: 'fantom',
     logo: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"><defs><style>.cls-1{fill:#fff;fill-rule:evenodd;}.cls-2{fill:#13b5ec;}.cls-3{mask:url(#mask);}</style><mask id="mask" x="10" y="6" width="93.1" height="20" maskUnits="userSpaceOnUse"><g id="a"><path class="cls-1" d="M10,6h93.1V26H10Z"/></g></mask></defs><title>fa</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><circle class="cls-2" cx="16" cy="16" r="16"/><g class="cls-3"><path class="cls-1" d="M17.2,12.9l3.6-2.1V15Zm3.6,9L16,24.7l-4.8-2.8V17L16,19.8,20.8,17ZM11.2,10.8l3.6,2.1L11.2,15Zm5.4,3.1L20.2,16l-3.6,2.1Zm-1.2,4.2L11.8,16l3.6-2.1Zm4.8-8.3L16,12.2,11.8,9.8,16,7.3ZM10,9.4V22.5l6,3.4,6-3.4V9.4L16,6Z"/></g></g></g></svg>`
   },
@@ -219,6 +219,7 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'fantom_testnet',
     defaultRpcUrl: "https://rpc.testnet.fantom.network",
     explorerUrl: "https://testnet.ftmscan.com",
+    biconomyEnabled: true,
     logo: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32"><defs><style>.cls-1{fill:#fff;fill-rule:evenodd;}.cls-2{fill:#13b5ec;}.cls-3{mask:url(#mask);}</style><mask id="mask" x="10" y="6" width="93.1" height="20" maskUnits="userSpaceOnUse"><g id="a"><path class="cls-1" d="M10,6h93.1V26H10Z"/></g></mask></defs><title>fa</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><circle class="cls-2" cx="16" cy="16" r="16"/><g class="cls-3"><path class="cls-1" d="M17.2,12.9l3.6-2.1V15Zm3.6,9L16,24.7l-4.8-2.8V17L16,19.8,20.8,17ZM11.2,10.8l3.6,2.1L11.2,15Zm5.4,3.1L20.2,16l-3.6,2.1Zm-1.2,4.2L11.8,16l3.6-2.1Zm4.8-8.3L16,12.2,11.8,9.8,16,7.3ZM10,9.4V22.5l6,3.4,6-3.4V9.4L16,6Z"/></g></g></g></svg>`
   },
   CELO_MAINNET: {

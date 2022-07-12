@@ -2,15 +2,15 @@ const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 
-const environment = process.argv[2] || 'development';
-
-const artifactPath = path.resolve(__dirname, '../../p-cask-contracts/artifacts/contracts/interfaces');
-const outputPath = path.resolve(__dirname, '../src/core/abi/'+environment);
+const artifactPath = path.resolve(__dirname, '../../cask-contracts/artifacts/contracts/interfaces');
+const outputPath = path.resolve(__dirname, '../src/core/abi');
 
 const abiJSONfilenames = [
     'ICaskVault',
     'ICaskSubscriptions',
     'ICaskSubscriptionPlans',
+    'ICaskDCA',
+    'ICaskP2P',
 ];
 
 glob(artifactPath + '/**/!(*dbg).json', {}, (err, files) => {
