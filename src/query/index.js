@@ -93,6 +93,96 @@ class Query {
     }
 
     /**
+     * Get the summary metrics for a specific provider
+     * @param {Object} args Function arguments
+     * @param {string} [args.address=this.ethersConnection.address] Address of provider
+     * @return {Promise<*>}
+     */
+    async providerSummary({address}={}) {
+        address = address || this.ethersConnection.address;
+        if (!address) {
+            throw new Error("address not specified or detectable");
+        }
+
+        const query = `
+query Query {
+    caskProvider(id: "${address.toLowerCase()}") {
+        appearedAt
+        totalSubscriptionCount
+        activeSubscriptionCount 
+        totalPaymentsReceived
+    }
+}`;
+        const results = await this.rawQuery(query);
+        return results.data.caskProvider;
+    }
+
+    /**
+     * Get the summary metrics for a specific provider and plan
+     * @param {Object} args Function arguments
+     * @param {string} [args.address=this.ethersConnection.address] Address of user
+     * @param {number} args.planId Plan ID
+     * @return {Promise<*>}
+     */
+    async providerPlanSummary({address, planId}={}) {
+        address = address || this.ethersConnection.address;
+        if (!address) {
+            throw new Error("address not specified or detectable");
+        }
+        if (!planId) {
+            throw new Error("planId not specified");
+        }
+
+        const query = `
+query Query {
+    caskSubscriptionPlan(id: "${address.toLowerCase()}-${planId}") {
+        activeSubscriptionCount
+        canceledSubscriptionCount
+        convertedSubscriptionCount
+        pastDueSubscriptionCount
+        pausedSubscriptionCount
+        totalSubscriptionCount
+        trialingSubscriptionCount
+    }
+}`;
+        const results = await this.rawQuery(query);
+        return results.data.caskSubscriptionPlan;
+    }
+
+    /**
+     * Get the summary metrics for a specific consumer
+     * @param {Object} args Function arguments
+     * @param {string} [args.address=this.ethersConnection.address] Address of consumer
+     * @return {Promise<*>}
+     */
+    async consumerSummary({address}={}) {
+        address = address || this.ethersConnection.address;
+        if (!address) {
+            throw new Error("address not specified or detectable");
+        }
+
+        const query = `
+query Query {
+    caskConsumer(id: "${address.toLowerCase()}") {
+        balance
+        appearedAt
+        depositAmount
+        depositCount
+        withdrawAmount
+        withdrawCount
+        activeSubscriptionCount
+        totalSubscriptionCount
+        activeDCACount
+        totalDCACount
+        activeP2PCount
+        totalP2PCount
+    }
+}`;
+        const results = await this.rawQuery(query);
+        return results.data.caskConsumer;
+    }
+
+    /**
      * Get all flows for an address
      * @param {Object} args Function arguments
      * @param {string} [args.address=this.ethersConnection.address] Address of user

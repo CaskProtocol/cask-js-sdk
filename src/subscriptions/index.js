@@ -130,6 +130,7 @@ class Subscriptions {
 
     /**
      * Get a map of subscriptions for a specified address
+     * @deprecated use query service
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @param [limit=10] Limit
      * @param [offset=0] Offset
@@ -161,6 +162,7 @@ query Query {
 
     /**
      * Get the current number of subscriptions for an address.
+     * @deprecated use query service
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @return {Promise<*>}
      */
@@ -182,6 +184,7 @@ query Query {
 
     /**
      * Get a map of subscriptions that are subscribed to a specified service provider.
+     * @deprecated use query service
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @param [limit=10] Limit
      * @param [offset=0] Offset
@@ -189,7 +192,9 @@ query Query {
      * @param [orderDirection=asc] Order direction, one of asc or desc
      * @return {Promise<*>}
      */
-    async getProviderSubscriptions({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
+    async getProviderSubscriptions({address, limit=10, offset=0, orderBy="createdAt",
+                                       orderDirection="asc", includeCanceled=false}={})
+    {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
@@ -213,6 +218,7 @@ query Query {
 
     /**
      * Get the number of subscriptions that are subscribed to a specified service provider.
+     * @deprecated use query service
      * @param [address=ethersConnection.address] Provider address or attempts to use the blockchain connection address
      * @param [includeCanceled=false] Also include canceled subscriptions
      * @param planId Plan ID

@@ -139,6 +139,44 @@ class SubscriptionPlans {
     }
 
     /**
+     * Get the provider profile for an address.
+     * @param address Provider address
+     * @param {Object} options Options
+     * @param [options.force=false] Force re-fetching profile even if it was previously loaded
+     * @return {Promise<ProviderProfile|null>}
+     */
+    async providerProfile(address, {force=false}={}) {
+
+        if (!this.providerProfileCache) {
+            this.providerProfileCache = {};
+        }
+
+        if (this.providerProfileCache[address] &&!force) {
+            return this.providerProfileCache[address];
+        }
+
+        const profile = await this.CaskSubscriptionPlans.getProviderProfile(address);
+
+        if (!profile?.cid) {
+            return null;
+        }
+
+        this.providerProfileCache[address] = new ProviderProfile({
+            ipfs: this.options.ipfs,
+            address,
+            nonce: profile.nonce,
+            registered: true,
+            logLevel: this.options.logLevel,
+            defaultUnits: this.options.defaultUnits,
+            defaultUnitOptions: this.options.defaultUnitOptions,
+        });
+
+        await this.providerProfileCache[address].loadFromIPFS(profile.cid);
+
+        return this.providerProfileCache[address];
+    }
+
+    /**
      * Get the number of redemptions a specific plan/discountId has already had.
      * @param discountId Discount ID
      * @return {Promise<string>}
