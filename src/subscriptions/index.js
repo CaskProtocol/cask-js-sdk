@@ -187,9 +187,11 @@ query Query {
      * @param [offset=0] Offset
      * @param [orderBy=createdAt] Order by
      * @param [orderDirection=asc] Order direction, one of asc or desc
+     * @param [includeCanceled=false] Also include canceled subscriptions
+     * @param planId Plan ID
      * @return {Promise<*>}
      */
-    async getProviderSubscriptions({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
+    async getProviderSubscriptions({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc", includeCanceled=false, planId=0}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
@@ -198,7 +200,7 @@ query Query {
         const query = `
 query Query {
   caskSubscriptions(
-    where: {provider: "${address.toLowerCase()}"}
+    where: {provider: "${address.toLowerCase()}" ${parseInt(planId) > 0 ? `, plan_: { planId: ${planId} }` : ''} ${includeCanceled ? '' : `, status_not: "Canceled"`}}
     first: ${limit}
     skip: ${offset}
     orderBy: ${orderBy}
@@ -226,12 +228,15 @@ query Query {
 
         const query = `
 query Query {
-    caskProvider(id: "${address.toLowerCase()}") {
-        totalSubscriptionCount
-    }
+  caskSubscriptions(
+    where: {provider: "${address.toLowerCase()}" ${parseInt(planId) > 0 ? `, plan_: { planId: ${planId} }` : ''} ${includeCanceled ? '' : `, status_not: "Canceled"`}}
+  ) {
+    id
+  }
 }`;
+
         const results = await this.query.rawQuery(query);
-        return parseInt(results.data.caskProvider?.totalSubscriptionCount) || 0;
+        return parseInt(results.data.caskSubscriptions?.length) || 0;
     }
 
     /**
