@@ -322,44 +322,11 @@ query Query {
     }
 
     /**
-     * Get all subscriptions for a given consumer/provider
-     *
-     * @param {string} consumer Consumer address
-     * @param {string} provider Provider address
-     * @param {Object} args Optional function arguments
-     * @param {number} [args.planId] Limit subscriptions to only those for a specific PlanID
-     * @param {boolean} [args.onlyActiveOrTrailing=true] Only include active or trailing subscriptions
-     * @param {boolean} [args.includeCanceled=false] Include canceled subscriptions
-     */
-    async getAll(consumer, provider, {planId,onlyActiveOrTrailing=true,includeCanceled=false}={}) {
-        let status;
-        if (onlyActiveOrTrailing) {
-            status = ['Active','Trialing'];
-        }
-        let where = {
-            provider: provider.toLowerCase(),
-            currentOwner: consumer.toLowerCase(),
-        }
-        if (planId) {
-            where.plan = `${provider.toLowerCase()}-${planId}`;
-        }
-        const results = await this.query.subscriptionQuery({
-            where,
-            includeCanceled,
-            status
-        });
-
-        // perform on-chain retrieval of each subscription found in the subgraph data
-        const promises = results.data.caskSubscriptions.map(async (s) => this.get(s.id));
-        return Promise.all(promises);
-    }
-
-    /**
      * Get history for a subscription
      *
      * @param {string} subscriptionId Subscription ID
      */
-    async getHistory(subscriptionId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+    async history(subscriptionId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
         subscriptionId = ethers.BigNumber.from(subscriptionId);
 
         const query = `
@@ -603,7 +570,7 @@ query Query {
      * @param [privacy=enc.mode.TRANSFERRABLE] privacy setting for attached data.
      * @return {Promise<*>}
      */
-    async getAttachedData(subscriptionId, {authSig={}, privacy=enc.mode.TRANSFERRABLE}={}) {
+    async attachedData(subscriptionId, {authSig={}, privacy=enc.mode.TRANSFERRABLE}={}) {
 
         const subscriptionInfo = await this.CaskSubscriptions.getSubscription(subscriptionId);
         if (!subscriptionInfo) {

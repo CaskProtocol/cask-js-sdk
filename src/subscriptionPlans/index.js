@@ -145,7 +145,7 @@ class SubscriptionPlans {
      * @param [options.force=false] Force re-fetching profile even if it was previously loaded
      * @return {Promise<ProviderProfile|null>}
      */
-    async providerProfile(address, {force=false}={}) {
+    async getProfile(address, {force=false}={}) {
 
         if (!this.providerProfileCache) {
             this.providerProfileCache = {};

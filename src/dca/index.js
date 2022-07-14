@@ -119,56 +119,6 @@ class DCA {
     }
 
     /**
-     * Get a map of DCAs for a specified address
-     * @param [limit=10] Limit
-     * @param [offset=0] Offset
-     * @param [orderBy=createdAt] Order by
-     * @param [orderDirection=asc] Order direction, one of asc or desc
-     * @return {Promise<*>}
-     */
-    async getUserDCAList({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
-        address = address || this.ethersConnection.address;
-        if (!address) {
-            throw new Error("address not specified or detectable");
-        }
-
-        const query = `
-query Query {
-  caskDCA(
-    where: {user: "${address.toLowerCase()}"}
-    first: ${limit}
-    skip: ${offset}
-    orderBy: ${orderBy}
-    orderDirection: ${orderDirection}
-  ) {
-    id
-  }
-}`;
-        const results = await this.query.rawQuery(query);
-        return results.data.caskDCA.map((record) => record.id);
-    }
-
-    /**
-     * Get the current number of DCAs for an address.
-     * @return {Promise<*>}
-     */
-    async getUserDCACount({address}={}) {
-        address = address || this.ethersConnection.address;
-        if (!address) {
-            throw new Error("address not specified or detectable");
-        }
-
-        const query = `
-query Query {
-    caskConsumer(id: "${address.toLowerCase()}") {
-        totalDCACount
-    }
-}`;
-        const results = await this.query.rawQuery(query);
-        return parseInt(results.data.caskConsumer.totalDCACount);
-    }
-
-    /**
      * Get the details of a specific DCA.
      *
      * @see The SDK guide for more details on unit formatting at {@link https://docs.cask.fi/developer-docs/javascript-sdk}
@@ -210,7 +160,7 @@ query Query {
      *
      * @param {string} dcaId DCA ID
      */
-    async getHistory(dcaId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+    async history(dcaId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
         const query = `
 query Query {
     caskDCAEvents(
@@ -397,13 +347,64 @@ query Query {
      * Get the specified asset definition from the asset manifest
      * @return {Promise<DCA.DCAAssetDefinition>}
      */
-    async getAssetDefinition(asset) {
+    async assetDefinition(asset) {
         await this.loadDCAManifest();
 
         return this.dcaManifest.assets.find((a) =>
             a.chainId === this.ethersConnection.chainId &&
             a.path[a.path.length-1].toLowerCase() === asset.toLowerCase()
         )
+    }
+
+    async assetPrice(asset) {
+        if (typeof(asset) === 'string') {
+            asset = await this.assetDefinition(asset);
+        }
+        if (!asset?.path) {
+            throw new Error(`Unable to locate asset ${asset}`);
+        }
+
+        if (asset.priceFeed === '') { // LP price
+            console.log(`Looking up asset price using LP router ${asset.router}`);
+
+            const inputAsset = asset.path[0];
+            const outputAsset = asset.path[asset.path.length-1];
+
+            const router = contracts.IUniswapV2Router02({
+                routerAddress: asset.router,
+                ethersConnection: this.ethersConnection});
+
+            const inputAssetInfo = this.vault.getAsset(inputAsset);
+            const outputAssetInfo = this.vault.getAsset(outputAsset);
+
+            const one = ethers.BigNumber.from(10).pow(baseAssetInfo.assetDecimals);
+
+            const amountsOut = await router.getAmountsOut(1)
+
+        } else { // oracle price
+
+            const assetToUSDOracle = contracts.AggregatorV3Interface({
+                priceFeed: asset.priceFeed,
+                ethersConnection: this.ethersConnection});
+
+            const assetResult = await assetToUSDOracle.latestRoundData();
+
+            const baseAssetInfo = this.vault.getAsset(this.vault.baseAsset);
+            const baseAssetResult = await baseAssetInfo.priceFeedContract.latestRoundData();
+
+            const basePrice = CaskUnits.scalePrice(
+                baseAssetResult.answer,
+                baseAssetInfo.priceFeedDecimals,
+                baseAssetInfo.assetDecimals);
+
+            const quotePrice = CaskUnits.scalePrice(assetResult.answer,
+                await assetToUSDOracle.decimals(),
+                baseAssetInfo.assetDecimals);
+
+            const one = ethers.BigNumber.from(10).pow(baseAssetInfo.assetDecimals);
+
+            return basePrice.mul(one).div(quotePrice);
+        }
     }
 
 }

@@ -69,18 +69,6 @@ class Query {
         }
     }
 
-    /**
-     * Get the wallet our current connection represents.
-     * @return {string}
-     */
-    currentWalletAddress() {
-        let walletAddress = this.walletAddress;
-        if (!walletAddress && this.ethersConnection.address) {
-            walletAddress = this.ethersConnection.address;
-        }
-        return walletAddress;
-    }
-
     async rawQuery(query, options={}) {
         if (!this.apolloClient) {
             throw new Error(`apolloClient not available. Current chain have a supported subgraph?`);
@@ -292,7 +280,7 @@ query Query {
 }`);
     }
 
-    subscriptions({
+    subscriptions({   consumer,
                       first=10,
                       skip=0,
                       where={},
@@ -302,8 +290,13 @@ query Query {
                       status,
                   }={})
     {
+        consumer = consumer || this.ethersConnection.address;
+        if (!consumer) {
+            throw new Error("consumer not specified or detectable");
+        }
+
         where = {
-            currentOwner: this.currentWalletAddress().toLowerCase(),
+            currentOwner: consumer.toLowerCase(),
             ...where
         }
 
@@ -318,7 +311,7 @@ query Query {
         });
     }
 
-    subscribers({
+    subscribers({     provider,
                       first=10,
                       skip=0,
                       where={},
@@ -328,9 +321,13 @@ query Query {
                       status,
                   }={})
     {
+        provider = provider || this.ethersConnection.address;
+        if (!provider) {
+            throw new Error("provider not specified or detectable");
+        }
 
         where = {
-            provider: this.currentWalletAddress().toLowerCase(),
+            provider: provider.toLowerCase(),
             ...where
         }
 
