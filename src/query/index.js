@@ -24,8 +24,6 @@ class Query {
 
         this.logger = new Logger('CaskSDK::Query', this.options.logLevel);
 
-        this.walletAddress = this.options.walletAddress;
-
         if (!this.options?.cache) {
             this.options.cache = {};
         }
