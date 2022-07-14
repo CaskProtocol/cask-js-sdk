@@ -87,9 +87,12 @@ class Prices {
                     }
                 }, this.options.interval);
             }
-
             await this.refreshData();
+
             this.onPricesReadyCallbacks.map(async (handler) => { return handler() }); // dont wait for callbacks
+            if (this.currentWalletAddress()) {
+                this.onBalancesReadyCallbacks.map(async (handler) => { return handler(this.currentWalletAddress()) }); // dont wait for callbacks
+            }
 
             vaultReadyResolve();
         });
