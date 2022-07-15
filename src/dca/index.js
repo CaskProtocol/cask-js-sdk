@@ -356,6 +356,10 @@ query Query {
         )
     }
 
+    /**
+     * Get the current price of a DCA asset denominated in the vault base asset
+     * @return {Promise<BigNumber>}
+     */
     async assetPrice(asset) {
         if (typeof(asset) === 'string') {
             asset = await this.assetDefinition(asset);
