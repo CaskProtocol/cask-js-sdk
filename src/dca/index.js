@@ -364,8 +364,7 @@ query Query {
             throw new Error(`Unable to locate asset ${asset}`);
         }
 
-        if (asset.priceFeed === '') { // LP price
-            console.log(`Looking up asset price using LP router ${asset.router}`);
+        if (!asset.priceFeed || asset.priceFeed === '0x0000000000000000000000000000000000000000') { // LP price
 
             const inputAsset = asset.path[0];
             const outputAsset = asset.path[asset.path.length-1];
@@ -375,11 +374,38 @@ query Query {
                 ethersConnection: this.ethersConnection});
 
             const inputAssetInfo = this.vault.getAsset(inputAsset);
-            const outputAssetInfo = this.vault.getAsset(outputAsset);
+            const erc20 = contracts.ERC20({tokenAddress: outputAsset, ethersConnection: this.ethersConnection});
+            const outputDecimals = await erc20.decimals();
 
-            const one = ethers.BigNumber.from(10).pow(baseAssetInfo.assetDecimals);
+            const oneInput = ethers.BigNumber.from(10).pow(inputAssetInfo.assetDecimals);
 
-            const amountsOut = await router.getAmountsOut(1)
+            const amountsOut = await router.getAmountsOut(oneInput, asset.path);
+            const amountOutScaled = CaskUnits.scalePrice(
+                amountsOut[amountsOut.length-1],
+                outputDecimals,
+                inputAssetInfo.assetDecimals);
+
+            const outputPrice = oneInput.mul(oneInput).div(amountOutScaled);
+
+            if (inputAsset.toLowerCase() !== this.vault.baseAsset.address.toLowerCase()) {
+                const baseAssetResult = await this.vault.baseAsset.priceFeedContract.latestRoundData();
+
+                const basePrice = CaskUnits.scalePrice(
+                    outputPrice,
+                    inputAssetInfo.assetDecimals,
+                    this.vault.baseAsset.assetDecimals);
+
+                const quotePrice = CaskUnits.scalePrice(
+                    baseAssetResult.answer,
+                    this.vault.baseAsset.priceFeedDecimals,
+                    this.vault.baseAsset.assetDecimals);
+
+                const one = ethers.BigNumber.from(10).pow(this.vault.baseAsset.assetDecimals);
+
+                return basePrice.mul(one).div(quotePrice);
+            } else {
+                return outputPrice;
+            }
 
         } else { // oracle price
 
@@ -393,12 +419,13 @@ query Query {
             const baseAssetResult = await baseAssetInfo.priceFeedContract.latestRoundData();
 
             const basePrice = CaskUnits.scalePrice(
-                baseAssetResult.answer,
-                baseAssetInfo.priceFeedDecimals,
+                assetResult.answer,
+                await assetToUSDOracle.decimals(),
                 baseAssetInfo.assetDecimals);
 
-            const quotePrice = CaskUnits.scalePrice(assetResult.answer,
-                await assetToUSDOracle.decimals(),
+            const quotePrice = CaskUnits.scalePrice(
+                baseAssetResult.answer,
+                baseAssetInfo.priceFeedDecimals,
                 baseAssetInfo.assetDecimals);
 
             const one = ethers.BigNumber.from(10).pow(baseAssetInfo.assetDecimals);
