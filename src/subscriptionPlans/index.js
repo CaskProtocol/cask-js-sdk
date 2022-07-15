@@ -151,7 +151,7 @@ class SubscriptionPlans {
             this.providerProfileCache = {};
         }
 
-        if (this.providerProfileCache[address] &&!force) {
+        if (this.providerProfileCache[address] && !force) {
             return this.providerProfileCache[address];
         }
 
@@ -161,7 +161,7 @@ class SubscriptionPlans {
             return null;
         }
 
-        this.providerProfileCache[address] = new ProviderProfile({
+        const newProfile = new ProviderProfile({
             ipfs: this.options.ipfs,
             address,
             nonce: profile.nonce,
@@ -171,7 +171,9 @@ class SubscriptionPlans {
             defaultUnitOptions: this.options.defaultUnitOptions,
         });
 
-        await this.providerProfileCache[address].loadFromIPFS(profile.cid);
+        await newProfile.loadFromIPFS(profile.cid);
+
+        this.providerProfileCache[address] = newProfile;
 
         return this.providerProfileCache[address];
     }
