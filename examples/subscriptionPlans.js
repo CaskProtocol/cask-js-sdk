@@ -108,13 +108,33 @@ async function loadProfile() {
     console.log(`Plan 100 status is ${status}`);
 }
 
+async function getProviderProfile(address) {
+    const providerProfile = await cask.subscriptionPlans.getProfile(address);
+    if (providerProfile) {
+        console.log(`Provider ${address} profile ${JSON.stringify(providerProfile.asProfileObject(), null, 2)}`);
+    } else {
+        console.log(`Unable to locate ProviderProfile for ${address}`);
+    }
+}
+
+async function getProviderSummary(address) {
+    const summary = await cask.query.providerSummary(address);
+    if (summary) {
+        console.log(`Provider ${address} summary ${JSON.stringify(summary, null, 2)}`);
+    } else {
+        console.log(`Unable to locate summary for ${address}`);
+    }
+}
+
 
 (async () => {
     await cask.init();
 
-    await publishProfile();
+    // await publishProfile();
     // await addPlanAndPublishProfile();
-    await loadProfile();
+    // await loadProfile();
+
+    wait getProviderProfile(cask.ethersConnection.address);
 
     cask.stop();
 })();

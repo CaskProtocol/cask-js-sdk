@@ -36,6 +36,7 @@ function manualManifest() {
                 "outputAssetSymbol": "ABC",
                 "routerName": "MockRouter",
                 "router": mockRouterAddress,
+                // "priceFeed": "0x0000000000000000000000000000000000000000",
                 "priceFeed": mockOracleAddress,
                 "path": [usdcAddress, abcAddress],
                 "chainId": cask.currentChain()
@@ -82,14 +83,21 @@ async function dcaHistory(dcaId) {
     console.log(JSON.stringify(history, null, 2));
 }
 
+async function dcaAssetPrice() {
+    const price = await cask.dca.assetPrice(abcAddress);
+    console.log(`ABC price: ${price}`);
+}
+
+
 (async () => {
     await cask.initDCA();
 
     manualManifest();
-    await dcaMerkleRoot();
+    // await dcaMerkleRoot();
     // await dcaManifest();
-    await createDCA();
+    // await createDCA();
     // await dcaHistory('0x6ae1adddae1df13c44052527418d75ae6659f7ed585b63d5ee87fdbca58cf3a4');
+    await dcaAssetPrice();
 
     cask.stop();
 })();
