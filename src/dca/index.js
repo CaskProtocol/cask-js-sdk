@@ -378,7 +378,9 @@ query Query {
                 ethersConnection: this.ethersConnection});
 
             const inputAssetInfo = this.vault.getAsset(inputAsset);
-            const erc20 = contracts.ERC20({tokenAddress: outputAsset, ethersConnection: this.ethersConnection});
+            const erc20 = contracts.ERC20({
+                tokenAddress: outputAsset,
+                ethersConnection: this.ethersConnection});
             const outputDecimals = await erc20.decimals();
 
             const oneInput = ethers.BigNumber.from(10).pow(inputAssetInfo.assetDecimals);
