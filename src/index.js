@@ -189,18 +189,16 @@ class CaskSDK {
    * Initialize the blockchain connection(s).
    *
    * @param {Object} args Function arguments
-   * @param {EthersConnection} [args.ethersConnection] EthersConnection instance
-   * @param {number} [args.chainId=options.environment] ID of chain to use
+   * @param {EthersConnection} [args.ethersConnection] EthersConnection instance to use instead of creating a new one.
+   * @param {number} [args.chainId=options.environment] ID of chain to use.
    * @param {Signer} [args.signer=options.connections.signer] Signer to use on new chain.
    */
   async init({ ethersConnection, chainId , signer} = {}) {
     this.logger.info(`Initializing Cask SDK.`);
-    if (this.ethersConnection) {
-      await this.ethersConnection.switchChain(chainId, signer);
-      return;
-    }
 
-    if (!ethersConnection) {
+    if (ethersConnection) {
+      this.ethersConnection = ethersConnection;
+    } else {
       this.ethersConnection = new EthersConnection(this.options);
     }
 
@@ -220,7 +218,7 @@ class CaskSDK {
     await Promise.all(promises);
 
     if (!ethersConnection) {
-      await this.ethersConnection.init({ chainId });
+      await this.ethersConnection.init({chainId, signer});
     }
     this.logger.info(`Cask SDK initialization complete.`);
   }

@@ -72,16 +72,17 @@ class EthersConnection {
      * Initialize a blockchain connection.
      * @param {Object} args Function arguments
      * @param {Object} [args.chainId] Chain ID to connect to. Defaults to the defaultChain for the environment.
+     * @param {Object} [args.signer] Initial signer to use
      * @async
      */
-    init({chainId}={}) {
+    init({chainId, signer}={}) {
         if (!chainId) {
             chainId = this.options?.initialChainId;
         }
         if (!chainId) {
             chainId = defaultChains[this.environment].chainId;
         }
-        return this.switchChain(chainId);
+        return this.switchChain(chainId, signer);
     }
 
     /**
@@ -132,7 +133,6 @@ class EthersConnection {
                 signer = loadEthersProvider(configuredSigner);
             }
         }
-        const newSigner = signer !== this.signer;
         if (signer) {
             try {
                 if (ethers.Signer.isSigner(signer)) {
