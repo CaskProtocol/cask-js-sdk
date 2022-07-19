@@ -95,7 +95,12 @@ query Query {
     caskProvider(id: "${address.toLowerCase()}") {
         appearedAt
         totalSubscriptionCount
-        activeSubscriptionCount 
+        activeSubscriptionCount
+        trialingSubscriptionCount
+        convertedSubscriptionCount
+        canceledSubscriptionCount
+        pausedSubscriptionCount
+        pastDueSubscriptionCount
         totalPaymentsReceived
     }
 }`;
@@ -122,13 +127,13 @@ query Query {
         const query = `
 query Query {
     caskSubscriptionPlan(id: "${address.toLowerCase()}-${planId}") {
-        activeSubscriptionCount
-        canceledSubscriptionCount
-        convertedSubscriptionCount
-        pastDueSubscriptionCount
-        pausedSubscriptionCount
         totalSubscriptionCount
+        activeSubscriptionCount
         trialingSubscriptionCount
+        convertedSubscriptionCount
+        canceledSubscriptionCount
+        pausedSubscriptionCount
+        pastDueSubscriptionCount
     }
 }`;
         const results = await this.rawQuery(query);

@@ -30,11 +30,17 @@ async function flows() {
     console.log(`Data: ${JSON.stringify(results, null, 2)}`);
 }
 
+async function providerSummary(address) {
+    const results = await cask.query.providerSummary({address});
+    console.log(`Data: ${JSON.stringify(results, null, 2)}`);
+}
+
 (async () => {
     await cask.init();
 
     // await transactionHistory();
-    await flows();
+    // await flows();
+    await providerSummary('0x26e730a8f03661ac1b196fa82c6b0d0ba65e3da8');
 
     cask.stop();
 })();
