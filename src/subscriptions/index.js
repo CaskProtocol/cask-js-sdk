@@ -486,7 +486,7 @@ query Query {
         const subscriptionCid = await this.ipfs.save(subscriptionData)
 
         let tx;
-        if (this.ethersConnection.meta.metaProvider !== meta.providers.NONE) {
+        if (this.ethersConnection.metaEnabled()) {
             tx = await this.ethersConnection.sendTransaction(
                 await this.CaskSubscriptions.connect(this.ethersConnection.signer).populateTransaction.createSubscription(
                     providerProfile.nonce,

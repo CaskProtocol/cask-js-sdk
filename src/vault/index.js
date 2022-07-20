@@ -269,7 +269,7 @@ class Vault {
         amountAsset = this.amountInAsset({asset, amountSimple, amountAsset});
 
         let tx;
-        if (this.ethersConnection.meta.metaProvider !== meta.providers.NONE) {
+        if (this.ethersConnection.metaEnabled()) {
             if (to) {
                 tx = await this.ethersConnection.sendTransaction(
                     await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.depositTo(to, asset.address, amountAsset)
@@ -392,7 +392,7 @@ class Vault {
         }
 
         let tx;
-        if (this.ethersConnection.meta.metaProvider !== meta.providers.NONE) {
+        if (this.ethersConnection.metaEnabled()) {
             tx = await this.ethersConnection.sendTransaction(
                 await this.CaskVault.connect(this.ethersConnection.signer).populateTransaction.setFundingSource(fundingSource, asset.address)
             );

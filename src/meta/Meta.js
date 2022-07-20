@@ -22,7 +22,7 @@ class Meta {
      */
     constructor(options={}) {
         this.options = options;
-        this.metaProvider = providers.NONE;
+        this.metaProvider = this.options.metaProvider || providers.NONE;
         this.gasLimitMargin = 1;
 
         if (options.biconomyApiKey) {
@@ -39,7 +39,9 @@ class Meta {
             this.logger.info("Cannot perform meta transactions without a connection");
             return;
         }
-        if (!ethersConnection.signer) {
+        this.ethersConnection = ethersConnection;
+
+        if (!this.ethersConnection.signer) {
             this.logger.info("Cannot perform meta transactions without signer");
             return;
         }
@@ -48,30 +50,30 @@ class Meta {
             case providers.NONE:
                 break;
             case providers.BICONOMY:
-                const chainInfo = chains.lookupChain(ethersConnection.chainId);
+                const chainInfo = chains.lookupChain(this.ethersConnection.chainId);
                 if (!chainInfo?.biconomyEnabled) {
-                    this.logger.info(`Biconomy meta transactions not supported on current chain ${ethersConnection.chainId}.`);
+                    this.logger.info(`Biconomy meta transactions not supported on current chain ${this.ethersConnection.chainId}.`);
                     break;
                 }
-                if (!this.options.biconomyApiKey[ethersConnection.chainId]) {
-                    this.logger.info(`Biconomy API Key not provided for current chain ${ethersConnection.chainId}.`);
+                if (!this.options.biconomyApiKey?.[this.ethersConnection.chainId]) {
+                    this.logger.info(`Biconomy API Key not provided for current chain ${this.ethersConnection.chainId}.`);
                     break;
                 }
-                if (ethersConnection.signer?.provider?.provider?.isBiconomy) {
+                if (this.ethersConnection.signer?.provider?.provider?.isBiconomy) {
                     // already setup
                     this.logger.info(`Biconomy already initalized.`);
                     return;
                 }
 
                 try {
-                    this.biconomy = new Biconomy(ethersConnection.signer.provider, {
-                        walletProvider: ethersConnection.signer.provider.provider,
-                        apiKey: this.options.biconomyApiKey[ethersConnection.chainId],
+                    this.biconomy = new Biconomy(this.ethersConnection.signer.provider, {
+                        walletProvider: this.ethersConnection.signer.provider.provider,
+                        apiKey: this.options.biconomyApiKey?.[this.ethersConnection.chainId],
                         debug: this.options.logLevel === 'debug',
                     });
                     this.logger.info(`Biconomy instantiated.`);
 
-                    ethersConnection.onEstimateGas(async (request, gas) => {
+                    this.ethersConnection.onEstimateGas(async (request, gas) => {
                         if (gas && gas.toNumber() && this.gasLimitMargin) {
                             let gasLimit = gas?.toNumber();
                             let newGas = gasLimit * this.gasLimitMargin;
@@ -84,7 +86,7 @@ class Meta {
                     this.logger.warn(`Biconomy failed to initialize: ${error}.`);
                 }
 
-                ethersConnection.signer = this.biconomy.getEthersProvider().getSigner();
+                this.ethersConnection.signer = this.biconomy.getEthersProvider().getSigner();
                 this.logger.info(`Cask Meta service successfully integrated with Biconomy.`);
 
                 let biconomyReadyResolve;
@@ -108,6 +110,13 @@ class Meta {
         }
 
         this.logger.info(`Cask Meta service initialization complete.`);
+    }
+
+    enabled() {
+        if (!this.ethersConnection || !this.options.biconomyApiKey) {
+            return false;
+        }
+        return !!this.options.biconomyApiKey?.[this.ethersConnection.chainId];
     }
 }
 

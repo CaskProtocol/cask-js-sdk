@@ -85,6 +85,10 @@ class EthersConnection {
         return this.switchChain(chainId, signer);
     }
 
+    metaEnabled() {
+        return this.meta.enabled()
+    }
+
     /**
      * Switch signer to use for write transactions.
      * @param signer New signer to use

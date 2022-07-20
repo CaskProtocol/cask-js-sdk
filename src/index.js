@@ -10,6 +10,7 @@ import urls from "./core/urls.js";
 import contracts from "./contracts/index.js";
 import enc from "./enc/index.js";
 import ipfs from "./ipfs/index.js";
+import meta from "./meta/index.js";
 import utils from "./utils/index.js";
 
 import EthersConnection from "./core/EthersConnection.js";
@@ -86,6 +87,7 @@ class CaskSDK {
   static contracts = contracts;
   static enc = enc;
   static ipfs = ipfs;
+  static meta = meta;
   static utils = utils;
 
   static fundingSource = {
@@ -233,12 +235,10 @@ class CaskSDK {
    */
   async initSubscription({ ethersConnection, chainId , signer} = {}) {
     this.logger.info(`Initializing Cask SDK.`);
-    if (this.ethersConnection) {
-      await this.ethersConnection.switchChain(chainId, signer);
-      return;
-    }
 
-    if (!ethersConnection) {
+    if (ethersConnection) {
+      this.ethersConnection = ethersConnection;
+    } else {
       this.ethersConnection = new EthersConnection(this.options);
     }
 
@@ -255,19 +255,17 @@ class CaskSDK {
     await Promise.all(promises);
 
     if (!ethersConnection) {
-      await this.ethersConnection.init({ chainId });
+      await this.ethersConnection.init({ chainId, signer });
     }
     this.logger.info(`Cask SDK initialization complete.`);
   }
 
   async initDCA({ ethersConnection, chainId , signer} = {}) {
     this.logger.info(`Initializing Cask DCA SDK.`);
-    if (this.ethersConnection) {
-      await this.ethersConnection.switchChain(chainId, signer);
-      return;
-    }
 
-    if (!ethersConnection) {
+    if (ethersConnection) {
+      this.ethersConnection = ethersConnection;
+    } else {
       this.ethersConnection = new EthersConnection(this.options);
     }
 
@@ -280,19 +278,17 @@ class CaskSDK {
     await Promise.all(promises);
 
     if (!ethersConnection) {
-      await this.ethersConnection.init({ chainId });
+      await this.ethersConnection.init({ chainId, signer });
     }
     this.logger.info(`Cask DCA SDK initialization complete.`);
   }
 
   async initP2P({ ethersConnection, chainId , signer} = {}) {
     this.logger.info(`Initializing Cask P2P SDK.`);
-    if (this.ethersConnection) {
-      await this.ethersConnection.switchChain(chainId, signer);
-      return;
-    }
 
-    if (!ethersConnection) {
+    if (ethersConnection) {
+      this.ethersConnection = ethersConnection;
+    } else {
       this.ethersConnection = new EthersConnection(this.options);
     }
 
@@ -305,7 +301,7 @@ class CaskSDK {
     await Promise.all(promises);
 
     if (!ethersConnection) {
-      await this.ethersConnection.init({ chainId });
+      await this.ethersConnection.init({ chainId, signer });
     }
     this.logger.info(`Cask P2P SDK initialization complete.`);
   }
