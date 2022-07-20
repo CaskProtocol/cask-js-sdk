@@ -20,11 +20,11 @@ const deployments = {
     CaskSubscriptions: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x7899118A8A3EAe4cDd97Cb2Ea9E52a5b78da3cB6",
-            [chains.AVAX_TESTNET.chainId]: "0x28E372eff469b18Bc86Fb9f0C496b219bde39E81",
+            // [chains.AVAX_TESTNET.chainId]: "0x28E372eff469b18Bc86Fb9f0C496b219bde39E81",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
-            [chains.AVAX_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
+            // [chains.AVAX_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xb651068Ace267cc30Ca77c91284772AD8315B4E6',
@@ -42,11 +42,11 @@ const deployments = {
     CaskSubscriptionPlans: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x3E9B8E9D60Abc50b032cdc42Ef2F6CBaBce17983",
-            [chains.AVAX_TESTNET.chainId]: "0x06bd2FD3784E1cEe11969caA67CDb0803DcF5869",
+            // [chains.AVAX_TESTNET.chainId]: "0x06bd2FD3784E1cEe11969caA67CDb0803DcF5869",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
-            [chains.AVAX_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
+            // [chains.AVAX_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xA80D4D3d0b2C9c38912459F2E674416973a9A161',
@@ -64,11 +64,11 @@ const deployments = {
     CaskVault: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0xc924CaAFe6759F92215Dadf326FF4fAb158f6C41",
-            [chains.AVAX_TESTNET.chainId]: "0x9d628d298D917BF9642Bb45D594B2075f661373D",
+            // [chains.AVAX_TESTNET.chainId]: "0x9d628d298D917BF9642Bb45D594B2075f661373D",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
-            [chains.AVAX_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
+            // [chains.AVAX_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x61E53693d81A38e72AAe0B2aC5f9B2dbb2B5ac56',
@@ -86,7 +86,7 @@ const deployments = {
     CaskDCA: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "",
-            [chains.AVAX_TESTNET.chainId]: "",
+            // [chains.AVAX_TESTNET.chainId]: "",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '',
@@ -107,7 +107,7 @@ const deployments = {
     CaskP2P: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "",
-            [chains.AVAX_TESTNET.chainId]: "",
+            // [chains.AVAX_TESTNET.chainId]: "",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '',
@@ -125,13 +125,12 @@ const deployments = {
     CaskToken: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
-            [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+            // [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
         },
         [environments.PRODUCTION]: {
             [chains.ETH_MAINNET.chainId]: '0x0645314c1Afd4d9711d609e3e755265aBaBc95Eb',
             [chains.POLYGON_MAINNET.chainId]: '0xdc185ade9a3362f9203191f136499ffe512527c1',
-            [chains.FANTOM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            // [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x0000000000000000000000000000000000000000',
@@ -144,12 +143,11 @@ const deployments = {
     CaskAirdrop: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
-            [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+            // [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.FANTOM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
-            [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            // [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x0000000000000000000000000000000000000000',
@@ -165,11 +163,11 @@ const deployments = {
     SubgraphUrl: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-mumbai",
-            [chains.AVAX_TESTNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji",
+            // [chains.AVAX_TESTNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-polygon",
-            [chains.AVAX_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-avalanche",
+            // [chains.AVAX_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-avalanche",
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: null,
