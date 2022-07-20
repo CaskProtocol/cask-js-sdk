@@ -219,7 +219,7 @@ class Vault {
 
         const allowance = await this.allowance({asset, address, units: CaskUnits.ASSET});
 
-        return allowance.lt(amountAsset);
+        return ethers.BigNumber.from(allowance).lt(amountAsset);
     }
 
     /**
