@@ -113,10 +113,14 @@ class Meta {
     }
 
     enabled() {
-        if (!this.ethersConnection || !this.options.biconomyApiKey) {
-            return false;
+        switch (this.metaProvider) {
+            case providers.BICONOMY:
+                if (!this.ethersConnection || !this.options.biconomyApiKey) {
+                    return false;
+                }
+                return !!this.options.biconomyApiKey?.[this.ethersConnection.chainId];
         }
-        return !!this.options.biconomyApiKey?.[this.ethersConnection.chainId];
+        return false;
     }
 }
 
