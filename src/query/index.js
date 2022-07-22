@@ -84,7 +84,7 @@ class Query {
      * @param {string} [args.address=this.ethersConnection.address] Address of provider
      * @return {Promise<*>}
      */
-    async providerSummary({address}={}) {
+    async providerSummary({address, options}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
@@ -104,7 +104,7 @@ query Query {
         totalPaymentsReceived
     }
 }`;
-        const results = await this.rawQuery(query);
+        const results = await this.rawQuery(query, options);
         return results.data.caskProvider;
     }
 
@@ -115,7 +115,7 @@ query Query {
      * @param {number} args.planId Plan ID
      * @return {Promise<*>}
      */
-    async providerPlanSummary({address, planId}={}) {
+    async providerPlanSummary({address, planId, options}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
@@ -136,7 +136,7 @@ query Query {
         pastDueSubscriptionCount
     }
 }`;
-        const results = await this.rawQuery(query);
+        const results = await this.rawQuery(query, options);
         return results.data.caskSubscriptionPlan;
     }
 
@@ -146,7 +146,7 @@ query Query {
      * @param {string} [args.address=this.ethersConnection.address] Address of consumer
      * @return {Promise<*>}
      */
-    async consumerSummary({address}={}) {
+    async consumerSummary({address, options}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
@@ -169,7 +169,7 @@ query Query {
         totalP2PCount
     }
 }`;
-        const results = await this.rawQuery(query);
+        const results = await this.rawQuery(query, options);
         return results.data.caskConsumer;
     }
 
@@ -179,7 +179,7 @@ query Query {
      * @param {string} [args.address=this.ethersConnection.address] Address of user
      * @return {Promise<*>}
      */
-    async flows({address}={}) {
+    async flows({address, options}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
@@ -245,7 +245,7 @@ query Query {
   }
 }
 `
-        const results = await this.rawQuery(query);
+        const results = await this.rawQuery(query, options);
         return results.data
     }
 
@@ -254,7 +254,8 @@ query Query {
                            skip=0,
                            where={},
                            orderBy='timestamp',
-                           orderDirection='desc'
+                           orderDirection='desc',
+                           options
                        }={})
     {
         const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
@@ -283,7 +284,8 @@ query Query {
 }`);
     }
 
-    subscriptions({   consumer,
+    subscriptions({
+                      consumer,
                       first=10,
                       skip=0,
                       where={},
@@ -291,6 +293,7 @@ query Query {
                       orderDirection='desc',
                       includeCanceled = false,
                       status,
+                      options
                   }={})
     {
         consumer = consumer || this.ethersConnection.address;
@@ -311,18 +314,21 @@ query Query {
             orderDirection,
             includeCanceled,
             status,
+            options
         });
     }
 
-    subscribers({     provider,
-                      first=10,
-                      skip=0,
-                      where={},
-                      orderBy='createdAt',
-                      orderDirection='desc',
-                      includeCanceled = false,
-                      status,
-                  }={})
+    subscribers({
+                    provider,
+                    first=10,
+                    skip=0,
+                    where={},
+                    orderBy='createdAt',
+                    orderDirection='desc',
+                    includeCanceled = false,
+                    status,
+                    options
+                }={})
     {
         provider = provider || this.ethersConnection.address;
         if (!provider) {
@@ -342,18 +348,20 @@ query Query {
             orderDirection,
             includeCanceled,
             status,
+            options
         })
     }
 
     subscriptionQuery({
-                    first=10,
-                    skip=0,
-                    where={},
-                    orderBy='createdAt',
-                    orderDirection='desc',
-                    includeCanceled = false,
-                    status,
-                }={})
+                          first=10,
+                          skip=0,
+                          where={},
+                          orderBy='createdAt',
+                          orderDirection='desc',
+                          includeCanceled = false,
+                          status,
+                          options
+                      }={})
     {
         let whereStatus;
         if (status) {
@@ -398,17 +406,18 @@ query Query {
     renewAt
     renewCount
   }
-}`);
+}`, options);
     }
 
     dcaQuery({
-                          first=10,
-                          skip=0,
-                          where={},
-                          orderBy='createdAt',
-                          orderDirection='desc',
-                          status,
-                      }={})
+                 first=10,
+                 skip=0,
+                 where={},
+                 orderBy='createdAt',
+                 orderDirection='desc',
+                 status,
+                 options
+             }={})
     {
         let whereStatus = '';
         if (status) {
@@ -448,7 +457,7 @@ query Query {
     to
     totalAmount
   }
-}`);
+}`, options);
     }
 
     p2pQuery({
@@ -458,6 +467,7 @@ query Query {
                  orderBy='createdAt',
                  orderDirection='desc',
                  status,
+                 options
              }={})
     {
         let whereStatus = '';
@@ -492,7 +502,7 @@ query Query {
     to
     totalAmount
   }
-}`);
+}`, options);
     }
 }
 
