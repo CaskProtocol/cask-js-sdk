@@ -4,6 +4,7 @@ import contracts from "../contracts/index.js";
 import EthersConnection from "../core/EthersConnection.js";
 import ProviderProfile from "./ProviderProfile.js";
 import utils from "../utils/index.js";
+import Query from "../query";
 
 
 /**
@@ -54,6 +55,13 @@ class SubscriptionPlans {
             this.options.cache = {};
         }
         this.options.cache.subscriptionPlans = this;
+
+        if (this.options.cache?.query) {
+            this.query = this.options.cache?.query;
+        } else {
+            this.query = new Query(this.options);
+            this.options.cache.query = this.query;
+        }
     }
 
     /**
@@ -70,6 +78,10 @@ class SubscriptionPlans {
             this.ethersConnection = ethersConnection;
         }
         this.ethersConnection.onSwitchChain(async(chainId) => { await this._initContracts(chainId) });
+
+        if (!this.query.ethersConnection) {
+            await this.query.init({ethersConnection: this.ethersConnection});
+        }
 
         if (!ethersConnection) {
             await this.ethersConnection.init();
@@ -101,7 +113,7 @@ class SubscriptionPlans {
      * @param [force=false] Force reloading profile even if it was previously loaded
      * @return {Promise<ProviderProfile>}
      */
-    async loadProfile({address, force=false}={}) {
+    async loadProfile({address, includePlanStatus=false, force=false}={}) {
         address = address || this.ethersConnection.address;
         if (!address) {
             throw new Error("address not specified or detectable");
@@ -124,6 +136,10 @@ class SubscriptionPlans {
                 defaultUnitOptions: this.options.defaultUnitOptions,
             });
             await this.providerProfile.loadFromIPFS(providerProfile.cid);
+            if (includePlanStatus) {
+                await this.mergePlanStatus(this.providerProfile);
+            }
+            this.providerProfile.plans['testme'] = {key: 'why'};
         } else {
             this.providerProfile = new ProviderProfile({
                 ipfs: this.options.ipfs,
@@ -138,6 +154,29 @@ class SubscriptionPlans {
         return this.providerProfile;
     }
 
+    async mergePlanStatus(profile) {
+
+        const query = `
+query Query {
+  caskSubscriptionPlans(where: {provider: "${profile.address.toLowerCase()}"}) {
+    planId
+    status
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+        results.data.caskSubscriptionPlans.forEach((p) => {
+            if (profile.plans[p.planId]) {
+                profile.plans[p.planId].status = p.status;
+            }
+        });
+
+        Object.keys(profile.plans).forEach((planId) => {
+            if (!profile.plans[planId].status) {
+                profile.plans[planId].status = 'Enabled';
+            }
+        });
+    }
+
     /**
      * Get the provider profile for an address.
      * @param address Provider address
@@ -145,13 +184,16 @@ class SubscriptionPlans {
      * @param [options.force=false] Force re-fetching profile even if it was previously loaded
      * @return {Promise<ProviderProfile|null>}
      */
-    async getProfile(address, {force=false}={}) {
+    async getProfile(address, {includePlanStatus=false, force=false}={}) {
 
         if (!this.providerProfileCache) {
             this.providerProfileCache = {};
         }
 
         if (this.providerProfileCache[address] && !force) {
+            if (includePlanStatus) {
+                await this.mergeStatus(this.providerProfileCache[address]);
+            }
             return this.providerProfileCache[address];
         }
 
@@ -172,6 +214,9 @@ class SubscriptionPlans {
         });
 
         await newProfile.loadFromIPFS(profile.cid);
+        if (includePlanStatus) {
+            await this.mergePlanStatus(newProfile);
+        }
 
         this.providerProfileCache[address] = newProfile;
 
