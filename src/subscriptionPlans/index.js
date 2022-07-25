@@ -151,7 +151,6 @@ class SubscriptionPlans {
             if (includePlanStatus) {
                 await this.mergePlanStatus(this.providerProfile);
             }
-            this.providerProfile.plans['testme'] = {key: 'why'};
         } else {
             this.providerProfile = new ProviderProfile({
                 ipfs: this.options.ipfs,
