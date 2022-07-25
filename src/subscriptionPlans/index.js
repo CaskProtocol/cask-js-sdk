@@ -203,7 +203,7 @@ query Query {
 
         if (this.providerProfileCache[address] && !force) {
             if (includePlanStatus) {
-                await this.mergeStatus(this.providerProfileCache[address]);
+                await this.mergePlanStatus(this.providerProfileCache[address]);
             }
             return this.providerProfileCache[address];
         }
