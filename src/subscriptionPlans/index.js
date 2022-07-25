@@ -37,6 +37,18 @@ import Query from "../query";
  */
 class SubscriptionPlans {
 
+    static SubscriptionPlanStatus = {
+        ENABLED: 0,
+        DISABLED: 1,
+        ENDOFLIFE: 2
+    }
+
+    static SubscriptionPlanStatusText = {
+        [SubscriptionPlans.SubscriptionPlanStatus.ENABLED]: 'Enabled',
+        [SubscriptionPlans.SubscriptionPlanStatus.DISABLED]: 'Disabled',
+        [SubscriptionPlans.SubscriptionPlanStatus.ENDOFLIFE]: 'EndOfLife'
+    }
+
     /**
      * Create an instance of the SubscriptionPlans service.
      *
@@ -297,7 +309,8 @@ query Query {
             throw new Error(`Unknown plan ${planId}`);
         }
 
-        return await this.CaskSubscriptionPlans.getPlanStatus(this.providerProfile.address, planId);
+        const status =  await this.CaskSubscriptionPlans.getPlanStatus(this.providerProfile.address, planId);
+        return SubscriptionPlans.SubscriptionPlanStatusText[status] || 'Unknown';
     }
 
     /**
