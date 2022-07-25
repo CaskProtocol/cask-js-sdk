@@ -94,6 +94,9 @@ class Query {
 query Query {
     caskProvider(id: "${address.toLowerCase()}") {
         appearedAt
+        paymentAddress
+        profileCid
+        profileNonce
         totalSubscriptionCount
         activeSubscriptionCount
         trialingSubscriptionCount
@@ -127,6 +130,7 @@ query Query {
         const query = `
 query Query {
     caskSubscriptionPlan(id: "${address.toLowerCase()}-${planId}") {
+        status
         totalSubscriptionCount
         activeSubscriptionCount
         trialingSubscriptionCount
@@ -234,6 +238,7 @@ query Query {
     period
     plan {
       planId
+      status
     }
     price
     provider {
@@ -397,6 +402,7 @@ query Query {
     period
     plan {
       planId
+      status
     }
     price
     provider {
