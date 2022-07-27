@@ -235,12 +235,18 @@ query Query {
       id
     }
     discountId
-    period
     plan {
       planId
       status
     }
     price
+    period
+    freeTrial
+    maxActive
+    minPeriods
+    gracePeriod
+    canPause
+    canTransfer
     provider {
       id
     }
@@ -399,12 +405,18 @@ query Query {
       id
     }
     discountId
-    period
     plan {
       planId
       status
     }
     price
+    period
+    freeTrial
+    maxActive
+    minPeriods
+    gracePeriod
+    canPause
+    canTransfer
     provider {
       id
     }
