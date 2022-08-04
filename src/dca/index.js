@@ -213,7 +213,7 @@ query Query {
             totalAmount = totalAmountAsset;
         }
 
-        const assetInfo = await this.getAssetDefinition(asset);
+        const assetInfo = await this.assetDefinition(asset);
 
         if (!assetInfo) {
             throw new Error(`Cannot get asset definition for asset ${asset}`);

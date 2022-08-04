@@ -10,6 +10,14 @@ function dcaAssetspecHash(asset) {
     ));
 }
 
+function dcaAssetspec(asset) {
+    return [
+        asset.router.toLowerCase(),
+        asset.priceFeed.toLowerCase(),
+        ...asset.path.map((a) => a.toLowerCase())
+    ];
+}
+
 function _dcaMerkleTree(assetList) {
     const elements = assetList.map((asset) => dcaAssetspecHash(asset));
     return new MerkleTree(elements, keccak256, { sort: true });
@@ -40,6 +48,7 @@ function getDCAAsset(assetList, asset) {
 export default {
     // dca helpers
     dcaAssetspecHash,
+    dcaAssetspec,
     dcaMerkleRoot,
     dcaMerkleProof,
     dcaMerkleVerify,
