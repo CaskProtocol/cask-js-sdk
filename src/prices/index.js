@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import Logger from "../utils/Logger.js";
+import contracts from "../contracts";
 import CaskUnits from "../core/units.js";
 
 import EthersConnection from "../core/EthersConnection.js";
@@ -38,6 +39,8 @@ class Prices {
             this.vault = new Vault(options);
             this.options.cache.vault = this.vault;
         }
+
+        this.assetPriceData = {};
 
         this.onPricesReadyCallbacks = [];
         this.onBalancesReadyCallbacks = [];
@@ -158,7 +161,8 @@ class Prices {
         }
         const promises = Object.keys(this.vault.assetMap).map(async (asset) => {
             const assetInfo = this.vault.getAsset(asset);
-            assetInfo.latestRoundData = await assetInfo.priceFeedContract.latestRoundData();
+
+            this.assetPriceData[assetInfo.address] = await this.vault.currentPrice(assetInfo);
 
             if (walletAddress) {
                 assetInfo.balance = await assetInfo.tokenContract.balanceOf(walletAddress);
@@ -182,15 +186,15 @@ class Prices {
             throw new Error(`Unknown asset ${asset} - is it in the vault?`);
         }
         const now = ethers.BigNumber.from(parseInt(Date.now()/1000));
-        const updatedAt = assetInfo?.latestRoundData?.updatedAt;
+        const updatedAt = this.assetPriceData[assetInfo.address]?.updatedAt;
         if (!updatedAt) {
-            throw new Error(`latestRoundData unavailable for asset ${assetInfo.symbol} - prices loaded yet?`);
+            throw new Error(`updatedAt unavailable for asset ${assetInfo.symbol} - prices loaded yet?`);
         }
         const age = now.sub(updatedAt);
         if (this.priceMaxAge > 0 && updatedAt.gt(0) && age.gt(this.priceMaxAge)) {
             throw new Error(`Price feed is too old - age: ${age}`);
         }
-        return assetInfo?.latestRoundData?.answer.toString();
+        return this.assetPriceData[assetInfo.address]?.price.toString();
     }
 
     /**

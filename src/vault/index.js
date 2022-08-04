@@ -52,6 +52,8 @@ class Vault {
 
         this.assetsLoaded = false;
 
+        this.assetPriceFeed = {};
+
         this.onAssetsLoadedCallbacks = [];
     }
 
@@ -114,10 +116,6 @@ class Vault {
                 tokenAddress: asset,
                 ethersConnection: this.ethersConnection
             });
-            const priceFeedContract = contracts.AggregatorV3Interface({
-                priceFeed: vaultAsset.priceFeed,
-                ethersConnection: this.ethersConnection
-            });
             this.assetMap[asset] = {
                 address: asset,
                 priceFeed: vaultAsset.priceFeed,
@@ -127,7 +125,6 @@ class Vault {
                 priceFeedDecimals: vaultAsset.priceFeedDecimals,
                 allowed: vaultAsset.allowed,
                 symbol: await tokenContract.symbol(),
-                priceFeedContract,
                 tokenContract,
             };
             return asset;
@@ -564,16 +561,8 @@ class Vault {
         amountAsset =
             ethers.BigNumber.from(this.amountInAsset({asset, amountSimple, amountAsset}));
 
-        const fromPriceFeed = contracts.AggregatorV3Interface({
-            priceFeed: asset.priceFeed,
-            ethersConnection: this.ethersConnection,
-        });
-        const toPriceFeed = contracts.AggregatorV3Interface({
-            priceFeed: toAsset.priceFeed,
-            ethersConnection: this.ethersConnection,
-        });
-        const fromOraclePrice = ethers.BigNumber.from((await fromPriceFeed.latestRoundData()).answer);
-        const toOraclePrice = ethers.BigNumber.from((await toPriceFeed.latestRoundData()).answer);
+        const fromOracleData = await this.currentPrice(asset);
+        const toOracleData = await this.currentPrice(toAsset);
 
         let toAmount;
 
@@ -581,15 +570,15 @@ class Vault {
             // since oracle precision is different, scale everything
             // to toAsset precision and do conversion
             toAmount = CaskUnits.scalePrice(amountAsset, asset.assetDecimals, toAsset.assetDecimals)
-                .mul(CaskUnits.scalePrice(fromOraclePrice, asset.priceFeedDecimals, toAsset.assetDecimals))
-                .div(CaskUnits.scalePrice(toOraclePrice, toAsset.priceFeedDecimals, toAsset.assetDecimals))
+                .mul(CaskUnits.scalePrice(fromOracleData.price, asset.priceFeedDecimals, toAsset.assetDecimals))
+                .div(CaskUnits.scalePrice(toOracleData.price, toAsset.priceFeedDecimals, toAsset.assetDecimals))
                 .toString();
         } else {
             // oracles are already in same precision, so just scale fromAmountAssetDecimals to oracle precision,
             // do the price conversion and convert back to toAsset precision
             toAmount = CaskUnits.scalePrice(
                 CaskUnits.scalePrice(amountAsset, asset.assetDecimals, toAsset.priceFeedDecimals)
-                    .mul(fromOraclePrice).div(toOraclePrice),
+                    .mul(fromOracleData.price).div(toOracleData.price),
                 toAsset.priceFeedDecimals,
                 toAsset.assetDecimals)
                 .toString();
@@ -600,6 +589,45 @@ class Vault {
             units: units || this.options.defaultUnits,
             unitOptions: unitOptions || this.options.defaultUnitOptions,
         });
+    }
+
+    async currentPrice(asset) {
+        asset = this.getAsset(asset);
+
+        if (this.ethersConnection.oracleType() === 'band') {
+            return this.currentPriceBand(asset);
+        }
+
+        if (!this.assetPriceFeed[asset.address]) {
+            this.assetPriceFeed[asset.address] = contracts.AggregatorV3Interface({
+                priceFeed: asset.priceFeed,
+                ethersConnection: this.ethersConnection,
+            });
+        }
+
+        const oracleResult = await this.assetPriceFeed[asset.address].latestRoundData();
+        return {
+            updatedAt: oracleResult.updatedAt,
+            price: oracleResult.answer,
+        };
+    }
+
+    async currentPriceBand(asset) {
+        asset = this.getAsset(asset);
+
+
+        const bandOracle = contracts.IStdReference({
+            referenceAddress: asset.priceFeed,
+            ethersConnection: this.ethersConnection,
+        });
+
+        const bandAssetSymbol = asset.symbol.replace(/\.[^.]+$/, "").toUpperCase();
+
+        const oracleResult = await bandOracle.getReferenceData(bandAssetSymbol, "USD");
+        return {
+            updatedAt: oracleResult.lastUpdatedBase,
+            price: oracleResult.rate,
+        };
     }
 
     /**

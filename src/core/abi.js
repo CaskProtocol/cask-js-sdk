@@ -8,6 +8,7 @@ import AggregatorV3InterfaceAbi from "./abi/AggregatorV3Interface.js";
 import ERC20Abi from "./abi/ERC20Metadata.js";
 import ERC721Abi from "./abi/ERC721Metadata.js";
 import IUniswapV2Router02Abi from "./abi/IUniswapV2Router02.js";
+import IStdReferenceAbi from "./abi/IStdReference.js";
 
 
 /**
@@ -58,6 +59,10 @@ const abi = {
    * IUniswapV2Router02 ABI.
    */
   IUniswapV2Router02: IUniswapV2Router02Abi.abi,
+  /**
+   * Band Protocol Oracle IStdReference ABI.
+   */
+  IStdReference: IStdReferenceAbi.abi,
 };
 
 export default abi;
