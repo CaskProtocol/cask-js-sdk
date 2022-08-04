@@ -25,6 +25,8 @@ const deployments = {
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
             [chains.AVAX_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
+            [chains.FANTOM_MAINNET.chainId]: '0x7DaF9a1744Df00d0473A9A920B6A4Ea33B665360',
+            [chains.AURORA_MAINNET.chainId]: '0xD054F8866fc45c4387d56D2340dCA08d83E14A5e',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xb651068Ace267cc30Ca77c91284772AD8315B4E6',
@@ -47,6 +49,8 @@ const deployments = {
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
             [chains.AVAX_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
+            [chains.FANTOM_MAINNET.chainId]: '0xF76BF31f0b56BD6f72E1aFeB83a51F191ec2291B',
+            [chains.AURORA_MAINNET.chainId]: '0xD252A4C836C75063867f0193325b328CCe6B7306',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xA80D4D3d0b2C9c38912459F2E674416973a9A161',
@@ -69,6 +73,8 @@ const deployments = {
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
             [chains.AVAX_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
+            [chains.FANTOM_MAINNET.chainId]: '0xBCcDbB0806Acc914F6746DE592f924B374190710',
+            [chains.AURORA_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x61E53693d81A38e72AAe0B2aC5f9B2dbb2B5ac56',
@@ -91,6 +97,8 @@ const deployments = {
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x733Ec5A72c38f2f3c75E98b28DffC1885aB04AF1',
             [chains.AVAX_MAINNET.chainId]: '0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8',
+            [chains.FANTOM_MAINNET.chainId]: '0x4C17e4F40262108F06375d727f1353e1D592B1Bf',
+            [chains.AURORA_MAINNET.chainId]: '0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xF4EED3670EB74651D55EaA4f1832410eF0cbc519',
@@ -113,6 +121,8 @@ const deployments = {
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x28bc3F4C21504c4686f88238cF424c353e3E628E',
             [chains.AVAX_MAINNET.chainId]: '0x28418B0AB2C00142a865971dcC6a4b1154DaD19E',
+            [chains.FANTOM_MAINNET.chainId]: '0x1A4620123cfD10c73D9Cdd65879c1Fb6312ef654',
+            [chains.AURORA_MAINNET.chainId]: '0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xc979978f89B11A6684Cc7C6384141322001Dc6E2',
@@ -170,6 +180,8 @@ const deployments = {
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-polygon",
             [chains.AVAX_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-avalanche",
+            [chains.FANTOM_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fantom",
+            [chains.AURORA_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-aurora",
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: null,
