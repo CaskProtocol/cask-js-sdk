@@ -233,6 +233,7 @@ viewBox="0 0 784.37 1277.39"
     litName: 'celo',
     transakName: 'celo',
     transakToken: 'CUSD',
+    oracleType: 'band',
     logo: `<svg version="1.1" id="Celo_Rings" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 950 950" style="enable-background:new 0 0 950 950;" xml:space="preserve">
 <style type="text/css">
@@ -258,6 +259,7 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'celo_alfajores',
     defaultRpcUrl: "https://alfajores-forno.celo-testnet.org",
     explorerUrl: "https://alfajores-blockscout.celo-testnet.org",
+    oracleType: 'band',
     logo: `<svg version="1.1" id="Celo_Rings" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 950 950" style="enable-background:new 0 0 950 950;" xml:space="preserve">
 <style type="text/css">

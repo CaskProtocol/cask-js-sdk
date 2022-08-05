@@ -14,7 +14,7 @@ const cask = new CaskSDK({
         pinataApiSecret: process.env.PINATA_API_SECRET,
     },
     prices: {
-        priceMaxAge: 900,
+        priceMaxAge: 9000,
         interval: 5000,
     },
     environment: CaskSDK.environments.DEVELOPMENT,
@@ -25,26 +25,20 @@ async function priceFeed() {
 
     await cask.init();
 
+    const asset = 'USDC';
+
     cask.prices.onBalancesReady(async () => {
         console.log(`Starting price loop`);
 
         for (let i = 0; i < 5; i++) {
-            const dai = 905 + (2345.2 * i);
+            const amount = 905 + (2345.2 * i);
 
             try {
-                const usd = cask.prices.usdPrice({
-                    asset: 'DAI',
-                    amount: dai,
-                    units: CaskSDK.units.SIMPLE
-                });
-                console.log(`DAI: ${dai} in USD is ${usd}`);
+                const usd = cask.prices.usdPrice({asset, amount, units: CaskSDK.units.SIMPLE});
+                console.log(`${asset}: ${amount} in USD is ${usd}`);
 
-                const balance = cask.prices.balance({
-                    asset: 'USDC',
-                    units: CaskSDK.units.SIMPLE
-                });
-
-                console.log(`Wallet balance of USDC: ${balance}`);
+                const balance = cask.prices.balance({asset, units: CaskSDK.units.SIMPLE});
+                console.log(`Wallet balance of ${asset}: ${balance}`);
 
             } catch (err) {
                 console.log(`Error getting price feed: ${err}`);
@@ -68,14 +62,12 @@ async function priceFeed() {
 async function priceCallbacks() {
     await cask.init();
 
+    const asset = 'USDC';
+
     cask.prices.onPricesUpdated(async () => {
 
-        const balance = cask.prices.balance({
-            asset: 'USDC',
-            units: CaskSDK.units.SIMPLE
-        });
-
-        console.log(`Wallet balance of USDC: ${balance}`);
+        const balance = cask.prices.balance({asset, units: CaskSDK.units.SIMPLE});
+        console.log(`Wallet balance of ${asset}: ${balance}`);
 
     });
 
@@ -87,6 +79,6 @@ async function priceCallbacks() {
 }
 
 (async () => {
-    // await priceFeed();
-    await priceCallbacks();
+    await priceFeed();
+    // await priceCallbacks();
 })();

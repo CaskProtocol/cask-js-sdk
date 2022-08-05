@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import Logger from "../utils/Logger.js";
 import contracts from "../contracts/index.js";
+import chains from "../core/chains.js";
 import CaskUnits from "../core/units.js";
-import meta from "../meta/index.js";
 import EthersConnection from "../core/EthersConnection.js";
 
 /**
@@ -594,7 +594,10 @@ class Vault {
     async currentPrice(asset) {
         asset = this.getAsset(asset);
 
-        if (this.ethersConnection.oracleType() === 'band') {
+        const chainInfo = chains.lookupChain(this.ethersConnection.chainId);
+        const oracleType = this.options?.oracleType || chainInfo?.oracleType || 'chainlink';
+
+        if (oracleType === 'band') {
             return this.currentPriceBand(asset);
         }
 

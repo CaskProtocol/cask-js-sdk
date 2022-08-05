@@ -89,14 +89,6 @@ class EthersConnection {
         return this.meta.enabled()
     }
 
-    oracleType() {
-        if (typeof(this.options?.oracleType) === 'string') {
-            return this.options?.oracleType;
-        } else {
-            return this.options?.oracleType?.[this.chainId] || 'chainlink';
-        }
-    }
-
     /**
      * Switch signer to use for write transactions.
      * @param signer New signer to use
