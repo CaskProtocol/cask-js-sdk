@@ -21,6 +21,7 @@ const deployments = {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x7899118A8A3EAe4cDd97Cb2Ea9E52a5b78da3cB6",
             [chains.AVAX_TESTNET.chainId]: "0x28E372eff469b18Bc86Fb9f0C496b219bde39E81",
+            [chains.CELO_TESTNET.chainId]: "0xB844AFd937717bf117CaE2467B12f2922afa68dB",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
@@ -45,6 +46,7 @@ const deployments = {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x3E9B8E9D60Abc50b032cdc42Ef2F6CBaBce17983",
             [chains.AVAX_TESTNET.chainId]: "0x06bd2FD3784E1cEe11969caA67CDb0803DcF5869",
+            [chains.CELO_TESTNET.chainId]: "0x6FF7EB600f4BF68e0A3f35ba2D4825BfcA031A1b",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
@@ -69,6 +71,7 @@ const deployments = {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0xc924CaAFe6759F92215Dadf326FF4fAb158f6C41",
             [chains.AVAX_TESTNET.chainId]: "0x9d628d298D917BF9642Bb45D594B2075f661373D",
+            [chains.CELO_TESTNET.chainId]: "0xC48f1deb2E6d68aD620cA38927F4d8b1923555d0",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
@@ -93,6 +96,7 @@ const deployments = {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x71327966DE32D572Decc847312997751fecD0F25",
             [chains.AVAX_TESTNET.chainId]: "0x1588c85cacbD6e30B37F94d351dF50194ca36C1c",
+            [chains.CELO_TESTNET.chainId]: "0x2A591f416EecEfF7C29436957b53736826D0BCD3",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x733Ec5A72c38f2f3c75E98b28DffC1885aB04AF1',
@@ -117,6 +121,7 @@ const deployments = {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x57e139E6649b768C23c33230F6a1C957711db537",
             [chains.AVAX_TESTNET.chainId]: "0xCC79bB7C015387F4784B822621Fd560e0433F00E",
+            [chains.CELO_TESTNET.chainId]: "0x4aAdCe807bcd419fACea62b56E084Ce54e32c312",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x28bc3F4C21504c4686f88238cF424c353e3E628E',
@@ -176,6 +181,7 @@ const deployments = {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-mumbai",
             [chains.AVAX_TESTNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji",
+            [chains.CELO_TESTNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-alfajores",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-polygon",

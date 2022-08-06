@@ -104,6 +104,16 @@ const contracts = {
             abi.IUniswapV2Router02,
             provider || ethersConnection.provider);
     },
+    /**
+     * Band price oracle. Uses either the supplied provider, or the connection from the ethersConnection.
+     * @type ethers.Contract
+     */
+    IStdReference: ({referenceAddress, ethersConnection, provider}) => {
+        return new ethers.Contract(
+            referenceAddress,
+            abi.IStdReference,
+            provider || ethersConnection.provider);
+    },
 }
 
 export default contracts;

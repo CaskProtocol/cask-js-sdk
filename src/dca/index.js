@@ -415,31 +415,65 @@ query Query {
 
         } else { // oracle price
 
-            const assetToUSDOracle = contracts.AggregatorV3Interface({
-                priceFeed: asset.priceFeed,
-                ethersConnection: this.ethersConnection});
-
-            const assetResult = await assetToUSDOracle.latestRoundData();
-
-            const baseAssetInfo = this.vault.getAsset(this.vault.baseAsset);
-            const baseAssetResult = await baseAssetInfo.priceFeedContract.latestRoundData();
-
-            const basePrice = CaskUnits.scalePrice(
-                assetResult.answer,
-                await assetToUSDOracle.decimals(),
-                baseAssetInfo.assetDecimals);
-
-            const quotePrice = CaskUnits.scalePrice(
-                baseAssetResult.answer,
-                baseAssetInfo.priceFeedDecimals,
-                baseAssetInfo.assetDecimals);
-
-            const one = ethers.BigNumber.from(10).pow(baseAssetInfo.assetDecimals);
-
-            return basePrice.mul(one).div(quotePrice);
+            if (this.ethersConnection.oracleType() === 'band') {
+                return await this.bandAssetPrice(asset);
+            } else {
+                return await this.chainlinkAssetPrice(asset);
+            }
         }
     }
 
+    async chainlinkAssetPrice(asset) {
+        if (typeof(asset) === 'string') {
+            asset = await this.assetDefinition(asset);
+        }
+
+        const assetToUSDOracle = contracts.AggregatorV3Interface({
+            priceFeed: asset.priceFeed,
+            ethersConnection: this.ethersConnection});
+
+        const assetResult = await assetToUSDOracle.latestRoundData();
+
+        const baseAssetInfo = this.vault.getAsset(this.vault.baseAsset);
+        const baseAssetResult = await baseAssetInfo.priceFeedContract.latestRoundData();
+
+        const basePrice = CaskUnits.scalePrice(
+            assetResult.answer,
+            await assetToUSDOracle.decimals(),
+            baseAssetInfo.assetDecimals);
+
+        const quotePrice = CaskUnits.scalePrice(
+            baseAssetResult.answer,
+            baseAssetInfo.priceFeedDecimals,
+            baseAssetInfo.assetDecimals);
+
+        const one = ethers.BigNumber.from(10).pow(baseAssetInfo.assetDecimals);
+
+        return basePrice.mul(one).div(quotePrice);
+    }
+
+    async bandAssetPrice(asset) {
+        if (typeof(asset) === 'string') {
+            asset = await this.assetDefinition(asset);
+        }
+
+        const bandOracle = contracts.IStdReference({
+            referenceAddress: asset.priceFeed,
+            ethersConnection: this.ethersConnection,
+        });
+
+        const baseAssetInfo = this.vault.getAsset(this.vault.baseAsset);
+
+        const bandAssetBaseSymbol = asset.outputAssetSymbol.replace(/\.[^.]+$/, "").toUpperCase();
+        const bandAssetQuoteSymbol = baseAssetInfo.symbol.replace(/\.[^.]+$/, "").toUpperCase();
+
+        const oracleResult = await bandOracle.getReferenceData(bandAssetBaseSymbol, bandAssetQuoteSymbol);
+
+        return {
+            updatedAt: oracleResult.lastUpdatedBase,
+            price: CaskUnits.scalePrice(oracleResult.rate, 18, baseAssetInfo.assetDecimals),
+        };
+    }
 }
 
 export default DCA;
