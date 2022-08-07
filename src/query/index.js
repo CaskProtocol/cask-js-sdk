@@ -178,6 +178,24 @@ query Query {
     }
 
     /**
+     * Get the specified flow of a specific type
+     * @param {string} id flow ID
+     * @param {string} type Flow type (subscription, dca or p2p)
+     * @param {Object} [options] query options
+     * @return {Promise<*>}
+     */
+    async flow(id, type, options={}) {
+        if (type === 'subscription') {
+            return this.subscription(id, options);
+        } else if (type === 'dca') {
+            return this.dca(id, options);
+        } else if (type === 'p2p') {
+            return this.p2p(id, options);
+        }
+        throw new Error(`Unknown flow type ${type}`);
+    }
+
+    /**
      * Get all flows for an address
      * @param {Object} args Function arguments
      * @param {string} [args.address=this.ethersConnection.address] Address of user
@@ -363,6 +381,11 @@ query Query {
         })
     }
 
+    async subscription(id, options={}) {
+        const result = await this.subscriptionQuery({where: {id}, includeCanceled: true, options});
+        return result?.data?.caskSubscriptions?.[0];
+    }
+
     subscriptionQuery({
                           first=10,
                           skip=0,
@@ -427,12 +450,18 @@ query Query {
 }`, options);
     }
 
+    async dca(id, options={}) {
+        const result = await this.dcaQuery({where: {id}, includeCanceled: true, options});
+        return result?.data?.caskDCAs?.[0];
+    }
+
     dcaQuery({
                  first=10,
                  skip=0,
                  where={},
                  orderBy='createdAt',
                  orderDirection='desc',
+                 includeCanceled = false,
                  status,
                  options
              }={})
@@ -444,6 +473,8 @@ query Query {
             } else {
                 whereStatus = `status: ${status}`;
             }
+        } else {
+            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
         }
 
         const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
@@ -478,12 +509,18 @@ query Query {
 }`, options);
     }
 
+    async p2p(id, options={}) {
+        const result = await this.p2pQuery({where: {id}, includeCanceled: true, options});
+        return result?.data?.caskP2Ps?.[0];
+    }
+
     p2pQuery({
                  first=10,
                  skip=0,
                  where={},
                  orderBy='createdAt',
                  orderDirection='desc',
+                 includeCanceled = false,
                  status,
                  options
              }={})
@@ -495,6 +532,8 @@ query Query {
             } else {
                 whereStatus = `status: ${status}`;
             }
+        } else {
+            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
         }
 
         const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );

@@ -30,6 +30,9 @@ async function flows() {
     console.log(`Data: ${JSON.stringify(results, null, 2)}`);
 }
 
+async function subscription(id) {
+    console.log(`Subscription: ${JSON.stringify(await cask.query.flow(id, 'subscription'), null, 2)}`);
+}
 async function providerSummary(address) {
     const results = await cask.query.providerSummary({address});
     console.log(`Data: ${JSON.stringify(results, null, 2)}`);
@@ -40,7 +43,8 @@ async function providerSummary(address) {
 
     // await transactionHistory();
     // await flows();
-    await providerSummary('0x26e730a8f03661ac1b196fa82c6b0d0ba65e3da8');
+    // await providerSummary('0x26e730a8f03661ac1b196fa82c6b0d0ba65e3da8');
+    await subscription('0xad2b35d4b6a955e0c5305b0fdadfaac3bb70091f9ff135f8fef4a4438c5776cd');
 
     cask.stop();
 })();
