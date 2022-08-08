@@ -561,6 +561,40 @@ query Query {
   }
 }`, options);
     }
+
+    /**
+     * Get wallet history for the connected user
+     *
+     */
+    async walletHistory({address, limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+        if (!address) {
+            address = this.ethersConnection.address;
+        }
+        if (!address) {
+            throw new Error("Cannot perform query without connection address");
+        }
+
+        const query = `
+query Query {
+    caskWalletEvents(
+        where: {user: "${this.ethersConnection.address.toLowerCase()}"}
+        first: ${limit}
+        skip: ${offset}
+        orderBy: ${orderBy}
+        orderDirection: ${orderDirection}
+    ) {
+        id
+        txnId
+        timestamp
+        type
+        assetAddress
+        amount
+        fundingSource
+    }
+}`;
+        const results = await this.rawQuery(query);
+        return results.data.caskWalletEvents;
+    }
 }
 
 export default Query;
