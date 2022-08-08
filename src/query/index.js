@@ -586,6 +586,7 @@ query Query {
         id
         txnId
         timestamp
+        to
         type
         assetAddress
         amount
