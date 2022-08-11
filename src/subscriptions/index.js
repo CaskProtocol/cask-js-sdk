@@ -375,7 +375,7 @@ query Query {
      * @param {string} [args.description] Description for NFT - defaults to auto generated description
      * @param {string} [args.image] URL for NFT image - defaults to provider icon URL if not supplied
      * @param {string} [args.external_url] URL for NFT - defaults to provider website URL if not supplied
-     * @param {Object} [args.attributes] Map of attributes to store with IPFS NFT data
+     * @param {Array} [args.attributes] Array of attributes to store with IPFS NFT data
      * @param {string} [args.discountCode] Discount code of discount to apply to subscription
      * @param {string} [args.discountTokenValidator] Discount token validator for token discount to apply to subscription
      * @param {AuthSig} [args.authSig] AuthSig for attaching private data to subscription
@@ -383,7 +383,7 @@ query Query {
      * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Subscriptions.CreateSubscriptionResult}
      */
-    async create({provider, planId, ref, cancelAt=0, image, external_url, attributes={}, name, description,
+    async create({provider, planId, ref, cancelAt=0, image, external_url, attributes=[], name, description,
                      discountCode, discountTokenValidator,
                      authSig={}, privateData={}, metadata={}})
     {
@@ -401,6 +401,7 @@ query Query {
             throw new Error(`Unable to locate plan ${planId} in provider plans`);
         }
 
+        const origRef = ref;
         if (ref && !ref.startsWith('0x')) {
             ref = utils.stringToRef(ref);
         } else if (!ref) {
@@ -450,13 +451,38 @@ query Query {
             discountProof = utils.generateDiscountProof(0, 0, providerProfile.discountMerkleRoot);
         }
 
+        attributes = [
+            ...attributes,
+            {
+                trait_type: "Provider Address",
+                value: provider
+            },
+            {
+                trait_type: "Provider Name",
+                value: providerProfile?.metadata?.name
+            },
+            {
+                trait_type: "Plan ID",
+                value: planId
+            },
+            {
+                trait_type: "Plan Name",
+                value: plan.name
+            },
+        ];
+        if (origRef) {
+            attributes.push({
+                trait_type: "Ref",
+                value: origRef
+            });
+        }
         const subscriptionData = {
             version: 1,
             image: image || providerProfile?.metadata?.iconUrl,
             name: name || `Subscription to ${providerProfile?.metadata?.name}`,
             description: description || `Subscription to ${providerProfile?.metadata?.name} for plan ${plan.name}. Powered by Cask Protocol - https://www.cask.fi`,
-            attributes,
             external_url: external_url || providerProfile?.metadata?.websiteUrl,
+            attributes,
             chainId: this.ethersConnection.chainId,
             ref,
             planId,
@@ -605,12 +631,12 @@ query Query {
      * @param {string} [args.description] Description for NFT - defaults to auto generated description
      * @param {string} [args.image] URL for NFT image - defaults to provider icon URL if not supplied
      * @param {string} [args.external_url] URL for NFT - defaults to provider website URL if not supplied
-     * @param {Object} [args.attributes] Map of attributes to store with IPFS NFT data
+     * @param {Array} [args.attributes] Array of attributes to store with IPFS NFT data
      * @param {Object} [args.metadata] Non-encrypted data to associate with subscription
      * @return {Promise<{ref, tx: *, provider, chainId, planId, subscriptionId, consumer: (*)}>}
      */
     async change(subscriptionId, {planId, discountCode, discountTokenValidator,
-        image, external_url, attributes={}, name, description, metadata={}})
+        image, external_url, attributes=[], name, description, metadata={}})
     {
 
         if (!this.ethersConnection.signer) {
@@ -684,13 +710,39 @@ query Query {
             discountProof = utils.generateDiscountProof(0, 0, providerProfile.discountMerkleRoot);
         }
 
+        attributes = [
+            ...attributes,
+            {
+                trait_type: "Provider Address",
+                value: provider
+            },
+            {
+                trait_type: "Provider Name",
+                value: providerProfile?.metadata?.name
+            },
+            {
+                trait_type: "Plan ID",
+                value: planId
+            },
+            {
+                trait_type: "Plan Name",
+                value: plan.name
+            },
+        ];
+        if (subscriptionInfo.subscription.ref) {
+            attributes.push({
+                trait_type: "Ref",
+                value: subscriptionInfo.subscription.ref
+            });
+        }
+
         const subscriptionData = {
             version: 1,
             image: image || ipfsData.image || providerProfile?.metadata?.iconUrl,
             name: name || ipfsData.name || `Subscription to ${providerProfile?.metadata?.name}`,
             description: description || ipfsData.description || `Subscription to ${providerProfile?.metadata?.name} for plan ${plan.name}. Powered by Cask Protocol - https://www.cask.fi`,
-            attributes: attributes || ipfsData.attributes,
             external_url: external_url || ipfsData.external_url || providerProfile?.metadata?.websiteUrl,
+            attributes,
             chainId: this.ethersConnection.chainId,
             ref: subscriptionInfo.subscription.ref,
             plan,
