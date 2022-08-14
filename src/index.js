@@ -210,8 +210,8 @@ class CaskSDK {
     promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.subscriptionPlans.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.subscriptions.init({ ethersConnection: this.ethersConnection }));
-    // promises.push(this.dca.init({ ethersConnection: this.ethersConnection }));
-    // promises.push(this.p2p.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.dca.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.p2p.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.events.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.prices.init({ ethersConnection: this.ethersConnection }));
 
