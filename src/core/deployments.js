@@ -94,8 +94,8 @@ const deployments = {
      */
     CaskDCA: {
         [environments.TESTNET]: {
-            [chains.POLYGON_MUMBAI.chainId]: "0x71327966DE32D572Decc847312997751fecD0F25",
-            [chains.AVAX_TESTNET.chainId]: "0x1588c85cacbD6e30B37F94d351dF50194ca36C1c",
+            [chains.POLYGON_MUMBAI.chainId]: "0xE9E994bdaeB77B06E8b31457BAE341D8C4F081ab",
+            [chains.AVAX_TESTNET.chainId]: "0x74708050c23850FDdDbd357fE504b93d4f06E901",
             [chains.CELO_TESTNET.chainId]: "0x2A591f416EecEfF7C29436957b53736826D0BCD3",
         },
         [environments.PRODUCTION]: {
@@ -109,9 +109,9 @@ const deployments = {
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_DCA ||
-                '0x41Eb18BA90c2c955f1987BD3AeA6feb0F70e0e49',
+                '0x3183C5F1951437180A84bD005e3975C66E71b977',
             [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_DCA ||
-                '0x02b5953b90087d5e0A8e9a74364a3e60cfbc9872',
+                '0xdDCEfdE530930c573D27E4f04b7E87A2e88981B8',
         },
     },
     /**
@@ -119,8 +119,8 @@ const deployments = {
      */
     CaskP2P: {
         [environments.TESTNET]: {
-            [chains.POLYGON_MUMBAI.chainId]: "0x57e139E6649b768C23c33230F6a1C957711db537",
-            [chains.AVAX_TESTNET.chainId]: "0xCC79bB7C015387F4784B822621Fd560e0433F00E",
+            [chains.POLYGON_MUMBAI.chainId]: "0x2068607e74B3ED913F920A4e9Fc922067dD825BB",
+            [chains.AVAX_TESTNET.chainId]: "0x4Deb1AAe96809Fc8f05859f7A9F21F7e59e30186",
             [chains.CELO_TESTNET.chainId]: "0x4aAdCe807bcd419fACea62b56E084Ce54e32c312",
         },
         [environments.PRODUCTION]: {
@@ -134,9 +134,9 @@ const deployments = {
         },
         [environments.INTERNAL]: {
             [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_P2P ||
-                '0x92b34C07bD6B77A88d91919469c540a7e1b269e4',
+                '0x96636D895605c1bc5069af3c880853D6D806e259',
             [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_P2P ||
-                '0xDa70B55FEF2Ad61a289eC57d27E8e9f85144A298',
+                '0x2e0B0616C5feBFa0C9f8F9DeE4c6E07A1ecCfCB8',
         },
     },
     CaskToken: {
