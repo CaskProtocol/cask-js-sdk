@@ -221,7 +221,6 @@ query Query {
     outputAsset
     currentQty
     currentAmount
-    cancelAt
     processAt
     slippageBps
     status
@@ -233,7 +232,6 @@ query Query {
     period
     createdAt
     amount
-    cancelAt
     currentAmount
     numPayments
     numSkips
@@ -499,7 +497,6 @@ query Query {
     outputAsset
     currentQty
     currentAmount
-    cancelAt
     processAt
     slippageBps
     status
@@ -551,7 +548,6 @@ query Query {
     period
     createdAt
     amount
-    cancelAt
     currentAmount
     numPayments
     numSkips
