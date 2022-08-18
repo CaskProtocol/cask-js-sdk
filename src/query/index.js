@@ -222,6 +222,8 @@ query Query {
     currentQty
     currentAmount
     processAt
+    lastProcessedAt
+    lastSkippedAt
     slippageBps
     status
     to
@@ -238,6 +240,9 @@ query Query {
     status
     to
     totalAmount
+    processAt
+    lastProcessedAt
+    lastSkippedAt
   }
   caskSubscriptions(
     where: {currentOwner: "${address.toLowerCase()}"}
@@ -269,6 +274,8 @@ query Query {
     ref
     renewAt
     renewCount
+    lastRenewedAt
+    pastDueAt
   }
 }
 `
@@ -444,6 +451,8 @@ query Query {
     ref
     renewAt
     renewCount
+    lastRenewedAt
+    pastDueAt
   }
 }`, options);
     }
@@ -498,6 +507,8 @@ query Query {
     currentQty
     currentAmount
     processAt
+    lastProcessedAt
+    lastSkippedAt
     slippageBps
     status
     to
@@ -554,6 +565,9 @@ query Query {
     status
     to
     totalAmount
+    processAt
+    lastProcessedAt
+    lastSkippedAt
   }
 }`, options);
     }
