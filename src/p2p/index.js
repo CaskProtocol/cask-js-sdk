@@ -180,7 +180,7 @@ query Query {
      *
      * @param {string} dcaId P2P ID
      */
-    async getHistory(p2pId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+    async history(p2pId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
         const query = `
 query Query {
     caskP2PEvents(
@@ -198,6 +198,34 @@ query Query {
 }`;
         const results = await this.query.rawQuery(query);
         return results.data.caskP2PEvents;
+    }
+
+    /**
+     * Get the estimated spend for a P2P for a specific period
+     *
+     * @param {string} address User address
+     * @param {number} [period=1 month] Commitment period
+     */
+    async estimatedCommitment(address, period=2628000) {
+        const query = `
+query Query {
+  caskP2Ps(where: {
+     user: "${address.toLowerCase()}",
+     status_in: [Active]
+    }
+  ) {
+    period
+    amount
+    currentAmount
+    status
+    totalAmount
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+
+        return results.data.caskP2Ps.reduce((balance, p2p) => {
+            return balance + (period / p2p.period * parseFloat(p2p.amount));
+        }, 0);
     }
 
     /**

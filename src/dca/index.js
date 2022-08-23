@@ -184,6 +184,35 @@ query Query {
     }
 
     /**
+     * Get the estimated spend for a DCA for a specific period
+     *
+     * @param {string} address User address
+     * @param {number} [period=1 month] Commitment period
+     */
+    async estimatedCommitment(address, period=2628000) {
+        const query = `
+query Query {
+  caskDCAs(where: {
+      user: "${address.toLowerCase()}",
+      status_in: [Active]
+    }
+  ) {
+    period
+    amount
+    currentQty
+    currentAmount
+    status
+    totalAmount
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+
+        return results.data.caskDCAs.reduce((balance, dca) => {
+            return balance + (period / dca.period * parseFloat(dca.amount));
+        }, 0);
+    }
+
+    /**
      * Create a new DCA.
      *
      * @param {Object} args Function arguments

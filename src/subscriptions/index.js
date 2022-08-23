@@ -352,6 +352,35 @@ query Query {
     }
 
     /**
+     * Get the estimated spend by a consumer on all subscriptions for a specific period
+     *
+     * @param {string} address Consumer address
+     * @param {number} [period=1 month] Commitment period
+     */
+    async estimatedCommitment(address, period=2628000) {
+        const query = `
+query Query {
+  caskSubscriptions(
+    where: {
+      currentOwner: "${address.toLowerCase()}",
+      status_in: [Active]
+    }
+  ) {
+    status
+    cancelAt
+    discountId
+    price
+    period
+  }
+}`;
+        const results = await this.query.rawQuery(query);
+
+        return results.data.caskSubscriptions.reduce((balance, sub) => {
+            return balance + (period / sub.period * parseFloat(sub.price));
+        }, 0);
+    }
+
+    /**
      * Return the number of active/trialing subscriptions a consumer has to a specific provider and plan.
      *
      * @param {string} consumer Consumer address
