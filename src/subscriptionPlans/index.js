@@ -404,7 +404,7 @@ query Query {
         txnId
         timestamp
         type
-        provider {
+        consumer {
            id
         }
         planId
