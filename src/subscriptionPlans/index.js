@@ -381,6 +381,40 @@ query Query {
     }
 
     /**
+     * Get history for a provider and optionally a specific plan
+     *
+     * @param {string} provider Provider address
+     * @param {number} planId Plan ID
+     */
+    async history(provider, planId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+        let whereString = `provider: "${provider.toLowerCase()}"`;
+        if (planId) {
+            whereString = `${whereString}, planId: "${planId}"`;
+        }
+        const query = `
+query Query {
+    caskSubscriptionEvents(
+        where: {${whereString}}
+        first: ${limit}
+        skip: ${offset}
+        orderBy: ${orderBy}
+        orderDirection: ${orderDirection}
+    ) {
+        subscriptionId
+        txnId
+        timestamp
+        type
+        provider {
+           id
+        }
+        planId
+    }
+}`;
+        const results = await this.query.rawQuery(query);
+        return results.data.caskSubscriptionEvents;
+    }
+
+    /**
      * Publish a provider profile. Uploads profile to IPFS and performs a blockchain transaction to store the
      * new provider CID on-chain.
      *

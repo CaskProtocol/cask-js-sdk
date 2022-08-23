@@ -13,7 +13,7 @@ const cask = new CaskSDK({
         pinataApiKey: process.env.PINATA_API_KEY,
         pinataApiSecret: process.env.PINATA_API_SECRET,
     },
-    environment: CaskSDK.environments.DEVELOPMENT,
+    environment: CaskSDK.environments.INTERNAL,
     logLevel: 'debug',
 });
 
@@ -117,6 +117,11 @@ async function getProviderProfile(address) {
     }
 }
 
+async function getProviderHistory(address, planId=null) {
+    const history = await cask.subscriptionPlans.history(address, planId);
+    console.log(`Provider ${address} history ${JSON.stringify(history, null, 2)}`);
+}
+
 async function getProviderSummary(address) {
     const summary = await cask.query.providerSummary(address);
     if (summary) {
@@ -132,9 +137,10 @@ async function getProviderSummary(address) {
 
     // await publishProfile();
     // await addPlanAndPublishProfile();
+    await getProviderHistory('0xd9cba6fcadf21111b6a1bced5fc466c47bac7f2f');
     // await loadProfile();
 
-    wait getProviderProfile(cask.ethersConnection.address);
+    // await getProviderProfile(cask.ethersConnection.address);
 
     cask.stop();
 })();
