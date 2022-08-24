@@ -1,5 +1,6 @@
 import Logger from "../utils/Logger.js";
 import contracts from "../contracts/index.js";
+import deployments from "../core/deployments.js";
 import CaskUnits from "../core/units.js";
 
 import EthersConnection from "../core/EthersConnection.js";
@@ -89,8 +90,16 @@ class P2P {
         this.logger.info(`Cask P2P service initialization complete.`);
     }
 
+    serviceAvailable() {
+        return this.CaskP2P !== undefined;
+    }
+
     async _initContracts() {
-        this.CaskP2P = contracts.CaskP2P({ethersConnection: this.ethersConnection});
+        if (deployments.CaskP2P[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
+            deployments.CaskP2P[this.ethersConnection.environment][this.ethersConnection.chainId] !==
+            '0x0000000000000000000000000000000000000000') {
+            this.CaskP2P = contracts.CaskP2P({ethersConnection: this.ethersConnection});
+        }
     }
 
 

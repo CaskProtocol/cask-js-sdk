@@ -1,6 +1,7 @@
 import fetch from "cross-fetch";
 import Logger from "../utils/Logger.js";
 import contracts from "../contracts/index.js";
+import deployments from "../core/deployments.js";
 import utils from "../utils/index.js";
 import CaskUnits from "../core/units.js";
 import chains from "../core/chains.js";
@@ -104,18 +105,26 @@ class DCA {
         this.logger.info(`Cask DCA service initialization complete.`);
     }
 
+    serviceAvailable() {
+        return this.CaskDCA !== undefined;
+    }
+
     async _initContracts() {
         let vaultReadyResolve;
 
-        this.CaskDCA = contracts.CaskDCA({ethersConnection: this.ethersConnection});
+        if (deployments.CaskDCA[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
+            deployments.CaskDCA[this.ethersConnection.environment][this.ethersConnection.chainId] !==
+            '0x0000000000000000000000000000000000000000') {
+            this.CaskDCA = contracts.CaskDCA({ethersConnection: this.ethersConnection});
 
-        this.vault.onAssetsLoaded(async () => {
-            vaultReadyResolve();
-        });
+            this.vault.onAssetsLoaded(async () => {
+                vaultReadyResolve();
+            });
 
-        return new Promise((resolve, reject) => {
-            vaultReadyResolve = resolve;
-        });
+            return new Promise((resolve, reject) => {
+                vaultReadyResolve = resolve;
+            });
+        }
     }
 
     /**

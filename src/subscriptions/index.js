@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import Logger from "../utils/Logger.js";
 import ipfs from "../ipfs/index.js";
 import contracts from "../contracts/index.js";
+import deployments from "../core/deployments.js";
 import enc from "../enc/index.js";
 import utils from "../utils/index.js";
 import CaskUnits from "../core/units.js";
@@ -9,7 +10,6 @@ import Query from "../query/index.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 import SubscriptionPlans from "../subscriptionPlans/index.js";
-import meta from "../meta";
 
 /**
  * @memberOf Subscriptions
@@ -124,8 +124,16 @@ class Subscriptions {
         this.logger.info(`Cask Subscription service initialization complete.`);
     }
 
+    serviceAvailable() {
+        return this.CaskSubscriptions !== undefined;
+    }
+
     async _initContracts(chainId) {
-        this.CaskSubscriptions = contracts.CaskSubscriptions({ethersConnection: this.ethersConnection});
+        if (deployments.CaskSubscriptions[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
+            deployments.CaskSubscriptions[this.ethersConnection.environment][this.ethersConnection.chainId] !==
+            '0x0000000000000000000000000000000000000000') {
+            this.CaskSubscriptions = contracts.CaskSubscriptions({ethersConnection: this.ethersConnection});
+        }
     }
 
     /**

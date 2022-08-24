@@ -48,18 +48,11 @@ class Tokens {
             this.ethersConnection = ethersConnection;
         }
 
-        this.ethersConnection.onSwitchChain(async(chainId) => { await this._initContracts(chainId) });
-
         if (!ethersConnection) {
             await this.ethersConnection.init();
         }
         this.logger.info(`Cask Tokens service initialization complete.`);
     }
-
-    async _initContracts(chainId) {
-        this.CaskSubscriptions = contracts.CaskSubscriptions({ethersConnection: this.ethersConnection});
-    }
-
 
     /**
      * Get the wallet our current connection represents.

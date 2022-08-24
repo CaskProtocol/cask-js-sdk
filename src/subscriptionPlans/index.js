@@ -1,6 +1,7 @@
 import Logger from "../utils/Logger.js";
 import {ethers} from 'ethers';
 import contracts from "../contracts/index.js";
+import deployments from "../core/deployments.js";
 import EthersConnection from "../core/EthersConnection.js";
 import ProviderProfile from "./ProviderProfile.js";
 import utils from "../utils/index.js";
@@ -101,8 +102,16 @@ class SubscriptionPlans {
         this.logger.info(`Cask SubscriptionPlans service initialization complete.`);
     }
 
+    serviceAvailable() {
+        return this.CaskSubscriptionPlans !== undefined;
+    }
+
     async _initContracts(chainId) {
-        this.CaskSubscriptionPlans = contracts.CaskSubscriptionPlans({ethersConnection: this.ethersConnection});
+        if (deployments.CaskSubscriptionPlans[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
+            deployments.CaskSubscriptionPlans[this.ethersConnection.environment][this.ethersConnection.chainId] !==
+            '0x0000000000000000000000000000000000000000') {
+            this.CaskSubscriptionPlans = contracts.CaskSubscriptionPlans({ethersConnection: this.ethersConnection});
+        }
     }
 
     /**
