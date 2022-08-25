@@ -276,6 +276,7 @@ query Query {
     renewCount
     lastRenewedAt
     pastDueAt
+    canceledAt
   }
 }
 `
@@ -453,6 +454,7 @@ query Query {
     renewCount
     lastRenewedAt
     pastDueAt
+    canceledAt
   }
 }`, options);
     }
