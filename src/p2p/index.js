@@ -201,6 +201,9 @@ query Query {
     ) {
         txnId
         timestamp
+        user {
+           id
+        }
         type
         amount
     }

@@ -349,6 +349,9 @@ query Query {
         txnId
         timestamp
         type
+        consumer {
+           id
+        }
         provider {
            id
         }

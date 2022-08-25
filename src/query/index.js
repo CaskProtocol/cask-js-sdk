@@ -596,7 +596,12 @@ query Query {
         id
         txnId
         timestamp
-        to
+        user {
+           id
+        }
+        to {
+           id
+        }
         type
         assetAddress
         amount

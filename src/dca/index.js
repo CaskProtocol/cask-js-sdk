@@ -181,6 +181,9 @@ query Query {
     ) {
         txnId
         timestamp
+        user {
+           id
+        }
         type
         assetAddress
         amount
