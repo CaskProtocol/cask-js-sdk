@@ -144,24 +144,26 @@ class SubscriptionPlans {
             return this.providerProfile;
         }
 
-        const providerProfile = await this.CaskSubscriptionPlans.getProviderProfile(address);
+        const chainProfile = await this.CaskSubscriptionPlans.getProviderProfile(address);
 
-        if (providerProfile?.cid) {
-            this.providerProfile = new ProviderProfile({
+        let newProfile;
+
+        if (chainProfile?.cid) {
+            newProfile = new ProviderProfile({
                 ipfs: this.options.ipfs,
                 address,
-                nonce: providerProfile.nonce,
+                nonce: chainProfile.nonce,
                 registered: true,
                 logLevel: this.options.logLevel,
                 defaultUnits: this.options.defaultUnits,
                 defaultUnitOptions: this.options.defaultUnitOptions,
             });
-            await this.providerProfile.loadFromIPFS(providerProfile.cid);
+            await newProfile.loadFromIPFS(chainProfile.cid);
             if (includePlanStatus) {
-                await this.mergePlanStatus(this.providerProfile);
+                await this.mergePlanStatus(newProfile);
             }
         } else {
-            this.providerProfile = new ProviderProfile({
+            newProfile = new ProviderProfile({
                 ipfs: this.options.ipfs,
                 address,
                 registered: false,
@@ -171,6 +173,7 @@ class SubscriptionPlans {
             });
         }
 
+        this.providerProfile = newProfile;
         return this.providerProfile;
     }
 
