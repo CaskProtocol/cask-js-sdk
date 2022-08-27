@@ -234,6 +234,9 @@ query Query {
   }
   caskP2Ps(where: {user: "${address.toLowerCase()}"}) {
     id
+    user {
+       id
+    }
     period
     createdAt
     amount
@@ -288,7 +291,39 @@ query Query {
 }
 `
         const results = await this.rawQuery(query, options);
-        return results.data
+
+        const queryInbound = `
+query Query {
+  caskP2Ps(where: {to: "${address.toLowerCase()}"}) {
+    id
+    user {
+       id
+    }
+    period
+    createdAt
+    amount
+    currentAmount
+    numPayments
+    numSkips
+    status
+    to
+    totalAmount
+    processAt
+    lastProcessedAt
+    lastSkippedAt
+    pausedAt
+    canceledAt
+    completedAt
+  }
+}
+`
+        const resultsInbound = await this.rawQuery(queryInbound, options);
+
+        return {
+            caskDCAs: results.data.caskDCAs,
+            caskP2Ps: [...results.data.caskP2Ps, ...resultsInbound.data.caskP2Ps],
+            caskSubscriptions: results.data.caskSubscriptions,
+        }
     }
 
     transactionHistory({
@@ -506,6 +541,9 @@ query Query {
     where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
   ) {
     id
+    user {
+       id
+    }
     createdAt
     period
     amount
@@ -569,6 +607,9 @@ query Query {
     where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
   ) {
     id
+    user {
+       id
+    }
     period
     createdAt
     amount
