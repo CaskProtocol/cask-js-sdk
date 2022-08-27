@@ -666,7 +666,34 @@ query Query {
     }
 }`;
         const results = await this.rawQuery(query);
-        return results.data.caskWalletEvents;
+
+        const queryInbound = `
+query Query {
+    caskWalletEvents(
+        where: {to: "${this.ethersConnection.address.toLowerCase()}"}
+        first: ${limit}
+        skip: ${offset}
+        orderBy: ${orderBy}
+        orderDirection: ${orderDirection}
+    ) {
+        id
+        txnId
+        timestamp
+        user {
+           id
+        }
+        to {
+           id
+        }
+        type
+        assetAddress
+        amount
+        fundingSource
+    }
+}`;
+        const resultsInbound = await this.rawQuery(queryInbound);
+
+        return [...results.data.caskWalletEvents, ...resultsInbound.data.caskWalletEvents];
     }
 }
 
