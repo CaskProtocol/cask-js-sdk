@@ -232,7 +232,7 @@ query Query {
      * @return {DCA.CreateDCAResult}
      */
     async create({to, asset, amount, amountSimple, amountAsset, totalAmount=0, totalAmountSimple, totalAmountAsset,
-                     period, slippageBps=100, minPrice=0, maxPrice=0})
+                     period, slippageBps=100, minPrice=0, minPriceSimple, minPriceAsset, maxPrice=0, maxPriceSimple, maxPriceAsset})
     {
         if (!this.ethersConnection.signer) {
             throw new Error("Cannot perform transaction without ethers signer");
@@ -258,6 +258,18 @@ query Query {
 
         if (!assetInfo) {
             throw new Error(`Cannot get asset definition for asset ${asset}`);
+        }
+
+        if (minPriceSimple) {
+            minPrice = ethers.utils.parseUnits(minPriceSimple.toFixed(2), assetInfo.decimals);
+        } else if (minPriceAsset) {
+            minPrice = minPriceAsset;
+        }
+
+        if (maxPriceSimple) {
+            maxPrice = ethers.utils.parseUnits(maxPriceSimple.toFixed(2), assetInfo.decimals);
+        } else if (maxPriceAsset) {
+            maxPrice = maxPriceAsset;
         }
 
         const assetSpec = [
