@@ -10,6 +10,7 @@ import EthersConnection from "../core/EthersConnection.js";
 import Vault from "../vault/index.js";
 import {ethers} from "ethers";
 import Query from "../query/index.js";
+import Tokens from "../tokens/index.js";
 
 
 
@@ -69,6 +70,13 @@ class DCA {
             this.options.cache.query = this.query;
         }
 
+        if (this.options.cache?.tokens) {
+            this.tokens = this.options.cache?.tokens;
+        } else {
+            this.tokens = new Tokens(this.options);
+            this.options.cache.tokens = this.tokens;
+        }
+
         if (this.options.cache.vault) {
             this.vault = this.options.cache.vault
         } else {
@@ -94,6 +102,9 @@ class DCA {
 
         if (!this.query.ethersConnection) {
             await this.query.init({ethersConnection: this.ethersConnection});
+        }
+        if (!this.tokens.ethersConnection) {
+            await this.tokens.init({ethersConnection: this.ethersConnection});
         }
         if (!this.vault.ethersConnection) {
             await this.vault.init({ethersConnection: this.ethersConnection});
@@ -232,10 +243,20 @@ query Query {
      * @return {DCA.CreateDCAResult}
      */
     async create({to, asset, amount, amountSimple, amountAsset, totalAmount=0, totalAmountSimple, totalAmountAsset,
-                     period, slippageBps=100, minPrice=0, maxPrice=0})
+                     period, slippageBps=100, minPrice=0, minPriceSimple, maxPrice=0, maxPriceSimple})
     {
         if (!this.ethersConnection.signer) {
             throw new Error("Cannot perform transaction without ethers signer");
+        }
+
+        const assetInfo = await this.assetDefinition(asset);
+        if (!assetInfo) {
+            throw new Error(`Cannot get asset definition for asset ${asset}`);
+        }
+
+        const erc20Info = await this.tokens.getERC20Info(asset);
+        if (!erc20Info) {
+            throw new Error(`Cannot get erc20 info for asset ${asset}`);
         }
 
         if (!to) {
@@ -248,16 +269,17 @@ query Query {
             amount = amountAsset;
         }
 
+        if (minPriceSimple) {
+            minPrice = ethers.utils.parseUnits(minPriceSimple.toFixed(2), erc20Info.decimals);
+        }
+        if (maxPriceSimple) {
+            maxPrice = ethers.utils.parseUnits(maxPriceSimple.toFixed(2), erc20Info.decimals);
+        }
+
         if (totalAmountSimple) {
             totalAmount = ethers.utils.parseUnits(totalAmountSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
         } else if (totalAmountAsset) {
             totalAmount = totalAmountAsset;
-        }
-
-        const assetInfo = await this.assetDefinition(asset);
-
-        if (!assetInfo) {
-            throw new Error(`Cannot get asset definition for asset ${asset}`);
         }
 
         const assetSpec = [
