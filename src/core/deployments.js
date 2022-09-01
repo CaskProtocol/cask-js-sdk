@@ -30,6 +30,7 @@ const deployments = {
             [chains.AURORA_MAINNET.chainId]: '0xD054F8866fc45c4387d56D2340dCA08d83E14A5e',
             [chains.MOONBEAM_MAINNET.chainId]: '0xD054F8866fc45c4387d56D2340dCA08d83E14A5e',
             [chains.GNOSIS_MAINNET.chainId]: '0xD054F8866fc45c4387d56D2340dCA08d83E14A5e',
+            [chains.CELO_MAINNET.chainId]: '0x7DaF9a1744Df00d0473A9A920B6A4Ea33B665360',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xb651068Ace267cc30Ca77c91284772AD8315B4E6',
@@ -57,6 +58,7 @@ const deployments = {
             [chains.AURORA_MAINNET.chainId]: '0xD252A4C836C75063867f0193325b328CCe6B7306',
             [chains.MOONBEAM_MAINNET.chainId]: '0xD252A4C836C75063867f0193325b328CCe6B7306',
             [chains.GNOSIS_MAINNET.chainId]: '0xD252A4C836C75063867f0193325b328CCe6B7306',
+            [chains.CELO_MAINNET.chainId]: '0xF76BF31f0b56BD6f72E1aFeB83a51F191ec2291B',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xA80D4D3d0b2C9c38912459F2E674416973a9A161',
@@ -84,6 +86,7 @@ const deployments = {
             [chains.AURORA_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
             [chains.MOONBEAM_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
             [chains.GNOSIS_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
+            [chains.CELO_MAINNET.chainId]: '0xBCcDbB0806Acc914F6746DE592f924B374190710',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x61E53693d81A38e72AAe0B2aC5f9B2dbb2B5ac56',
@@ -102,7 +105,7 @@ const deployments = {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0xE9E994bdaeB77B06E8b31457BAE341D8C4F081ab",
             [chains.AVAX_TESTNET.chainId]: "0x74708050c23850FDdDbd357fE504b93d4f06E901",
-            [chains.CELO_TESTNET.chainId]: "0x2A591f416EecEfF7C29436957b53736826D0BCD3",
+            [chains.CELO_TESTNET.chainId]: "0x43cff515Fd8338421B5570EEDCBEd86234189EcF",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x733Ec5A72c38f2f3c75E98b28DffC1885aB04AF1',
@@ -111,6 +114,7 @@ const deployments = {
             [chains.AURORA_MAINNET.chainId]: '0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8',
             [chains.MOONBEAM_MAINNET.chainId]: '0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8',
             [chains.GNOSIS_MAINNET.chainId]: '0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8',
+            [chains.CELO_MAINNET.chainId]: '0x4C17e4F40262108F06375d727f1353e1D592B1Bf',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xF4EED3670EB74651D55EaA4f1832410eF0cbc519',
@@ -129,7 +133,7 @@ const deployments = {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x2068607e74B3ED913F920A4e9Fc922067dD825BB",
             [chains.AVAX_TESTNET.chainId]: "0x4Deb1AAe96809Fc8f05859f7A9F21F7e59e30186",
-            [chains.CELO_TESTNET.chainId]: "0x4aAdCe807bcd419fACea62b56E084Ce54e32c312",
+            [chains.CELO_TESTNET.chainId]: "0x8e2c338C1b470fd0cE9014bed29D5d3C5214AC0D",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x28bc3F4C21504c4686f88238cF424c353e3E628E',
@@ -138,6 +142,7 @@ const deployments = {
             [chains.AURORA_MAINNET.chainId]: '0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361',
             [chains.MOONBEAM_MAINNET.chainId]: '0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361',
             [chains.GNOSIS_MAINNET.chainId]: '0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361',
+            [chains.CELO_MAINNET.chainId]: '0x1A4620123cfD10c73D9Cdd65879c1Fb6312ef654',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xc979978f89B11A6684Cc7C6384141322001Dc6E2',
@@ -200,6 +205,7 @@ const deployments = {
             [chains.AURORA_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-aurora",
             [chains.MOONBEAM_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-moonbeam",
             [chains.GNOSIS_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-gnosis",
+            [chains.CELO_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-celo",
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: null,
