@@ -70,6 +70,31 @@ const deployments = {
                 '0x7d722482Cc143364B31366a2EEF0a1f096AB4BB4',
         },
     },
+    CaskSubscriptionManager: {
+        [environments.TESTNET]: {
+            [chains.POLYGON_MUMBAI.chainId]: "0x7F179331fDc27EFFA7620BB3fEa8B5951B623921",
+            [chains.AVAX_TESTNET.chainId]: "0xEeE424F3b51b1ec62e5EAd955b5776634dc7e22e",
+            [chains.CELO_TESTNET.chainId]: "0xcE1733bD8Bc301c055fa9517f384acBC5b6Fde79",
+        },
+        [environments.PRODUCTION]: {
+            [chains.POLYGON_MAINNET.chainId]: '0xfA07af9E5835D720b3798a37f716749252F94D71',
+            [chains.AVAX_MAINNET.chainId]: '0xfA07af9E5835D720b3798a37f716749252F94D71',
+            [chains.FANTOM_MAINNET.chainId]: '0x17a38EA9257cf899BF9A7F6F507a1445E72F823A',
+            [chains.AURORA_MAINNET.chainId]: '0x331979A83644574E56035E4b43d3ca68Ce793918',
+            [chains.MOONBEAM_MAINNET.chainId]: '0x331979A83644574E56035E4b43d3ca68Ce793918',
+            [chains.GNOSIS_MAINNET.chainId]: '0x331979A83644574E56035E4b43d3ca68Ce793918',
+            [chains.CELO_MAINNET.chainId]: '0x17a38EA9257cf899BF9A7F6F507a1445E72F823A',
+        },
+        [environments.DEVELOPMENT]: {
+            [chains.ETH_HARDHAT.chainId]: '0x63D99849deF155334210FFD443032D1230dd4c87',
+        },
+        [environments.INTERNAL]: {
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTION_MANAGER ||
+                '0x6fFe8913D5d9b6f1d2c6EeFa3e100Ab904a8C7a1',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_SUBSCRIPTION_MANAGER ||
+                '0x3431972E33F227d488E695e1ca1F3E788d4a8dcC',
+        },
+    },
     /**
      * CaskVault contract address for a given environment/chain deployment.
      */
@@ -126,6 +151,31 @@ const deployments = {
                 '0xdDCEfdE530930c573D27E4f04b7E87A2e88981B8',
         },
     },
+    CaskDCAManager: {
+        [environments.TESTNET]: {
+            [chains.POLYGON_MUMBAI.chainId]: "0x9C036b582E02717ae6523Eccc6AB0dC1Cad8755F",
+            [chains.AVAX_TESTNET.chainId]: "0x67aEeD63d1F0a48054C6bf50e21D47921e3902B3",
+            [chains.CELO_TESTNET.chainId]: "0x40f89BD69E634Eb1e3Cbe56D39DD15794E754CC8",
+        },
+        [environments.PRODUCTION]: {
+            [chains.POLYGON_MAINNET.chainId]: '0xE07c2e264fb6D4dD8215feD6f3a78d70D1BF4CE2',
+            [chains.AVAX_MAINNET.chainId]: '0x4898D1e6d9761B4215901817FBe9F12750238882',
+            [chains.FANTOM_MAINNET.chainId]: '0xfa3ed790FD1fdC5E15c900D929c2F0527a0eC8b6',
+            [chains.AURORA_MAINNET.chainId]: '0x83aA6a992Ff3ef3766679Cc90E8C60a04afcC171',
+            [chains.MOONBEAM_MAINNET.chainId]: '0x83aA6a992Ff3ef3766679Cc90E8C60a04afcC171',
+            [chains.GNOSIS_MAINNET.chainId]: '0x83aA6a992Ff3ef3766679Cc90E8C60a04afcC171',
+            [chains.CELO_MAINNET.chainId]: '0xfa3ed790FD1fdC5E15c900D929c2F0527a0eC8b6',
+        },
+        [environments.DEVELOPMENT]: {
+            [chains.ETH_HARDHAT.chainId]: '0x398DFcAC744A629943997bd53737DaA4A5eD5b16',
+        },
+        [environments.INTERNAL]: {
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_DCA_MANAGER ||
+                '0x920ca3c8A0C95D2402Ae254242824D16b0A19903',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_DCA_MANAGER ||
+                '0x58a4D10c2184179DB9cfC973A0B0181EE348D0f3',
+        },
+    },
     /**
      * CaskDCA contract address for a given environment/chain deployment.
      */
@@ -152,6 +202,31 @@ const deployments = {
                 '0x96636D895605c1bc5069af3c880853D6D806e259',
             [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_P2P ||
                 '0x2e0B0616C5feBFa0C9f8F9DeE4c6E07A1ecCfCB8',
+        },
+    },
+    CaskP2PManager: {
+        [environments.TESTNET]: {
+            [chains.POLYGON_MUMBAI.chainId]: "0xC1132d3077626E16e9A799A8CbDD70E95ec6b071",
+            [chains.AVAX_TESTNET.chainId]: "0x645C22Ad586509AE6B356E20a9e022C7caD18EF6",
+            [chains.CELO_TESTNET.chainId]: "0x9632510b7207a6B157b83e20678Da022223e5DC4",
+        },
+        [environments.PRODUCTION]: {
+            [chains.POLYGON_MAINNET.chainId]: '0xe465A32D2826dc5A42FDc75624a18Ee35A25a131',
+            [chains.AVAX_MAINNET.chainId]: '0x781a5958954a10066feB7B3E94D22D9F8c163e8b',
+            [chains.FANTOM_MAINNET.chainId]: '0x8c4E2551542f399Af1576e9c194ea257Dcb7D926',
+            [chains.AURORA_MAINNET.chainId]: '0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8',
+            [chains.MOONBEAM_MAINNET.chainId]: '0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8',
+            [chains.GNOSIS_MAINNET.chainId]: '0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8',
+            [chains.CELO_MAINNET.chainId]: '0x8c4E2551542f399Af1576e9c194ea257Dcb7D926',
+        },
+        [environments.DEVELOPMENT]: {
+            [chains.ETH_HARDHAT.chainId]: '0x764eE2aBf3a86632C551C8c730a0034D036e1984',
+        },
+        [environments.INTERNAL]: {
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_P2P_MANAGER ||
+                '0xbc881D779F4cBBCF3DB26311A0Dd1b0a8cD36fa6',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_P2P_MANAGER ||
+                '0x25feC85340eBED34A7dEb4aA19CeC0a3E2bFcf65',
         },
     },
     CaskToken: {

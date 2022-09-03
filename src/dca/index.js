@@ -116,10 +116,6 @@ class DCA {
         this.logger.info(`Cask DCA service initialization complete.`);
     }
 
-    serviceAvailable() {
-        return this.CaskDCA !== undefined;
-    }
-
     async _initContracts() {
         let vaultReadyResolve;
 
@@ -127,6 +123,7 @@ class DCA {
             deployments.CaskDCA[this.ethersConnection.environment][this.ethersConnection.chainId] !==
             '0x0000000000000000000000000000000000000000') {
             this.CaskDCA = contracts.CaskDCA({ethersConnection: this.ethersConnection});
+            this.CaskDCAManager = contracts.CaskDCAManager({ethersConnection: this.ethersConnection});
 
             this.vault.onAssetsLoaded(async () => {
                 vaultReadyResolve();
@@ -135,6 +132,26 @@ class DCA {
             return new Promise((resolve, reject) => {
                 vaultReadyResolve = resolve;
             });
+        }
+    }
+
+    serviceAvailable() {
+        return this.CaskDCA !== undefined;
+    }
+
+    serviceParameters() {
+        return {
+            assetsMerkleRoot: () => { return this.CaskDCA.assetsMerkleRoot() },
+            minAmount: () => { return this.CaskDCA.minAmount() },
+            minPeriod: () => { return this.CaskDCA.minPeriod() },
+            minSlippage: () => { return this.CaskDCA.minSlippage() },
+
+            maxSkips: () => { return this.CaskDCAManager.maxSkips() },
+            dcaFeeBps: () => { return this.CaskDCAManager.dcaFeeBps() },
+            dcaFeeMin: () => { return this.CaskDCAManager.dcaFeeMin() },
+            dcaMinValue: () => { return this.CaskDCAManager.dcaMinValue() },
+            maxPriceFeedAge: () => { return this.CaskDCAManager.maxPriceFeedAge() },
+            feeDistributor: () => { return this.CaskDCAManager.feeDistributor() },
         }
     }
 

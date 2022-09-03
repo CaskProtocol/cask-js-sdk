@@ -90,18 +90,28 @@ class P2P {
         this.logger.info(`Cask P2P service initialization complete.`);
     }
 
-    serviceAvailable() {
-        return this.CaskP2P !== undefined;
-    }
-
     async _initContracts() {
         if (deployments.CaskP2P[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
             deployments.CaskP2P[this.ethersConnection.environment][this.ethersConnection.chainId] !==
             '0x0000000000000000000000000000000000000000') {
             this.CaskP2P = contracts.CaskP2P({ethersConnection: this.ethersConnection});
+            this.CaskP2PManager = contracts.CaskP2PManager({ethersConnection: this.ethersConnection});
         }
     }
 
+    serviceAvailable() {
+        return this.CaskP2P !== undefined;
+    }
+
+    serviceParameters() {
+        return {
+            minAmount: () => { return this.CaskP2P.minAmount() },
+            minPeriod: () => { return this.CaskP2P.minPeriod() },
+
+            maxSkips: () => { return this.CaskP2PManager.maxSkips() },
+            paymentFee: () => { return this.CaskP2PManager.paymentFee() },
+        }
+    }
 
     /**
      * Get a map of P2Ps for a specified address

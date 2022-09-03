@@ -124,15 +124,29 @@ class Subscriptions {
         this.logger.info(`Cask Subscription service initialization complete.`);
     }
 
-    serviceAvailable() {
-        return this.CaskSubscriptions !== undefined;
-    }
-
     async _initContracts(chainId) {
         if (deployments.CaskSubscriptions[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
             deployments.CaskSubscriptions[this.ethersConnection.environment][this.ethersConnection.chainId] !==
             '0x0000000000000000000000000000000000000000') {
             this.CaskSubscriptions = contracts.CaskSubscriptions({ethersConnection: this.ethersConnection});
+            this.CaskSubscriptionManager = contracts.CaskSubscriptionManager({ethersConnection: this.ethersConnection});
+        }
+    }
+
+    serviceAvailable() {
+        return this.CaskSubscriptions !== undefined;
+    }
+
+    serviceParameters() {
+        return {
+            paymentFeeMin: () => { return this.CaskSubscriptionManager.paymentFeeMin() },
+            paymentFeeRateMin: () => { return this.CaskSubscriptionManager.paymentFeeRateMin() },
+            paymentFeeRateMax: () => { return this.CaskSubscriptionManager.paymentFeeRateMax() },
+            stakeTargetFactor: () => { return this.CaskSubscriptionManager.stakeTargetFactor() },
+            processBucketSize: () => { return this.CaskSubscriptionManager.processBucketSize() },
+            paymentMinValue: () => { return this.CaskSubscriptionManager.paymentMinValue() },
+            processBucketMaxAge: () => { return this.CaskSubscriptionManager.processBucketMaxAge() },
+            paymentRetryDelay: () => { return this.CaskSubscriptionManager.paymentRetryDelay() },
         }
     }
 

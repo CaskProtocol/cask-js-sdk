@@ -45,6 +45,16 @@ const contracts = {
             ethersConnection.provider);
     },
     /**
+     * Cask subscription manager contract.
+     * @type ethers.Contract
+     */
+    CaskSubscriptionManager: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskSubscriptionManager[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskSubscriptionManager,
+            ethersConnection.provider);
+    },
+    /**
      * Cask DCA contract.
      * @type ethers.Contract
      */
@@ -55,6 +65,16 @@ const contracts = {
             ethersConnection.provider);
     },
     /**
+     * Cask DCA Manager contract.
+     * @type ethers.Contract
+     */
+    CaskDCAManager: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskDCAManager[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskDCAManager,
+            ethersConnection.provider);
+    },
+    /**
      * Cask P2P contract.
      * @type ethers.Contract
      */
@@ -62,6 +82,16 @@ const contracts = {
         return new ethers.Contract(
             deployments.CaskP2P[ethersConnection.environment][ethersConnection.chainId],
             abi.CaskP2P,
+            ethersConnection.provider);
+    },
+    /**
+     * Cask P2P Manager contract.
+     * @type ethers.Contract
+     */
+    CaskP2PManager: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskP2PManager[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskP2PManager,
             ethersConnection.provider);
     },
     /**
