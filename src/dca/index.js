@@ -215,6 +215,7 @@ query Query {
         type
         assetAddress
         amount
+        fee
         buyQty
         skipReason
     }

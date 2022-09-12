@@ -216,6 +216,7 @@ query Query {
         }
         type
         amount
+        fee
     }
 }`;
         const results = await this.query.rawQuery(query);

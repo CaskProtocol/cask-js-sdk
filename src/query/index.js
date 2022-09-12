@@ -554,6 +554,7 @@ query Query {
     outputAsset
     currentQty
     currentAmount
+    currentFees
     processAt
     lastProcessedAt
     lastSkippedAt
@@ -614,6 +615,7 @@ query Query {
     createdAt
     amount
     currentAmount
+    currentFees
     numPayments
     numSkips
     status
