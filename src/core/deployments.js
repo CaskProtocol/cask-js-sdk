@@ -186,8 +186,8 @@ const deployments = {
             [chains.CELO_TESTNET.chainId]: "0x8e2c338C1b470fd0cE9014bed29D5d3C5214AC0D",
         },
         [environments.PRODUCTION]: {
-            [chains.POLYGON_MAINNET.chainId]: '0x28bc3F4C21504c4686f88238cF424c353e3E628E',
-            [chains.AVAX_MAINNET.chainId]: '0x28418B0AB2C00142a865971dcC6a4b1154DaD19E',
+            [chains.POLYGON_MAINNET.chainId]: '0xB80376507Dd5d561AD3A6aB452FE17e782220501',
+            [chains.AVAX_MAINNET.chainId]: '0xe2d24801A9b790f1168cCB7caBdAdC6A071912F3',
             [chains.FANTOM_MAINNET.chainId]: '0x1A4620123cfD10c73D9Cdd65879c1Fb6312ef654',
             [chains.AURORA_MAINNET.chainId]: '0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361',
             [chains.MOONBEAM_MAINNET.chainId]: '0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361',
@@ -211,8 +211,8 @@ const deployments = {
             [chains.CELO_TESTNET.chainId]: "0x9632510b7207a6B157b83e20678Da022223e5DC4",
         },
         [environments.PRODUCTION]: {
-            [chains.POLYGON_MAINNET.chainId]: '0xe465A32D2826dc5A42FDc75624a18Ee35A25a131',
-            [chains.AVAX_MAINNET.chainId]: '0x781a5958954a10066feB7B3E94D22D9F8c163e8b',
+            [chains.POLYGON_MAINNET.chainId]: '0xfA7fe9DFFd6fEd7292fdCce2677d88e1b9a9c295',
+            [chains.AVAX_MAINNET.chainId]: '0xCFC9B780609A80BDF65b4676C3227d2c4c862003',
             [chains.FANTOM_MAINNET.chainId]: '0x8c4E2551542f399Af1576e9c194ea257Dcb7D926',
             [chains.AURORA_MAINNET.chainId]: '0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8',
             [chains.MOONBEAM_MAINNET.chainId]: '0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8',
