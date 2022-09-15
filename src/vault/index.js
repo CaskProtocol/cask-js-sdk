@@ -116,7 +116,7 @@ class Vault {
                 tokenAddress: asset,
                 ethersConnection: this.ethersConnection
             });
-            this.assetMap[asset] = {
+            this.assetMap[asset.toLowerCase()] = {
                 address: asset,
                 priceFeed: vaultAsset.priceFeed,
                 slippageBps: vaultAsset.slippageBps,
@@ -127,7 +127,7 @@ class Vault {
                 symbol: await tokenContract.symbol(),
                 tokenContract,
             };
-            return asset;
+            return asset.toLowerCase();
         });
         await Promise.all(allPromises);
         this.assetsLoaded = true;
@@ -144,13 +144,13 @@ class Vault {
         if (typeof(asset) !== 'string') {
             return asset;
         } else if (asset.startsWith('0x')) {
-            foundAsset = this.assetMap[asset];
+            foundAsset = this.assetMap[asset.toLowerCase()];
         } else {
             foundAsset = Object.keys(this.assetMap).find((addr) => this.assetMap[addr].symbol === asset);
             foundAsset = this.assetMap[foundAsset];
         }
         if (!foundAsset) {
-            throw new Error(`Unknown asset ${asset}`);
+            throw new Error(`Unknown asset ${asset.toLowerCase()}`);
         }
         return foundAsset;
     }
@@ -608,10 +608,12 @@ class Vault {
             });
         }
 
+        const oracleDecimals = await this.assetPriceFeed[asset.address].decimals();
         const oracleResult = await this.assetPriceFeed[asset.address].latestRoundData();
         return {
             updatedAt: oracleResult.updatedAt,
             price: oracleResult.answer,
+            decimals: oracleDecimals,
         };
     }
 
@@ -630,6 +632,7 @@ class Vault {
         return {
             updatedAt: oracleResult.lastUpdatedBase,
             price: oracleResult.rate,
+            decimals: 18,
         };
     }
 

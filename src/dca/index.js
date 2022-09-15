@@ -496,7 +496,10 @@ query Query {
 
         } else { // oracle price
 
-            if (this.ethersConnection.oracleType() === 'band') {
+            const chainInfo = chains.lookupChain(this.ethersConnection.chainId);
+            const oracleType = this.options?.oracleType || chainInfo?.oracleType || 'chainlink';
+
+            if (oracleType === 'band') {
                 return await this.bandAssetPrice(asset);
             } else {
                 return await this.chainlinkAssetPrice(asset);
@@ -516,7 +519,7 @@ query Query {
         const assetResult = await assetToUSDOracle.latestRoundData();
 
         const baseAssetInfo = this.vault.getAsset(this.vault.baseAsset);
-        const baseAssetResult = await baseAssetInfo.priceFeedContract.latestRoundData();
+        const baseAssetResult = await this.vault.currentPrice(this.vault.baseAsset);
 
         const basePrice = CaskUnits.scalePrice(
             assetResult.answer,
@@ -524,8 +527,8 @@ query Query {
             baseAssetInfo.assetDecimals);
 
         const quotePrice = CaskUnits.scalePrice(
-            baseAssetResult.answer,
-            baseAssetInfo.priceFeedDecimals,
+            baseAssetResult.price,
+            baseAssetResult.decimals,
             baseAssetInfo.assetDecimals);
 
         const one = ethers.BigNumber.from(10).pow(baseAssetInfo.assetDecimals);
@@ -550,10 +553,7 @@ query Query {
 
         const oracleResult = await bandOracle.getReferenceData(bandAssetBaseSymbol, bandAssetQuoteSymbol);
 
-        return {
-            updatedAt: oracleResult.lastUpdatedBase,
-            price: CaskUnits.scalePrice(oracleResult.rate, 18, baseAssetInfo.assetDecimals),
-        };
+        return CaskUnits.scalePrice(oracleResult.rate, 18, baseAssetInfo.assetDecimals);
     }
 }
 
