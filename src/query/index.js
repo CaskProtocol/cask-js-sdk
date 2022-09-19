@@ -72,13 +72,14 @@ class Query {
             throw new Error(`apolloClient not available. Current chain have a supported subgraph?`);
         }
         this.logger.debug(`Subgraph Query: ${query}`);
+        this.logger.debug(`Subgraph Options: ${JSON.stringify(options, null, 2)}`);
         return this.apolloClient.query({
             query: gql(query),
             ...options
         });
     }
 
-    async graphStatus(options={}) {
+    async graphStatus(options={fetchPolicy: 'no-cache'}) {
         const query = `
 query Query {
     _meta {
