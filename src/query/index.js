@@ -78,6 +78,20 @@ class Query {
         });
     }
 
+    async graphStatus(options={}) {
+        const query = `
+query Query {
+    _meta {
+        block {
+            number
+            timestamp
+        }
+    }
+}`;
+        const results = await this.rawQuery(query, options);
+        return results.data['_meta'];
+    }
+
     /**
      * Get the summary metrics for a specific provider
      * @param {Object} args Function arguments
