@@ -2,9 +2,9 @@ import CaskSubscriptionsAbi from "./abi/ICaskSubscriptions.js";
 import CaskSubscriptionPlansAbi from "./abi/ICaskSubscriptionPlans.js";
 import CaskSubscriptionManagerAbi from "./abi/CaskSubscriptionManager.js";
 import CaskVaultAbi from "./abi/ICaskVault.js";
-import CaskDCAAbi from "./abi/ICaskDCA.js";
+import CaskDCAAbi from "./abi/CaskDCA.js";
 import CaskDCAManagerAbi from "./abi/CaskDCAManager.js";
-import CaskP2PAbi from "./abi/ICaskP2P.js";
+import CaskP2PAbi from "./abi/CaskP2P.js";
 import CaskP2PManagerAbi from "./abi/CaskP2PManager.js";
 
 import AggregatorV3InterfaceAbi from "./abi/AggregatorV3Interface.js";

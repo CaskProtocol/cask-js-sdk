@@ -9,9 +9,9 @@ const abiJSONfilenames = [
     'interfaces/ICaskSubscriptions.sol/ICaskSubscriptions.json',
     'interfaces/ICaskSubscriptionPlans.sol/ICaskSubscriptionPlans.json',
     'subscriptions/CaskSubscriptionManager.sol/CaskSubscriptionManager.json',
-    'interfaces/ICaskDCA.sol/ICaskDCA.json',
+    'dca/CaskDCA.sol/CaskDCA.json',
     'dca/CaskDCAManager.sol/CaskDCAManager.json',
-    'interfaces/ICaskP2P.sol/ICaskP2P.json',
+    'p2p/CaskP2P.sol/CaskP2P.json',
     'p2p/CaskP2PManager.sol/CaskP2PManager.json',
 ];
 
