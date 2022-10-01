@@ -153,6 +153,7 @@ class SubscriptionPlans {
                 ipfs: this.options.ipfs,
                 address,
                 nonce: chainProfile.nonce,
+                paymentAddress: chainProfile.paymentAddress || address,
                 registered: true,
                 logLevel: this.options.logLevel,
                 defaultUnits: this.options.defaultUnits,
@@ -229,6 +230,7 @@ query Query {
         const newProfile = new ProviderProfile({
             ipfs: this.options.ipfs,
             address,
+            paymentAddress: profile.paymentAddress || address,
             nonce: profile.nonce,
             registered: true,
             logLevel: this.options.logLevel,

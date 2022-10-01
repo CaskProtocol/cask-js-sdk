@@ -346,6 +346,7 @@ class ProviderProfile {
             version: VERSION,
             plans: this.plans,
             discounts: this.discounts,
+            paymentAddress: this.paymentAddress,
             nonce: this.nonce.toString(),
             planMerkleRoot: this.planMerkleRoot,
             discountMerkleRoot: this.discountMerkleRoot,
