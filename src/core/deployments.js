@@ -31,6 +31,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: '0xD054F8866fc45c4387d56D2340dCA08d83E14A5e',
             [chains.GNOSIS_MAINNET.chainId]: '0xD054F8866fc45c4387d56D2340dCA08d83E14A5e',
             [chains.CELO_MAINNET.chainId]: '0x7DaF9a1744Df00d0473A9A920B6A4Ea33B665360',
+            [chains.ARBITRUM_MAINNET.chainId]: '0xF76BF31f0b56BD6f72E1aFeB83a51F191ec2291B',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xb651068Ace267cc30Ca77c91284772AD8315B4E6',
@@ -59,6 +60,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: '0xD252A4C836C75063867f0193325b328CCe6B7306',
             [chains.GNOSIS_MAINNET.chainId]: '0xD252A4C836C75063867f0193325b328CCe6B7306',
             [chains.CELO_MAINNET.chainId]: '0xF76BF31f0b56BD6f72E1aFeB83a51F191ec2291B',
+            [chains.ARBITRUM_MAINNET.chainId]: '0xfA07af9E5835D720b3798a37f716749252F94D71',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xA80D4D3d0b2C9c38912459F2E674416973a9A161',
@@ -84,6 +86,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: '0x331979A83644574E56035E4b43d3ca68Ce793918',
             [chains.GNOSIS_MAINNET.chainId]: '0x331979A83644574E56035E4b43d3ca68Ce793918',
             [chains.CELO_MAINNET.chainId]: '0x17a38EA9257cf899BF9A7F6F507a1445E72F823A',
+            [chains.ARBITRUM_MAINNET.chainId]: '0x7DaF9a1744Df00d0473A9A920B6A4Ea33B665360',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x63D99849deF155334210FFD443032D1230dd4c87',
@@ -112,6 +115,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
             [chains.GNOSIS_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
             [chains.CELO_MAINNET.chainId]: '0xBCcDbB0806Acc914F6746DE592f924B374190710',
+            [chains.ARBITRUM_MAINNET.chainId]: '0x20151fF7fDd720b85063D02081aa5B7876aDff7B',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x61E53693d81A38e72AAe0B2aC5f9B2dbb2B5ac56',
@@ -140,6 +144,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: '0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8',
             [chains.GNOSIS_MAINNET.chainId]: '0x96d59127cCD1c0e3749E733Ee04F0DfbD2f808c8',
             [chains.CELO_MAINNET.chainId]: '0x4C17e4F40262108F06375d727f1353e1D592B1Bf',
+            [chains.ARBITRUM_MAINNET.chainId]: '0xf89418E3A57189692ADe9A25792fD986fb99C5Ca',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xF4EED3670EB74651D55EaA4f1832410eF0cbc519',
@@ -165,6 +170,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: '0x83aA6a992Ff3ef3766679Cc90E8C60a04afcC171',
             [chains.GNOSIS_MAINNET.chainId]: '0x83aA6a992Ff3ef3766679Cc90E8C60a04afcC171',
             [chains.CELO_MAINNET.chainId]: '0xfa3ed790FD1fdC5E15c900D929c2F0527a0eC8b6',
+            [chains.ARBITRUM_MAINNET.chainId]: '0x4C17e4F40262108F06375d727f1353e1D592B1Bf',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x398DFcAC744A629943997bd53737DaA4A5eD5b16',
@@ -193,6 +199,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: '0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361',
             [chains.GNOSIS_MAINNET.chainId]: '0xccB54bF4171bc8C11e78ca40f3a3bd3B721EF361',
             [chains.CELO_MAINNET.chainId]: '0x1A4620123cfD10c73D9Cdd65879c1Fb6312ef654',
+            [chains.ARBITRUM_MAINNET.chainId]: '0x775Df9836945B0E95eD5F6A3269Bf22F6b426e85',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0xc979978f89B11A6684Cc7C6384141322001Dc6E2',
@@ -218,6 +225,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: '0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8',
             [chains.GNOSIS_MAINNET.chainId]: '0xb8A52a086262E1d6c7494bDCb824f884f41FC5f8',
             [chains.CELO_MAINNET.chainId]: '0x8c4E2551542f399Af1576e9c194ea257Dcb7D926',
+            [chains.ARBITRUM_MAINNET.chainId]: '0x1A4620123cfD10c73D9Cdd65879c1Fb6312ef654',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: '0x764eE2aBf3a86632C551C8c730a0034D036e1984',
@@ -281,6 +289,7 @@ const deployments = {
             [chains.MOONBEAM_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-moonbeam",
             [chains.GNOSIS_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-gnosis",
             [chains.CELO_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-celo",
+            [chains.ARBITRUM_MAINNET.chainId]: 'https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-arbitrum',
         },
         [environments.DEVELOPMENT]: {
             [chains.ETH_HARDHAT.chainId]: null,
