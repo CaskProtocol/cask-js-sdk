@@ -267,6 +267,15 @@ query Query {
     }
 
     /**
+     * Get the LINK token used by the ChainlinkTopup service.
+     * @return {Promise<{*}>}
+     */
+    async linkToken() {
+        const linkFundingToken = await this.CaskChainlinkTopupManager.linkFundingToken();
+        return contracts.ERC20({tokenAddress: linkFundingToken, ethersConnection: this.ethersConnection});
+    }
+
+    /**
      * Get the link balance for the underlying service from a ChainlinkTopup.
      * @param {string} chainlinkTopupId ChainlinkTopup ID
      * @return {Promise<{tx: *}>}
