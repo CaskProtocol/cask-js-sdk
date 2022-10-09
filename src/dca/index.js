@@ -288,10 +288,10 @@ query Query {
         }
 
         if (minPriceSimple) {
-            minPrice = ethers.utils.parseUnits(minPriceSimple.toFixed(2), erc20Info.decimals);
+            minPrice = ethers.utils.parseUnits(minPriceSimple.toFixed(6), erc20Info.decimals);
         }
         if (maxPriceSimple) {
-            maxPrice = ethers.utils.parseUnits(maxPriceSimple.toFixed(2), erc20Info.decimals);
+            maxPrice = ethers.utils.parseUnits(maxPriceSimple.toFixed(6), erc20Info.decimals);
         }
 
         if (totalAmountSimple) {

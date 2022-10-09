@@ -237,6 +237,61 @@ const deployments = {
                 '0x25feC85340eBED34A7dEb4aA19CeC0a3E2bFcf65',
         },
     },
+    /**
+     * CaskChainlinkTopup contract address for a given environment/chain deployment.
+     */
+    CaskChainlinkTopup: {
+        [environments.TESTNET]: {
+            [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.CELO_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+        },
+        [environments.PRODUCTION]: {
+            [chains.POLYGON_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.FANTOM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.AURORA_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.MOONBEAM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.GNOSIS_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.CELO_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.ARBITRUM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+        },
+        [environments.DEVELOPMENT]: {
+            [chains.ETH_HARDHAT.chainId]: '0x78070E0b04F82cfE5e002a1Ebf3914b478B40912',
+        },
+        [environments.INTERNAL]: {
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_P2P ||
+            '0xFD923C9E7766457EB428A86176C05C2fD2cC33f6',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_P2P ||
+            '0xcdDdFfad20eAEeE9B77CB3EcEb79a05402d06c19',
+        },
+    },
+    CaskChainlinkTopupManager: {
+        [environments.TESTNET]: {
+            [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.CELO_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+        },
+        [environments.PRODUCTION]: {
+            [chains.POLYGON_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.AVAX_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.FANTOM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.AURORA_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.MOONBEAM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.GNOSIS_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.CELO_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+            [chains.ARBITRUM_MAINNET.chainId]: '0x0000000000000000000000000000000000000000',
+        },
+        [environments.DEVELOPMENT]: {
+            [chains.ETH_HARDHAT.chainId]: '0xc37ded1cEcA2929158Ed303c669172C8b28027Af',
+        },
+        [environments.INTERNAL]: {
+            [chains.POLYGON_MUMBAI.chainId]: process.env.CASK_CONTRACT_P2P_MANAGER ||
+            '0xa0E7ad1d853dfBbA56b38dd33fe1cFA19484c8a8',
+            [chains.AVAX_TESTNET.chainId]: process.env.CASK_CONTRACT_P2P_MANAGER ||
+            '0x1e7E32B8a17868C452eF95AeE1E1aE2Fef4bF6b1',
+        },
+    },
     CaskToken: {
         [environments.TESTNET]: {
             [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",

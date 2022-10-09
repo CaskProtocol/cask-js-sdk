@@ -24,6 +24,7 @@ import Query from "./query/index.js";
 import Tokens from "./tokens/index.js";
 import DCA from "./dca/index.js";
 import P2P from "./p2p/index.js";
+import ChainlinkTopup from "./chainlinkTopup/index.js";
 
 /**
  * @overview CaskSDK is the primary entrypoint into the Cask SDK.
@@ -121,6 +122,19 @@ class CaskSDK {
     COMPLETE: 4,
   }
 
+  static chainlinkTopupStatus = {
+    NONE: 0,
+    ACTIVE: 1,
+    PAUSED: 2,
+    CANCELED: 3,
+  }
+
+  static chainlinkTopupType = {
+    NONE: 0,
+    AUTOMATION: 1,
+    VRF: 2,
+  }
+
   /**
    * Create an instance of the CaskSDK
    * @param options
@@ -185,6 +199,12 @@ class CaskSDK {
      * @type {P2P}
      */
     this.p2p = new P2P(this.options);
+
+    /**
+     * ChainlinkTopup service instance.
+     * @type {ChainlinkTopup}
+     */
+    this.chainlinkTopup = new ChainlinkTopup(this.options);
   }
 
   /**
@@ -212,6 +232,7 @@ class CaskSDK {
     promises.push(this.subscriptions.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.dca.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.p2p.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.chainlinkTopup.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.events.init({ ethersConnection: this.ethersConnection }));
     promises.push(this.prices.init({ ethersConnection: this.ethersConnection }));
 
@@ -304,6 +325,29 @@ class CaskSDK {
       await this.ethersConnection.init({ chainId, signer });
     }
     this.logger.info(`Cask P2P SDK initialization complete.`);
+  }
+
+  async initChainlinkTopup({ ethersConnection, chainId , signer} = {}) {
+    this.logger.info(`Initializing Cask ChainlinkTopup SDK.`);
+
+    if (ethersConnection) {
+      this.ethersConnection = ethersConnection;
+    } else {
+      this.ethersConnection = new EthersConnection(this.options);
+    }
+
+    const promises = [];
+
+    promises.push(this.query.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.vault.init({ ethersConnection: this.ethersConnection }));
+    promises.push(this.chainlinkTopup.init({ ethersConnection: this.ethersConnection }));
+
+    await Promise.all(promises);
+
+    if (!ethersConnection) {
+      await this.ethersConnection.init({ chainId, signer });
+    }
+    this.logger.info(`Cask ChainlinkTopup SDK initialization complete.`);
   }
 
   /**

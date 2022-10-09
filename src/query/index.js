@@ -24,6 +24,8 @@ class Query {
 
         this.logger = new Logger('CaskSDK::Query', this.options.logLevel);
 
+        this.enabledFlows = this.options.enabledFlows || ['subscriptions','dca','p2p','chainlinkTopup'];
+
         if (!this.options?.cache) {
             this.options.cache = {};
         }
@@ -222,53 +224,11 @@ query Query {
             throw new Error("address not specified or detectable");
         }
 
-        const query = `
-query Query {
-  caskDCAs(where: {user: "${address.toLowerCase()}"}) {
-    id
-    createdAt
-    period
-    amount
-    maxPrice
-    minPrice
-    numBuys
-    numSkips
-    outputAsset
-    currentQty
-    currentAmount
-    processAt
-    lastProcessedAt
-    lastSkippedAt
-    pausedAt
-    canceledAt
-    completedAt
-    slippageBps
-    status
-    to
-    totalAmount
-  }
-  caskP2Ps(where: {user: "${address.toLowerCase()}"}) {
-    id
-    user {
-       id
-    }
-    period
-    createdAt
-    amount
-    currentAmount
-    numPayments
-    numSkips
-    status
-    to
-    totalAmount
-    processAt
-    lastProcessedAt
-    lastSkippedAt
-    pausedAt
-    canceledAt
-    completedAt
-  }
-  caskSubscriptions(
+        const outboundFlowQueries = [];
+
+        if (this.enabledFlows.includes('subscriptions')) {
+            outboundFlowQueries.push(`
+caskSubscriptions(
     where: {currentOwner: "${address.toLowerCase()}"}
   ) {
     id
@@ -302,14 +262,37 @@ query Query {
     pausedAt
     pastDueAt
     canceledAt
-  }
-}
-`
-        const results = await this.rawQuery(query, options);
+  }`);}
 
-        const queryInbound = `
-query Query {
-  caskP2Ps(where: {to: "${address.toLowerCase()}"}) {
+        if (this.enabledFlows.includes('dca')) {
+            outboundFlowQueries.push(`
+caskDCAs(where: {user: "${address.toLowerCase()}"}) {
+    id
+    createdAt
+    period
+    amount
+    maxPrice
+    minPrice
+    numBuys
+    numSkips
+    outputAsset
+    currentQty
+    currentAmount
+    processAt
+    lastProcessedAt
+    lastSkippedAt
+    pausedAt
+    canceledAt
+    completedAt
+    slippageBps
+    status
+    to
+    totalAmount
+  }`);}
+
+        if (this.enabledFlows.includes('p2p')) {
+            outboundFlowQueries.push(`
+caskP2Ps(where: {user: "${address.toLowerCase()}"}) {
     id
     user {
        id
@@ -329,51 +312,86 @@ query Query {
     pausedAt
     canceledAt
     completedAt
-  }
-}
-`
+  }`);}
+
+        if (this.enabledFlows.includes('chainlinkTopup')) {
+            outboundFlowQueries.push(`
+caskChainlinkTopups(where: {user: "${address.toLowerCase()}"}) {
+    id
+    user {
+       id
+    }
+    targetId
+    registry
+    topupType
+    createdAt
+    currentAmount
+    currentBuyQty
+    currentFees
+    numTopups
+    numSkips
+    status
+    lowBalance
+    topupAmount
+    lastProcessedAt
+    lastSkippedAt
+    pausedAt
+    canceledAt
+  }`);}
+
+        const query = `
+query Query {
+${outboundFlowQueries.join('')}
+}`
+        const resultsOutbound = await this.rawQuery(query, options);
+
+        const inboundFlowQueries = [];
+
+        if (this.enabledFlows.includes('p2p')) {
+            inboundFlowQueries.push(`
+caskP2Ps(where: {to: "${address.toLowerCase()}"}) {
+    id
+    user {
+       id
+    }
+    period
+    createdAt
+    amount
+    currentAmount
+    numPayments
+    numSkips
+    status
+    to
+    totalAmount
+    processAt
+    lastProcessedAt
+    lastSkippedAt
+    pausedAt
+    canceledAt
+    completedAt
+  }`);}
+
+        const queryInbound = `
+query Query {
+    ${inboundFlowQueries.join('')}  
+}`
         const resultsInbound = await this.rawQuery(queryInbound, options);
 
-        return {
-            caskDCAs: results.data.caskDCAs,
-            caskP2Ps: [...results.data.caskP2Ps, ...resultsInbound.data.caskP2Ps],
-            caskSubscriptions: results.data.caskSubscriptions,
+        const result = {};
+        if (this.enabledFlows.includes('subscriptions')) {
+            result['caskSubscriptions'] = resultsOutbound.data.caskSubscriptions
         }
-    }
+        if (this.enabledFlows.includes('dca')) {
+            result['caskDCAs'] = resultsOutbound.data.caskDCAs
+        }
+        if (this.enabledFlows.includes('p2p')) {
+            result['caskP2Ps'] = [...resultsOutbound.data.caskP2Ps, ...resultsInbound.data.caskP2Ps]
+        }
+        if (this.enabledFlows.includes('chainlinkTopup')) {
+            result['caskChainlinkTopups'] = resultsOutbound.data.caskChainlinkTopups
+        }
 
-    transactionHistory({
-                           first=10,
-                           skip=0,
-                           where={},
-                           orderBy='timestamp',
-                           orderDirection='desc',
-                           options
-                       }={})
-    {
-        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
-
-        return this.rawQuery(`
-query Query {
-    caskTransactions(
-        first: ${first}, 
-        skip: ${skip}, 
-        orderBy: ${orderBy}, 
-        orderDirection: ${orderDirection},
-        where: {${whereString}}
-    ) {
-        id
-        type
-        timestamp
-        amount
-        assetAddress
-        consumer {
-            id
-        }
-        provider {
-            id
-        }
-    }
-}`);
+        return result;
     }
 
     subscriptions({
@@ -642,6 +660,65 @@ query Query {
     pausedAt
     canceledAt
     completedAt
+  }
+}`, options);
+    }
+
+    async chainlinkTopup(id, options={}) {
+        const result = await this.chainlinkTopupQuery({where: {id}, includeCanceled: true, options});
+        return result?.data?.caskChainlinkTopups?.[0];
+    }
+
+    chainlinkTopupQuery({
+                 first=10,
+                 skip=0,
+                 where={},
+                 orderBy='createdAt',
+                 orderDirection='desc',
+                 includeCanceled = false,
+                 status,
+                 options
+             }={})
+    {
+        let whereStatus = '';
+        if (status) {
+            if (Array.isArray(status)) {
+                whereStatus = `status_in:[${status.join(',')}]`;
+            } else {
+                whereStatus = `status: ${status}`;
+            }
+        } else {
+            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
+        }
+
+        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+
+        return this.rawQuery(`
+query Query {
+  caskChainlinkTopups(
+    first: ${first}
+    skip: ${skip}
+    orderBy: ${orderBy}
+    orderDirection: ${orderDirection}
+    where: {${whereString}${whereString ? `, ${whereStatus}` : whereStatus}}
+  ) {
+    id
+    user {
+       id
+    }
+    createdAt
+    currentAmount
+    currentBuyQty
+    currentFees
+    numTopups
+    numSkips
+    status
+    lowBalance
+    topupAmount
+    lastProcessedAt
+    lastSkippedAt
+    pausedAt
+    canceledAt
   }
 }`, options);
     }

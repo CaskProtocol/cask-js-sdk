@@ -95,6 +95,26 @@ const contracts = {
             ethersConnection.provider);
     },
     /**
+     * Cask ChainlinkTopup contract.
+     * @type ethers.Contract
+     */
+    CaskChainlinkTopup: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskChainlinkTopup[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskChainlinkTopup,
+            ethersConnection.provider);
+    },
+    /**
+     * Cask ChainlinkTopup Manager contract.
+     * @type ethers.Contract
+     */
+    CaskChainlinkTopupManager: ({ethersConnection}) => {
+        return new ethers.Contract(
+            deployments.CaskChainlinkTopupManager[ethersConnection.environment][ethersConnection.chainId],
+            abi.CaskChainlinkTopupManager,
+            ethersConnection.provider);
+    },
+    /**
      * Chainlink price oracle. Uses either the supplied provider, or the connection from the ethersConnection.
      * @type ethers.Contract
      */
@@ -142,6 +162,26 @@ const contracts = {
         return new ethers.Contract(
             referenceAddress,
             abi.IStdReference,
+            provider || ethersConnection.provider);
+    },
+    /**
+     * Chainlink Automation registry instance.
+     * @type ethers.Contract
+     */
+    AutomationRegistry: ({registryAddress, ethersConnection, provider}) => {
+        return new ethers.Contract(
+            registryAddress,
+            abi.AutomationRegistryBaseInterface,
+            provider || ethersConnection.provider);
+    },
+    /**
+     * Chainlink VRF coordinator instance.
+     * @type ethers.Contract
+     */
+    VRFCoordinator: ({coordinatorAddress, ethersConnection, provider}) => {
+        return new ethers.Contract(
+            coordinatorAddress,
+            abi.VRFCoordinatorV2Interface,
             provider || ethersConnection.provider);
     },
 }
