@@ -8,8 +8,8 @@ const cask = new CaskSDK({
     connections: {
         signer: new ethers.Wallet(process.env.CONSUMER_WALLET_PK, ethersProvider),
     },
-    environment: CaskSDK.environments.DEVELOPMENT,
-    // initialChainId: CaskSDK.chains.AVAX_TESTNET.chainId,
+    environment: CaskSDK.environments.TESTNET,
+    initialChainId: CaskSDK.chains.AVAX_TESTNET.chainId,
     logLevel: 'debug',
 });
 
@@ -27,6 +27,8 @@ async function createChainlinkTopup(targetId, registry) {
 
     const getResp = await cask.chainlinkTopup.get(resp.chainlinkTopupId);
     console.log(`Get Response: ${JSON.stringify(getResp, null, 2)}`);
+
+    return resp.chainlinkTopupId;
 }
 
 async function chainlinkTopupHistory(chainlinkTopupId) {
@@ -36,6 +38,9 @@ async function chainlinkTopupHistory(chainlinkTopupId) {
 }
 
 async function chainlinkBalance(chainlinkTopupId) {
+    const linkToken = await cask.chainlinkTopup.linkToken();
+    console.log(`LINK decimals is: ${await linkToken.decimals()}`);
+
     const balance = await cask.chainlinkTopup.linkBalance(chainlinkTopupId);
     console.log(`LINK balance for ${chainlinkTopupId}: ${balance}`);
 }
@@ -44,9 +49,11 @@ async function chainlinkBalance(chainlinkTopupId) {
 (async () => {
     await cask.initChainlinkTopup();
 
-    // await createChainlinkTopup('1','0xD4388b628158a6A0b2f895CF8018AbCAc57eebA0')
-    // await chainlinkTopupHistory('0x96037054b16ba1744ab6fa55703c8cb2a8feee6a886ccd954eaf11abe58cdf8f');
-    await chainlinkBalance('0x96037054b16ba1744ab6fa55703c8cb2a8feee6a886ccd954eaf11abe58cdf8f');
+    const chainlinkTopupId = await createChainlinkTopup('1','0xD4388b628158a6A0b2f895CF8018AbCAc57eebA0');
+
+    await chainlinkTopupHistory(chainlinkTopupId);
+
+    await chainlinkBalance(chainlinkTopupId);
 
     cask.stop();
 })();

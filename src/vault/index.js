@@ -146,7 +146,8 @@ class Vault {
         } else if (asset.startsWith('0x')) {
             foundAsset = this.assetMap[asset.toLowerCase()];
         } else {
-            foundAsset = Object.keys(this.assetMap).find((addr) => this.assetMap[addr].symbol === asset);
+            foundAsset = Object.keys(this.assetMap).find((addr) => this.assetMap[addr].symbol.toLowerCase() ===
+                asset.toLowerCase());
             foundAsset = this.assetMap[foundAsset];
         }
         if (!foundAsset) {

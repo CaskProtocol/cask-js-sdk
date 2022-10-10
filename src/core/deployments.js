@@ -242,8 +242,8 @@ const deployments = {
      */
     CaskChainlinkTopup: {
         [environments.TESTNET]: {
-            [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
-            [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.POLYGON_MUMBAI.chainId]: "0xFB6edCa5E31e43572233212D3FB285465C969832",
+            [chains.AVAX_TESTNET.chainId]: "0x7823a600dE066e3F037396D2A4840EeA22F1361f",
             [chains.CELO_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
         },
         [environments.PRODUCTION]: {
@@ -268,8 +268,8 @@ const deployments = {
     },
     CaskChainlinkTopupManager: {
         [environments.TESTNET]: {
-            [chains.POLYGON_MUMBAI.chainId]: "0x0000000000000000000000000000000000000000",
-            [chains.AVAX_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.POLYGON_MUMBAI.chainId]: "0xCD54748EBE7507847C1523abb38d93D00791Ad27",
+            [chains.AVAX_TESTNET.chainId]: "0x6065db37aa5F4453fa988a5aA12b6293a11D9113",
             [chains.CELO_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
         },
         [environments.PRODUCTION]: {

@@ -4,6 +4,7 @@ import Logger from "../utils/Logger.js";
 import deployments from "../core/deployments.js";
 
 import EthersConnection from "../core/EthersConnection.js";
+import contracts from "../contracts";
 
 /**
  * Service class for querying Cask subgraph data.
@@ -24,7 +25,7 @@ class Query {
 
         this.logger = new Logger('CaskSDK::Query', this.options.logLevel);
 
-        this.enabledFlows = this.options.enabledFlows || ['subscriptions','dca','p2p','chainlinkTopup'];
+        this.enabledFlows = [];
 
         if (!this.options?.cache) {
             this.options.cache = {};
@@ -46,7 +47,7 @@ class Query {
             this.ethersConnection = ethersConnection;
         }
 
-        this.ethersConnection.onSwitchChain(async() => { await this._initApollo() });
+        this.ethersConnection.onSwitchChain(async() => { await this._initQuery() });
 
         if (!ethersConnection) {
             await this.ethersConnection.init();
@@ -54,7 +55,29 @@ class Query {
         this.logger.info(`Cask Query service initialization complete.`);
     }
 
-    _initApollo() {
+    _initQuery() {
+
+        if (deployments.CaskSubscriptions[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
+            deployments.CaskSubscriptions[this.ethersConnection.environment][this.ethersConnection.chainId] !==
+            '0x0000000000000000000000000000000000000000') {
+            this.enabledFlows.push('subscriptions');
+        }
+        if (deployments.CaskDCA[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
+            deployments.CaskDCA[this.ethersConnection.environment][this.ethersConnection.chainId] !==
+            '0x0000000000000000000000000000000000000000') {
+            this.enabledFlows.push('dca');
+        }
+        if (deployments.CaskP2P[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
+            deployments.CaskP2P[this.ethersConnection.environment][this.ethersConnection.chainId] !==
+            '0x0000000000000000000000000000000000000000') {
+            this.enabledFlows.push('p2p');
+        }
+        if (deployments.CaskChainlinkTopup[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
+            deployments.CaskChainlinkTopup[this.ethersConnection.environment][this.ethersConnection.chainId] !==
+            '0x0000000000000000000000000000000000000000') {
+            this.enabledFlows.push('chainlinkTopup');
+        }
+
         const subgraphUrl = this.options.subgraphUrl ||
             deployments.SubgraphUrl[this.ethersConnection.environment][this.ethersConnection.chainId];
         if (subgraphUrl) {
@@ -188,6 +211,8 @@ query Query {
         totalDCACount
         activeP2PCount
         totalP2PCount
+        activeChainlinkTopupCount
+        totalChainlinkTopupCount
     }
 }`;
         const results = await this.rawQuery(query, options);
@@ -197,7 +222,7 @@ query Query {
     /**
      * Get the specified flow of a specific type
      * @param {string} id flow ID
-     * @param {string} type Flow type (subscription, dca or p2p)
+     * @param {string} type Flow type (subscription, dca, p2p or chainlinkTopup)
      * @param {Object} [options] query options
      * @return {Promise<*>}
      */
@@ -208,6 +233,8 @@ query Query {
             return this.dca(id, options);
         } else if (type === 'p2p') {
             return this.p2p(id, options);
+        } else if (type === 'chainlinkTopup') {
+            return this.chainlinkTopup(id, options);
         }
         throw new Error(`Unknown flow type ${type}`);
     }
