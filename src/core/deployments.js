@@ -357,6 +357,44 @@ const deployments = {
 }
 
 /**
+ * Return a map of services and if they are available on the given ethersConnection (environment/chain)
+ * @memberOf CaskSDK.deployments
+ * @param ethersConnection
+ * @return {Object}
+ */
+function servicesAvailable(ethersConnection) {
+    const services = {
+        subscriptions: false,
+        subscriptionPlans: false,
+        dca: false,
+        p2p: false,
+        chainlinkTopup: false,
+    };
+    if (deployments.CaskSubscriptions[ethersConnection.environment]?.[ethersConnection.chainId] &&
+        deployments.CaskSubscriptions[ethersConnection.environment][ethersConnection.chainId] !==
+        '0x0000000000000000000000000000000000000000') {
+        services.subscriptions = true;
+        services.subscriptionPlans = true;
+    }
+    if (deployments.CaskDCA[ethersConnection.environment]?.[ethersConnection.chainId] &&
+        deployments.CaskDCA[ethersConnection.environment][ethersConnection.chainId] !==
+        '0x0000000000000000000000000000000000000000') {
+        services.dca = true;
+    }
+    if (deployments.CaskP2P[ethersConnection.environment]?.[ethersConnection.chainId] &&
+        deployments.CaskP2P[ethersConnection.environment][ethersConnection.chainId] !==
+        '0x0000000000000000000000000000000000000000') {
+        services.p2p = true;
+    }
+    if (deployments.CaskChainlinkTopup[ethersConnection.environment]?.[ethersConnection.chainId] &&
+        deployments.CaskChainlinkTopup[ethersConnection.environment][ethersConnection.chainId] !==
+        '0x0000000000000000000000000000000000000000') {
+        services.chainlinkTopup = true;
+    }
+    return services;
+}
+
+/**
  * See if a given environment/chain pair is valid
  * @memberOf CaskSDK.deployments
  * @param environment
@@ -369,5 +407,6 @@ function isSupported(environment, chainId) {
 
 export default {
     ...deployments,
+    servicesAvailable,
     isSupported,
 }

@@ -25,7 +25,7 @@ class Query {
 
         this.logger = new Logger('CaskSDK::Query', this.options.logLevel);
 
-        this.enabledFlows = [];
+        this.servicesAvailable = {};
 
         if (!this.options?.cache) {
             this.options.cache = {};
@@ -57,26 +57,7 @@ class Query {
 
     _initQuery() {
 
-        if (deployments.CaskSubscriptions[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
-            deployments.CaskSubscriptions[this.ethersConnection.environment][this.ethersConnection.chainId] !==
-            '0x0000000000000000000000000000000000000000') {
-            this.enabledFlows.push('subscriptions');
-        }
-        if (deployments.CaskDCA[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
-            deployments.CaskDCA[this.ethersConnection.environment][this.ethersConnection.chainId] !==
-            '0x0000000000000000000000000000000000000000') {
-            this.enabledFlows.push('dca');
-        }
-        if (deployments.CaskP2P[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
-            deployments.CaskP2P[this.ethersConnection.environment][this.ethersConnection.chainId] !==
-            '0x0000000000000000000000000000000000000000') {
-            this.enabledFlows.push('p2p');
-        }
-        if (deployments.CaskChainlinkTopup[this.ethersConnection.environment]?.[this.ethersConnection.chainId] &&
-            deployments.CaskChainlinkTopup[this.ethersConnection.environment][this.ethersConnection.chainId] !==
-            '0x0000000000000000000000000000000000000000') {
-            this.enabledFlows.push('chainlinkTopup');
-        }
+        this.servicesAvailable = deployments.servicesAvailable(this.ethersConnection);
 
         const subgraphUrl = this.options.subgraphUrl ||
             deployments.SubgraphUrl[this.ethersConnection.environment][this.ethersConnection.chainId];
@@ -253,7 +234,7 @@ query Query {
 
         const outboundFlowQueries = [];
 
-        if (this.enabledFlows.includes('subscriptions')) {
+        if (this.servicesAvailable.subscriptions) {
             outboundFlowQueries.push(`
 caskSubscriptions(
     where: {currentOwner: "${address.toLowerCase()}"}
@@ -291,7 +272,7 @@ caskSubscriptions(
     canceledAt
   }`);}
 
-        if (this.enabledFlows.includes('dca')) {
+        if (this.servicesAvailable.dca) {
             outboundFlowQueries.push(`
 caskDCAs(where: {user: "${address.toLowerCase()}"}) {
     id
@@ -317,7 +298,7 @@ caskDCAs(where: {user: "${address.toLowerCase()}"}) {
     totalAmount
   }`);}
 
-        if (this.enabledFlows.includes('p2p')) {
+        if (this.servicesAvailable.p2p) {
             outboundFlowQueries.push(`
 caskP2Ps(where: {user: "${address.toLowerCase()}"}) {
     id
@@ -341,7 +322,7 @@ caskP2Ps(where: {user: "${address.toLowerCase()}"}) {
     completedAt
   }`);}
 
-        if (this.enabledFlows.includes('chainlinkTopup')) {
+        if (this.servicesAvailable.chainlinkTopup) {
             outboundFlowQueries.push(`
 caskChainlinkTopups(where: {user: "${address.toLowerCase()}"}) {
     id
@@ -374,7 +355,7 @@ ${outboundFlowQueries.join('')}
 
         const inboundFlowQueries = [];
 
-        if (this.enabledFlows.includes('p2p')) {
+        if (this.servicesAvailable.p2p) {
             inboundFlowQueries.push(`
 caskP2Ps(where: {to: "${address.toLowerCase()}"}) {
     id
@@ -405,16 +386,16 @@ query Query {
         const resultsInbound = await this.rawQuery(queryInbound, options);
 
         const result = {};
-        if (this.enabledFlows.includes('subscriptions')) {
+        if (this.servicesAvailable.subscriptions) {
             result['caskSubscriptions'] = resultsOutbound.data.caskSubscriptions
         }
-        if (this.enabledFlows.includes('dca')) {
+        if (this.servicesAvailable.dca) {
             result['caskDCAs'] = resultsOutbound.data.caskDCAs
         }
-        if (this.enabledFlows.includes('p2p')) {
+        if (this.servicesAvailable.p2p) {
             result['caskP2Ps'] = [...resultsOutbound.data.caskP2Ps, ...resultsInbound.data.caskP2Ps]
         }
-        if (this.enabledFlows.includes('chainlinkTopup')) {
+        if (this.servicesAvailable.chainlinkTopup) {
             result['caskChainlinkTopups'] = resultsOutbound.data.caskChainlinkTopups
         }
 
@@ -733,6 +714,9 @@ query Query {
     user {
        id
     }
+    targetId
+    registry
+    topupType
     createdAt
     currentAmount
     currentBuyQty

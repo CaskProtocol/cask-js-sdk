@@ -417,6 +417,14 @@ class CaskSDK {
   }
 
   /**
+   * Return a map of services and if they are available based on the current ethersConnection
+   * @returns {Object}
+   */
+  servicesAvailable() {
+    return deployments.servicesAvailable(this.ethersConnection);
+  }
+
+  /**
    * Shutdown connections for background services
    */
   stop() {
