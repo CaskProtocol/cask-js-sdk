@@ -133,6 +133,7 @@ class CaskSDK {
     NONE: 0,
     AUTOMATION: 1,
     VRF: 2,
+    DIRECT: 3,
   }
 
   /**

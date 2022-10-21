@@ -290,7 +290,9 @@ query Query {
         }
 
         const linkFundingToken = await this.CaskChainlinkTopupManager.linkFundingToken();
-        const link = contracts.ERC20({tokenAddress: linkFundingToken, ethersConnection: this.ethersConnection});
+        const link = contracts.ERC20({
+            tokenAddress: linkFundingToken,
+            ethersConnection: this.ethersConnection});
 
         if (cltuInfo.topupType === 1) {
             const registry = contracts.AutomationRegistry({
@@ -317,6 +319,16 @@ query Query {
                 units: units || this.options.defaultUnits,
                 unitOptions: unitOptions || this.options.defaultUnitOptions,
             });
+
+        } else if (cltuInfo.topupType === 3) {
+            const result = await link.balanceOf(cltuInfo.registry);
+            return CaskUnits.formatUnits({
+                amount: result,
+                decimals: await link.decimals(),
+                units: units || this.options.defaultUnits,
+                unitOptions: unitOptions || this.options.defaultUnitOptions,
+            });
+
         } else {
             throw new Error("Unknown ChainlinkTopup type");
         }
