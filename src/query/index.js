@@ -409,7 +409,7 @@ query Query {
                       where={},
                       orderBy='createdAt',
                       orderDirection='desc',
-                      includeCanceled = false,
+                      includeInactive = false,
                       status,
                       options
                   }={})
@@ -430,7 +430,7 @@ query Query {
             where,
             orderBy,
             orderDirection,
-            includeCanceled,
+            includeInactive,
             status,
             options
         });
@@ -443,7 +443,7 @@ query Query {
                     where={},
                     orderBy='createdAt',
                     orderDirection='desc',
-                    includeCanceled = false,
+                    includeInactive = false,
                     status,
                     options
                 }={})
@@ -464,14 +464,14 @@ query Query {
             where,
             orderBy,
             orderDirection,
-            includeCanceled,
+            includeInactive,
             status,
             options
         })
     }
 
     async subscription(id, options={}) {
-        const result = await this.subscriptionQuery({where: {id}, includeCanceled: true, options});
+        const result = await this.subscriptionQuery({where: {id}, includeInactive: true, options});
         return result?.data?.caskSubscriptions?.[0];
     }
 
@@ -481,7 +481,7 @@ query Query {
                           where={},
                           orderBy='createdAt',
                           orderDirection='desc',
-                          includeCanceled = false,
+                          includeInactive = false,
                           status,
                           options
                       }={})
@@ -494,7 +494,7 @@ query Query {
                 whereStatus = `status: ${status}`;
             }
         } else {
-            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
+            whereStatus = includeInactive ? '' : ', status_not_in: [Canceled]';
         }
 
         const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
@@ -544,7 +544,7 @@ query Query {
     }
 
     async dca(id, options={}) {
-        const result = await this.dcaQuery({where: {id}, includeCanceled: true, options});
+        const result = await this.dcaQuery({where: {id}, includeInactive: true, options});
         return result?.data?.caskDCAs?.[0];
     }
 
@@ -554,7 +554,7 @@ query Query {
                  where={},
                  orderBy='createdAt',
                  orderDirection='desc',
-                 includeCanceled = false,
+                 includeInactive = false,
                  status,
                  options
              }={})
@@ -567,7 +567,7 @@ query Query {
                 whereStatus = `status: ${status}`;
             }
         } else {
-            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
+            whereStatus = includeInactive ? '' : ', status_not_in: [Canceled,Complete]';
         }
 
         const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
@@ -611,7 +611,7 @@ query Query {
     }
 
     async p2p(id, options={}) {
-        const result = await this.p2pQuery({where: {id}, includeCanceled: true, options});
+        const result = await this.p2pQuery({where: {id}, includeInactive: true, options});
         return result?.data?.caskP2Ps?.[0];
     }
 
@@ -621,7 +621,7 @@ query Query {
                  where={},
                  orderBy='createdAt',
                  orderDirection='desc',
-                 includeCanceled = false,
+                 includeInactive = false,
                  status,
                  options
              }={})
@@ -634,7 +634,7 @@ query Query {
                 whereStatus = `status: ${status}`;
             }
         } else {
-            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
+            whereStatus = includeInactive ? '' : ', status_not_in: [Canceled,Complete]';
         }
 
         const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
@@ -673,7 +673,7 @@ query Query {
     }
 
     async chainlinkTopup(id, options={}) {
-        const result = await this.chainlinkTopupQuery({where: {id}, includeCanceled: true, options});
+        const result = await this.chainlinkTopupQuery({where: {id}, includeInactive: true, options});
         return result?.data?.caskChainlinkTopups?.[0];
     }
 
@@ -683,7 +683,7 @@ query Query {
                  where={},
                  orderBy='createdAt',
                  orderDirection='desc',
-                 includeCanceled = false,
+                 includeInactive = false,
                  status,
                  options
              }={})
@@ -696,7 +696,7 @@ query Query {
                 whereStatus = `status: ${status}`;
             }
         } else {
-            whereStatus = includeCanceled ? '' : ', status_not_in: [Canceled]';
+            whereStatus = includeInactive ? '' : ', status_not_in: [Canceled]';
         }
 
         const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
