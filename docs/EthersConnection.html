@@ -204,6 +204,155 @@ instance of this class is shared across all service class instances.</div>
     
 
     
+    <h4 class="name" id="estimateGas"><span class="type-signature">(async) </span>estimateGas<span class="signature">(request)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Estimate gas for a transaction.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>request</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Object of args passed to sendTransaction</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Estimated amount of gas needed
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="init"><span class="type-signature">(async) </span>init<span class="signature">(args)</span><span class="type-signature"></span></h4>
     
 
@@ -322,10 +471,170 @@ instance of this class is shared across all service class instances.</div>
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>signer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Initial signer to use</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
             </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="onEstimateGas"><span class="type-signature"></span>onEstimateGas<span class="signature">(handler)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Register a handler to receive a callback when the EthersConnection estimates gas.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>handler</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Callback handler</td>
         </tr>
 
     
@@ -640,6 +949,155 @@ instance of this class is shared across all service class instances.</div>
 
 
 
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="sendTransaction"><span class="type-signature">(async) </span>sendTransaction<span class="signature">(transaction)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Send a transaction with the currently configured signer.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>transaction</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction to send</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    TransactionResponse
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1102,7 +1560,7 @@ instance of this class is shared across all service class instances.</div>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="CaskSDK.abi.html">abi</a></li><li><a href="CaskSDK.assetIcons.html">assetIcons</a></li><li><a href="CaskSDK.chains.html">chains</a></li><li><a href="CaskSDK.contracts.html">contracts</a></li><li><a href="CaskSDK.defaultChains.html">defaultChains</a></li><li><a href="CaskSDK.deployments.html">deployments</a></li><li><a href="CaskSDK.enc.html">enc</a></li><li><a href="CaskSDK.enc.mode.html">mode</a></li><li><a href="CaskSDK.enc.providers.html">providers</a></li><li><a href="CaskSDK.environments.html">environments</a></li><li><a href="CaskSDK.ipfs.html">ipfs</a></li><li><a href="CaskSDK.ipfs.providers.html">providers</a></li><li><a href="CaskSDK.units.html">units</a></li><li><a href="CaskSDK.urls.html">urls</a></li><li><a href="CaskSDK.utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="CaskSDK.enc.SecureData.html">SecureData</a></li><li><a href="CaskSDK.ipfs.IPFS.html">IPFS</a></li><li><a href="EthersConnection.html">EthersConnection</a></li><li><a href="Events.html">Events</a></li><li><a href="Prices.html">Prices</a></li><li><a href="ProviderProfile.html">ProviderProfile</a></li><li><a href="Query.html">Query</a></li><li><a href="SubscriptionPlans.html">SubscriptionPlans</a></li><li><a href="Subscriptions.html">Subscriptions</a></li><li><a href="Vault.html">Vault</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="CaskSDK.abi.html">abi</a></li><li><a href="CaskSDK.assetIcons.html">assetIcons</a></li><li><a href="CaskSDK.chains.html">chains</a></li><li><a href="CaskSDK.contracts.html">contracts</a></li><li><a href="CaskSDK.defaultChains.html">defaultChains</a></li><li><a href="CaskSDK.deployments.html">deployments</a></li><li><a href="CaskSDK.enc.html">enc</a></li><li><a href="CaskSDK.enc.mode.html">mode</a></li><li><a href="CaskSDK.enc.providers.html">providers</a></li><li><a href="CaskSDK.environments.html">environments</a></li><li><a href="CaskSDK.ipfs.html">ipfs</a></li><li><a href="CaskSDK.ipfs.providers.html">providers</a></li><li><a href="CaskSDK.meta.html">meta</a></li><li><a href="CaskSDK.meta.providers.html">providers</a></li><li><a href="CaskSDK.units.html">units</a></li><li><a href="CaskSDK.urls.html">urls</a></li><li><a href="CaskSDK.utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="CaskSDK.enc.SecureData.html">SecureData</a></li><li><a href="CaskSDK.ipfs.IPFS.html">IPFS</a></li><li><a href="CaskSDK.meta.Meta.html">Meta</a></li><li><a href="ChainlinkTopup.html">ChainlinkTopup</a></li><li><a href="DCA.html">DCA</a></li><li><a href="EthersConnection.html">EthersConnection</a></li><li><a href="Events.html">Events</a></li><li><a href="P2P.html">P2P</a></li><li><a href="Prices.html">Prices</a></li><li><a href="ProviderProfile.html">ProviderProfile</a></li><li><a href="Query.html">Query</a></li><li><a href="SubscriptionPlans.html">SubscriptionPlans</a></li><li><a href="Subscriptions.html">Subscriptions</a></li><li><a href="Tokens.html">Tokens</a></li><li><a href="Vault.html">Vault</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
