@@ -143,7 +143,16 @@ class ChainlinkTopup {
      *
      * @param {string} chainlinkTopupId ChainlinkTopup ID
      */
-    async history(chainlinkTopupId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+    async history(
+        chainlinkTopupId,
+        {
+            limit=10,
+            offset=0,
+            orderBy="timestamp",
+            orderDirection="desc",
+            options
+        }={})
+    {
         const query = `
 query Query {
     caskChainlinkTopupEvents(
@@ -168,7 +177,7 @@ query Query {
         skipReason
     }
 }`;
-        const results = await this.query.rawQuery(query);
+        const results = await this.query.rawQuery(query, options);
         return results.data.caskChainlinkTopupEvents;
     }
 

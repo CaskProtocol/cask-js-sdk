@@ -197,9 +197,18 @@ query Query {
     /**
      * Get history for a P2P flow
      *
-     * @param {string} dcaId P2P ID
+     * @param {string} p2pId P2P ID
      */
-    async history(p2pId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+    async history(
+        p2pId,
+        {
+            limit=10,
+            offset=0,
+            orderBy="timestamp",
+            orderDirection="desc",
+            options
+        }={})
+    {
         const query = `
 query Query {
     caskP2PEvents(
@@ -219,7 +228,7 @@ query Query {
         fee
     }
 }`;
-        const results = await this.query.rawQuery(query);
+        const results = await this.query.rawQuery(query, options);
         return results.data.caskP2PEvents;
     }
 

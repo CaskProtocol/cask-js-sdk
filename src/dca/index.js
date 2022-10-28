@@ -197,7 +197,16 @@ class DCA {
      *
      * @param {string} dcaId DCA ID
      */
-    async history(dcaId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+    async history(
+        dcaId,
+        {
+            limit=10,
+            offset=0,
+            orderBy="timestamp",
+            orderDirection="desc",
+            options
+        }={})
+    {
         const query = `
 query Query {
     caskDCAEvents(
@@ -220,7 +229,7 @@ query Query {
         skipReason
     }
 }`;
-        const results = await this.query.rawQuery(query);
+        const results = await this.query.rawQuery(query, options);
         return results.data.caskDCAEvents;
     }
 

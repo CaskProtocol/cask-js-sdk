@@ -348,7 +348,16 @@ query Query {
      *
      * @param {string} subscriptionId Subscription ID
      */
-    async history(subscriptionId, {limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+    async history(
+        subscriptionId,
+        {
+            limit=10,
+            offset=0,
+            orderBy="timestamp",
+            orderDirection="desc",
+            options
+        }={})
+    {
         subscriptionId = ethers.BigNumber.from(subscriptionId);
 
         const query = `
@@ -372,7 +381,7 @@ query Query {
         planId
     }
 }`;
-        const results = await this.query.rawQuery(query);
+        const results = await this.query.rawQuery(query, options);
         return results.data.caskSubscriptionEvents;
     }
 

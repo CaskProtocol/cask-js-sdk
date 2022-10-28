@@ -738,7 +738,15 @@ query Query {
      * Get wallet history for the connected user
      *
      */
-    async walletHistory({address, limit=10, offset=0, orderBy="timestamp", orderDirection="desc"}={}) {
+    async walletHistory({
+                            address,
+                            limit=10,
+                            offset=0,
+                            orderBy="timestamp",
+                            orderDirection="desc",
+                            options
+                        }={})
+    {
         if (!address) {
             address = this.ethersConnection.address;
         }
@@ -770,7 +778,7 @@ query Query {
         fundingSource
     }
 }`;
-        const results = await this.rawQuery(query);
+        const results = await this.rawQuery(query, options);
 
         const queryInbound = `
 query Query {
@@ -796,7 +804,7 @@ query Query {
         fundingSource
     }
 }`;
-        const resultsInbound = await this.rawQuery(queryInbound);
+        const resultsInbound = await this.rawQuery(queryInbound, options);
 
         return [...results.data.caskWalletEvents, ...resultsInbound.data.caskWalletEvents];
     }
