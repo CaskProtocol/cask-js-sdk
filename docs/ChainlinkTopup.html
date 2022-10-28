@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: SubscriptionPlans</title>
+    <title>JSDoc: Class: ChainlinkTopup</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: SubscriptionPlans</h1>
+    <h1 class="page-title">Class: ChainlinkTopup</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>SubscriptionPlans<span class="signature">(options)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ChainlinkTopup<span class="signature">(options)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Service class to handle interacting with the Cask subscription plans system</div>
+            <div class="class-description">Service class to handle interacting with the Cask ChainlinkTopup system</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="SubscriptionPlans"><span class="type-signature"></span>new SubscriptionPlans<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ChainlinkTopup"><span class="type-signature"></span>new ChainlinkTopup<span class="signature">(options)</span><span class="type-signature"></span></h4>
     
 
     
@@ -53,7 +53,7 @@
 
 
 <div class="description">
-    Create an instance of the SubscriptionPlans service.
+    Create an instance of the ChainlinkTopup service.
 </div>
 
 
@@ -199,7 +199,7 @@
     
 
     
-    <h4 class="name" id="disablePlan"><span class="type-signature">(async) </span>disablePlan<span class="signature">(planId)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
+    <h4 class="name" id="cancel"><span class="type-signature">(async) </span>cancel<span class="signature">(chainlinkTopupId)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
     
 
     
@@ -207,7 +207,7 @@
 
 
 <div class="description">
-    Disable a plan from accepting any new subscriptions. No existing subscriptions are canceled.
+    Cancel a ChainlinkTopup.
 </div>
 
 
@@ -243,10 +243,15 @@
 
         <tr>
             
-                <td class="name"><code>planId</code></td>
+                <td class="name"><code>chainlinkTopupId</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
             
             </td>
 
@@ -254,7 +259,7 @@
 
             
 
-            <td class="description last">Plan ID</td>
+            <td class="description last">ChainlinkTopup ID</td>
         </tr>
 
     
@@ -344,7 +349,7 @@
     
 
     
-    <h4 class="name" id="enablePlan"><span class="type-signature">(async) </span>enablePlan<span class="signature">(planId)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature">(async) </span>create<span class="signature">(args)</span><span class="type-signature"> &rarr; {<a href="ChainlinkTopup.html#.CreateChainlinkTopupResult">ChainlinkTopup.CreateChainlinkTopupResult</a>}</span></h4>
     
 
     
@@ -352,7 +357,7 @@
 
 
 <div class="description">
-    Re-enable a previously disabled plan to be able to accept new subscriptions again.
+    Create a new ChainlinkTopup.
 </div>
 
 
@@ -388,315 +393,7 @@
 
         <tr>
             
-                <td class="name"><code>planId</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Plan ID</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;{tx: *}></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getDiscountRedemptions"><span class="type-signature">(async) </span>getDiscountRedemptions<span class="signature">(discountId)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get the number of redemptions a specific plan/discountId has already had.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>discountId</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Discount ID</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;string></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getProfile"><span class="type-signature">(async) </span>getProfile<span class="signature">(address, options)</span><span class="type-signature"> &rarr; {Promise.&lt;(<a href="ProviderProfile.html">ProviderProfile</a>|null)>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get the provider profile for an address.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Provider address</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>args</code></td>
             
 
             <td class="type">
@@ -712,7 +409,7 @@
 
             
 
-            <td class="description last">Options
+            <td class="description last">Function arguments
                 <h6>Properties</h6>
                 
 
@@ -726,11 +423,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -742,34 +435,23 @@
 
         <tr>
             
-                <td class="name"><code>force</code></td>
+                <td class="name"><code>asset</code></td>
             
 
             <td class="type">
             
+                
+<span class="param-type">string</span>
+
+
+            
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
 
-            <td class="description last">Force re-fetching profile even if it was previously loaded</td>
+            <td class="description last">Address of asset to ChainlinkTopup</td>
         </tr>
 
     
@@ -848,7 +530,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;(<a href="ProviderProfile.html">ProviderProfile</a>|null)></span>
+<span class="param-type"><a href="ChainlinkTopup.html#.CreateChainlinkTopupResult">ChainlinkTopup.CreateChainlinkTopupResult</a></span>
 
 
     </dd>
@@ -866,7 +548,7 @@
     
 
     
-    <h4 class="name" id="hasProviderProfile"><span class="type-signature">(async) </span>hasProviderProfile<span class="signature">(address)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
+    <h4 class="name" id="get"><span class="type-signature">(async) </span>get<span class="signature">(chainlinkTopupId)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="ChainlinkTopup.html#.ChainlinkTopupDetail">ChainlinkTopup.ChainlinkTopupDetail</a>>}</span></h4>
     
 
     
@@ -874,7 +556,7 @@
 
 
 <div class="description">
-    Check if a given address is registered as a service provider.
+    Get the details of a specific ChainlinkTopup.
 </div>
 
 
@@ -910,7 +592,7 @@
 
         <tr>
             
-                <td class="name"><code>address</code></td>
+                <td class="name"><code>chainlinkTopupId</code></td>
             
 
             <td class="type">
@@ -964,6 +646,13 @@
     
 
     
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>The SDK guide for more details on unit formatting at <a href="https://docs.cask.fi/developer-docs/javascript-sdk">https://docs.cask.fi/developer-docs/javascript-sdk</a></li>
+        </ul>
+    </dd>
+    
 
     
 </dl>
@@ -993,7 +682,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;boolean></span>
+<span class="param-type">Promise.&lt;<a href="ChainlinkTopup.html#.ChainlinkTopupDetail">ChainlinkTopup.ChainlinkTopupDetail</a>></span>
 
 
     </dd>
@@ -1011,7 +700,7 @@
     
 
     
-    <h4 class="name" id="history"><span class="type-signature">(async) </span>history<span class="signature">(provider, planId)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="history"><span class="type-signature">(async) </span>history<span class="signature">(chainlinkTopupId, queryopts<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
     
 
     
@@ -1019,7 +708,7 @@
 
 
 <div class="description">
-    Get history for a provider and optionally a specific plan
+    Get history for a chainlink topup flow
 </div>
 
 
@@ -1043,6 +732,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1055,7 +746,7 @@
 
         <tr>
             
-                <td class="name"><code>provider</code></td>
+                <td class="name"><code>chainlinkTopupId</code></td>
             
 
             <td class="type">
@@ -1068,33 +759,246 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">Provider address</td>
+            <td class="description last">Chainlink Topup ID</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>planId</code></td>
+                <td class="name"><code>queryopts</code></td>
             
 
             <td class="type">
             
+            </td>
+
+            
+                <td class="attributes">
                 
-<span class="param-type">number</span>
+                    &lt;optional><br>
+                
 
+                
 
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional query options
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last">Plan ID</td>
+            
+                <td class="default">
+                
+                    10
+                
+                </td>
+            
+
+            <td class="description last">Limit</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last">Offset</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderBy</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    timestamp
+                
+                </td>
+            
+
+            <td class="description last">Order by</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderDirection</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    desc
+                
+                </td>
+            
+
+            <td class="description last">Order direction, one of asc or desc</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    asc
+                
+                </td>
+            
+
+            <td class="description last">Optional options to pass to apollo for graphQL</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -1155,6 +1059,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;*></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1174,7 +1096,7 @@
 
 
 <div class="description">
-    Initialize the subscription plans service.
+    Initialize the ChainlinkTopup service.
 </div>
 
 
@@ -1359,7 +1281,7 @@
     
 
     
-    <h4 class="name" id="loadProfile"><span class="type-signature">(async) </span>loadProfile<span class="signature">(address<span class="signature-attributes">opt</span>, force<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="ProviderProfile.html">ProviderProfile</a>>}</span></h4>
+    <h4 class="name" id="linkBalance"><span class="type-signature">(async) </span>linkBalance<span class="signature">(chainlinkTopupId)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
     
 
     
@@ -1367,206 +1289,7 @@
 
 
 <div class="description">
-    Load the (or create a new non-published) service provider profile for an address.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    ethersConnection.address
-                
-                </td>
-            
-
-            <td class="description last">Provider address or attempts to use the blockchain connection address</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>force</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last">Force reloading profile even if it was previously loaded</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="ProviderProfile.html">ProviderProfile</a>></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="planStatus"><span class="type-signature">(async) </span>planStatus<span class="signature">(planId)</span><span class="type-signature"> &rarr; {Promise.&lt;number>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get the current plan status of a specific plan.
+    Get the link balance for the underlying service from a ChainlinkTopup.
 </div>
 
 
@@ -1602,10 +1325,15 @@
 
         <tr>
             
-                <td class="name"><code>planId</code></td>
+                <td class="name"><code>chainlinkTopupId</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
             
             </td>
 
@@ -1613,305 +1341,7 @@
 
             
 
-            <td class="description last">Plan ID</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;number></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="publishProfile"><span class="type-signature">(async) </span>publishProfile<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Publish a provider profile. Uploads profile to IPFS and performs a blockchain transaction to store the
-new provider CID on-chain.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;{tx: *}></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="retirePlan"><span class="type-signature">(async) </span>retirePlan<span class="signature">(planId, retireAt<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Permanently retire a specific plan. Any active subscriptions to the plan will be canceled at their
-next renewal date. This cannot be undone.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>planId</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Plan ID</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>retireAt</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    now
-                
-                </td>
-            
-
-            <td class="description last">Unix timestamp of when to retire plan, defaults to now.</td>
+            <td class="description last">ChainlinkTopup ID</td>
         </tr>
 
     
@@ -2001,7 +1431,7 @@ next renewal date. This cannot be undone.
     
 
     
-    <h4 class="name" id="verifyDiscount"><span class="type-signature">(async) </span>verifyDiscount<span class="signature">(planId, discountId)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
+    <h4 class="name" id="linkToken"><span class="type-signature">(async) </span>linkToken<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;{*}>}</span></h4>
     
 
     
@@ -2009,8 +1439,108 @@ next renewal date. This cannot be undone.
 
 
 <div class="description">
-    Verify the given plan/discountId is currently valid. Throws an error if is not currently valid
-that includes the reason.
+    Get the LINK token used by the ChainlinkTopup service.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;{*}></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="pause"><span class="type-signature">(async) </span>pause<span class="signature">(chainlinkTopupId)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Pause an active ChainlinkTopup
 </div>
 
 
@@ -2046,10 +1576,15 @@ that includes the reason.
 
         <tr>
             
-                <td class="name"><code>planId</code></td>
+                <td class="name"><code>chainlinkTopupId</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
             
             </td>
 
@@ -2057,25 +1592,7 @@ that includes the reason.
 
             
 
-            <td class="description last">Plan ID</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>discountId</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Discount ID</td>
+            <td class="description last">ChainlinkTopup ID</td>
         </tr>
 
     
@@ -2147,7 +1664,157 @@ that includes the reason.
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;boolean></span>
+<span class="param-type">Promise.&lt;{tx: *}></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="resume"><span class="type-signature">(async) </span>resume<span class="signature">(chainlinkTopupId)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Resume a paused ChainlinkTopup.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>chainlinkTopupId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ChainlinkTopup ID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;{tx: *}></span>
 
 
     </dd>
@@ -2162,6 +1829,312 @@ that includes the reason.
         
     
 
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".ChainlinkTopupDetail">ChainlinkTopupDetail</h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>chainlinkTopupId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ChainlinkTopup ID</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ChainlinkTopup status</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>createdAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Unix timestamp of ChainlinkTopup creation time</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".CreateChainlinkTopupResult">CreateChainlinkTopupResult</h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Create Transaction</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>chainId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Chain ID that the transaction took place on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>chainlinkTopupId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of newly created ChainlinkTopup</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
     
 
     
