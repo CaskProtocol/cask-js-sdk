@@ -38,16 +38,16 @@ import Query from "../query";
  */
 class SubscriptionPlans {
 
-    static SubscriptionPlanStatus = {
+    static PLAN_STATUS = {
         ENABLED: 0,
         DISABLED: 1,
-        ENDOFLIFE: 2
+        ENDOFLIFE: 2,
     }
 
-    static SubscriptionPlanStatusText = {
-        [SubscriptionPlans.SubscriptionPlanStatus.ENABLED]: 'Enabled',
-        [SubscriptionPlans.SubscriptionPlanStatus.DISABLED]: 'Disabled',
-        [SubscriptionPlans.SubscriptionPlanStatus.ENDOFLIFE]: 'EndOfLife'
+    static PLAN_STATUS_TEXT = {
+        [SubscriptionPlans.PLAN_STATUS.ENABLED]: 'Enabled',
+        [SubscriptionPlans.PLAN_STATUS.DISABLED]: 'Disabled',
+        [SubscriptionPlans.PLAN_STATUS.ENDOFLIFE]: 'EndOfLife',
     }
 
     /**
@@ -323,7 +323,7 @@ query Query {
         }
 
         const status =  await this.CaskSubscriptionPlans.getPlanStatus(this.providerProfile.address, planId);
-        return SubscriptionPlans.SubscriptionPlanStatusText[status] || 'Unknown';
+        return SubscriptionPlans.PLAN_STATUS_TEXT[status] || 'Unknown';
     }
 
     /**

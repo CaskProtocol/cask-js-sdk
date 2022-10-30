@@ -265,6 +265,7 @@ Each service below is a link to the reference documentation for that service.
 | [cask.subscriptionPlans](https://caskprotocol.github.io/cask-js-sdk/Subscriptions.html) |           Interact with the Cask subscription plans such as becoming a service provider, setting up plans, etc            |
 | [cask.events](https://caskprotocol.github.io/cask-js-sdk/Events.html)                   |                       A service to register event listeners on the various Cask protocol contracts                        |
 | [cask.prices](https://caskprotocol.github.io/cask-js-sdk/Prices.html)                   |                                A service to efficiently get asset prices and user balances                                |
+| [cask.dca](https://caskprotocol.github.io/cask-js-sdk/DCA.html)                         |                                Interface with the Auto-Buy service                                                        |
 
 
 # Testing

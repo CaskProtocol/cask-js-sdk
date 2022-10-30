@@ -30,6 +30,20 @@ import Query from "../query/index.js";
  */
 class ChainlinkTopup {
 
+    static STATUS = {
+        NONE: 0,
+        ACTIVE: 1,
+        PAUSED: 2,
+        CANCELED: 3,
+    }
+
+    static TOPUP_TYPE = {
+        NONE: 0,
+        AUTOMATION: 1,
+        VRF: 2,
+        DIRECT: 3,
+    }
+
     /**
      * Create an instance of the ChainlinkTopup service.
      *
@@ -139,9 +153,16 @@ class ChainlinkTopup {
     }
 
     /**
-     * Get history for a ChainlinkTopup
+     * Get history for a chainlink topup flow
      *
-     * @param {string} chainlinkTopupId ChainlinkTopup ID
+     * @param {string} chainlinkTopupId Chainlink Topup ID
+     * @param [queryopts] Optional query options
+     * @param [queryopts.limit=10] Limit
+     * @param [queryopts.offset=0] Offset
+     * @param [queryopts.orderBy=timestamp] Order by
+     * @param [queryopts.orderDirection=desc] Order direction, one of asc or desc
+     * @param [queryopts.options=asc] Optional options to pass to apollo for graphQL
+     * @return {Promise<*>}
      */
     async history(
         chainlinkTopupId,
@@ -303,7 +324,7 @@ query Query {
             tokenAddress: linkFundingToken,
             ethersConnection: this.ethersConnection});
 
-        if (cltuInfo.topupType === 1) {
+        if (cltuInfo.topupType === ChainlinkTopup.TOPUP_TYPE.AUTOMATION) {
             const registry = contracts.AutomationRegistry({
                 registryAddress: cltuInfo.registry,
                 ethersConnection: this.ethersConnection
@@ -316,7 +337,7 @@ query Query {
                 unitOptions: unitOptions || this.options.defaultUnitOptions,
             });
 
-        } else if (cltuInfo.topupType === 2) {
+        } else if (cltuInfo.topupType === ChainlinkTopup.TOPUP_TYPE.VRF) {
             const registry = contracts.VRFCoordinator({
                 coordinatorAddress: cltuInfo.registry,
                 ethersConnection: this.ethersConnection
@@ -329,7 +350,7 @@ query Query {
                 unitOptions: unitOptions || this.options.defaultUnitOptions,
             });
 
-        } else if (cltuInfo.topupType === 3) {
+        } else if (cltuInfo.topupType === ChainlinkTopup.TOPUP_TYPE.DIRECT) {
             const result = await link.balanceOf(cltuInfo.registry);
             return CaskUnits.formatUnits({
                 amount: result,

@@ -372,6 +372,35 @@ export default {
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "_network",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_networkData",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_networkSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "verifyNetworkData",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "bytes32",
           "name": "_planData",
           "type": "bytes32"
@@ -388,6 +417,45 @@ export default {
         }
       ],
       "name": "verifyPlan",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_provider",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_nonce",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_planMerkleRoot",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_discountMerkleRoot",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_providerSignature",
+          "type": "bytes"
+        }
+      ],
+      "name": "verifyProviderSignature",
       "outputs": [
         {
           "internalType": "bool",

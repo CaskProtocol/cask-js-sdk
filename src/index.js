@@ -91,50 +91,18 @@ class CaskSDK {
   static meta = meta;
   static utils = utils;
 
-  static fundingSource = {
-    CASK: 0, // Cask wallet
-    PERSONAL: 1, // personal wallet
-  }
+  static fundingSource = Vault.FUNDING_SOURCE;
 
-  static subscriptionStatus = {
-    NONE: 0,
-    TRIALING: 1,
-    ACTIVE: 2,
-    PAUSED: 3,
-    CANCELED: 4,
-    PAST_DUE: 5,
-    PENDING_PAUSE: 6
-  }
+  static subscriptionStatus = Subscriptions.STATUS;
+  static subscriptionPlanStatus = SubscriptionPlans.PLAN_STATUS;
 
-  static dcaStatus = {
-    NONE: 0,
-    ACTIVE: 1,
-    PAUSED: 2,
-    CANCELED: 3,
-    COMPLETE: 4,
-  }
+  static dcaStatus = DCA.STATUS;
+  static dcaSwapProtocol = DCA.SWAP_PROTOCOL;
 
-  static p2pStatus = {
-    NONE: 0,
-    ACTIVE: 1,
-    PAUSED: 2,
-    CANCELED: 3,
-    COMPLETE: 4,
-  }
+  static p2pStatus = P2P.STATUS
 
-  static chainlinkTopupStatus = {
-    NONE: 0,
-    ACTIVE: 1,
-    PAUSED: 2,
-    CANCELED: 3,
-  }
-
-  static chainlinkTopupType = {
-    NONE: 0,
-    AUTOMATION: 1,
-    VRF: 2,
-    DIRECT: 3,
-  }
+  static chainlinkTopupStatus = ChainlinkTopup.STATUS;
+  static chainlinkTopupType = ChainlinkTopup.TOPUP_TYPE;
 
   /**
    * Create an instance of the CaskSDK

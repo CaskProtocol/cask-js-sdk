@@ -13,7 +13,7 @@ const cask = new CaskSDK({
         pinataApiKey: process.env.PINATA_API_KEY,
         pinataApiSecret: process.env.PINATA_API_SECRET,
     },
-    environment: CaskSDK.environments.DEVELOPMENT,
+    environment: CaskSDK.environments.TESTNET,
     logLevel: 'debug',
 });
 
@@ -103,13 +103,18 @@ async function allowance() {
 
 }
 
+async function balance() {
+    console.log(`Balance is ${await cask.vault.balance()}`);
+}
+
 (async () => {
     await cask.init();
 
-    await fundingSource();
+    // await fundingSource();
     // await deposit();
     // await withdraw();
     // await allowance();
+    await balance();
 
     cask.stop();
 })();

@@ -36,6 +36,14 @@ import Query from "../query/index.js";
  */
 class P2P {
 
+    static STATUS = {
+        NONE: 0,
+        ACTIVE: 1,
+        PAUSED: 2,
+        CANCELED: 3,
+        COMPLETE: 4,
+    }
+
     /**
      * Create an instance of the P2P service.
      *
@@ -198,6 +206,13 @@ query Query {
      * Get history for a P2P flow
      *
      * @param {string} p2pId P2P ID
+     * @param [queryopts] Optional query options
+     * @param [queryopts.limit=10] Limit
+     * @param [queryopts.offset=0] Offset
+     * @param [queryopts.orderBy=timestamp] Order by
+     * @param [queryopts.orderDirection=desc] Order direction, one of asc or desc
+     * @param [queryopts.options=asc] Optional options to pass to apollo for graphQL
+     * @return {Promise<*>}
      */
     async history(
         p2pId,
