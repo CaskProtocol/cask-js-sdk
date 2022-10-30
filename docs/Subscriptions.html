@@ -199,7 +199,213 @@
     
 
     
-    <h4 class="name" id="attachData"><span class="type-signature">(async) </span>attachData<span class="signature">(subscriptionId, data, authSig)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
+    <h4 class="name" id="activeSubscriptionCount"><span class="type-signature">(async) </span>activeSubscriptionCount<span class="signature">(consumer, provider, planId<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Return the number of active/trialing subscriptions a consumer has to a specific provider and plan.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>consumer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Consumer address</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>provider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Provider address</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>planId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Plan ID</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="attachData"><span class="type-signature">(async) </span>attachData<span class="signature">(subscriptionId, data, options<span class="signature-attributes">opt</span>, authSig<span class="signature-attributes">opt</span>, privacy<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;{tx: *}>}</span></h4>
     
 
     
@@ -231,7 +437,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -251,7 +461,19 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"></td>
@@ -269,10 +491,54 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Additional Options</td>
         </tr>
 
     
@@ -284,13 +550,66 @@
 
             <td class="type">
             
+                
+<span class="param-type">object</span>
+
+
+            
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">LIT authsig</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>privacy</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    enc.mode.TRANSFERRABLE
+                
+                </td>
+            
+
+            <td class="description last">privacy setting for attached data.</td>
         </tr>
 
     
@@ -363,6 +682,270 @@
     <dd>
         
 <span class="param-type">Promise.&lt;{tx: *}></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="attachedData"><span class="type-signature">(async) </span>attachedData<span class="signature">(subscriptionId, options<span class="signature-attributes">opt</span>, authSig<span class="signature-attributes">opt</span>, privacy<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get the transferrable private data attached to a subscription.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>subscriptionId</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Additional Options</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authSig</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">LIT authsig</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>privacy</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    enc.mode.TRANSFERRABLE
+                
+                </td>
+            
+
+            <td class="description last">privacy setting for attached data.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;*></span>
 
 
     </dd>
@@ -565,7 +1148,7 @@
     
 
     
-    <h4 class="name" id="change"><span class="type-signature">(async) </span>change<span class="signature">(subscriptionId, planId, discountCode, metadata)</span><span class="type-signature"> &rarr; {Promise.&lt;{ref, tx: *, provider, chainId, planId, subscriptionId, consumer: (*)}>}</span></h4>
+    <h4 class="name" id="change"><span class="type-signature">(async) </span>change<span class="signature">(subscriptionId, args)</span><span class="type-signature"> &rarr; {Promise.&lt;{ref, tx: *, provider, chainId, planId, subscriptionId, consumer: (*)}>}</span></h4>
     
 
     
@@ -620,9 +1203,53 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">ID of subscription to change</td>
         </tr>
 
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">change function options
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
@@ -632,13 +1259,26 @@
 
             <td class="type">
             
+                
+<span class="param-type">number</span>
+
+
+            
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Plan ID for new subscription</td>
         </tr>
 
     
@@ -650,13 +1290,226 @@
 
             <td class="type">
             
+                
+<span class="param-type">string</span>
+
+
+            
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Discount code of discount to apply to subscription</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>discountTokenValidator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Discount token validator for token discount to apply to subscription</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Name for NFT - defaults to auto generated name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Description for NFT - defaults to auto generated description</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>image</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">URL for NFT image - defaults to provider icon URL if not supplied</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>external_url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">URL for NFT - defaults to provider website URL if not supplied</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attributes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Array of attributes to store with IPFS NFT data</td>
         </tr>
 
     
@@ -668,13 +1521,35 @@
 
             <td class="type">
             
+                
+<span class="param-type">Object</span>
+
+
+            
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Non-encrypted data to associate with subscription</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -980,6 +1855,171 @@
 
         <tr>
             
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Name for NFT - defaults to auto generated name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>description</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Description for NFT - defaults to auto generated description</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>image</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">URL for NFT image - defaults to provider icon URL if not supplied</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>external_url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">URL for NFT - defaults to provider website URL if not supplied</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attributes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Array of attributes to store with IPFS NFT data</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>discountCode</code></td>
             
 
@@ -1006,7 +2046,40 @@
 
             
 
-            <td class="description last">Discount to apply to subscription</td>
+            <td class="description last">Discount code of discount to apply to subscription</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>discountTokenValidator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Discount token validator for token discount to apply to subscription</td>
         </tr>
 
     
@@ -1202,6 +2275,193 @@
     
 
     
+    <h4 class="name" id="estimatedCommitment"><span class="type-signature">(async) </span>estimatedCommitment<span class="signature">(address, period<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get the estimated spend by a consumer on all subscriptions for a specific period
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Consumer address</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>period</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1 month
+                
+                </td>
+            
+
+            <td class="description last">Commitment period</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="get"><span class="type-signature">(async) </span>get<span class="signature">(subscriptionId, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="Subscriptions.html#.SubscriptionDetail">Subscriptions.SubscriptionDetail</a>>}</span></h4>
     
 
@@ -1295,7 +2555,7 @@
 
             
 
-            <td class="description last">Addtional Options
+            <td class="description last">Additional Options
                 <h6>Properties</h6>
                 
 
@@ -1574,169 +2834,6 @@
     
 
     
-    <h4 class="name" id="getAttachedData"><span class="type-signature">(async) </span>getAttachedData<span class="signature">(subscriptionId, authSig)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get the transferrable private data attached to a subscription.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>subscriptionId</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>authSig</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;*></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="getConsumerSubscriptionCount"><span class="type-signature">(async) </span>getConsumerSubscriptionCount<span class="signature">(address<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
     
 
@@ -1841,6 +2938,8 @@
     
 
     
+        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>use query service</li></ul></dd>
+    
 
     
 
@@ -1902,7 +3001,7 @@
     
 
     
-    <h4 class="name" id="getConsumerSubscriptions"><span class="type-signature">(async) </span>getConsumerSubscriptions<span class="signature">(address<span class="signature-attributes">opt</span>, limit<span class="signature-attributes">opt</span>, offset<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
+    <h4 class="name" id="getConsumerSubscriptions"><span class="type-signature">(async) </span>getConsumerSubscriptions<span class="signature">(address<span class="signature-attributes">opt</span>, limit<span class="signature-attributes">opt</span>, offset<span class="signature-attributes">opt</span>, orderBy<span class="signature-attributes">opt</span>, orderDirection<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
     
 
     
@@ -2049,6 +3148,74 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>orderBy</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    createdAt
+                
+                </td>
+            
+
+            <td class="description last">Order by</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderDirection</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    asc
+                
+                </td>
+            
+
+            <td class="description last">Order direction, one of asc or desc</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2073,6 +3240,8 @@
 
     
 
+    
+        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>use query service</li></ul></dd>
     
 
     
@@ -2303,6 +3472,8 @@
     
 
     
+        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>use query service</li></ul></dd>
+    
 
     
 
@@ -2364,7 +3535,7 @@
     
 
     
-    <h4 class="name" id="getProviderSubscriptions"><span class="type-signature">(async) </span>getProviderSubscriptions<span class="signature">(address<span class="signature-attributes">opt</span>, limit<span class="signature-attributes">opt</span>, offset<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
+    <h4 class="name" id="getProviderSubscriptions"><span class="type-signature">(async) </span>getProviderSubscriptions<span class="signature">(address<span class="signature-attributes">opt</span>, limit<span class="signature-attributes">opt</span>, offset<span class="signature-attributes">opt</span>, orderBy<span class="signature-attributes">opt</span>, orderDirection<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
     
 
     
@@ -2508,6 +3679,464 @@
             
 
             <td class="description last">Offset</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderBy</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    createdAt
+                
+                </td>
+            
+
+            <td class="description last">Order by</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderDirection</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    asc
+                
+                </td>
+            
+
+            <td class="description last">Order direction, one of asc or desc</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>use query service</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;*></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="history"><span class="type-signature">(async) </span>history<span class="signature">(subscriptionId, queryopts<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get history for a subscription
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>subscriptionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Subscription ID</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>queryopts</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Optional query options
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    10
+                
+                </td>
+            
+
+            <td class="description last">Limit</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last">Offset</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderBy</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    timestamp
+                
+                </td>
+            
+
+            <td class="description last">Order by</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderDirection</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    desc
+                
+                </td>
+            
+
+            <td class="description last">Order direction, one of asc or desc</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    asc
+                
+                </td>
+            
+
+            <td class="description last">Optional options to pass to apollo for graphQL</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -3705,7 +5334,7 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="CaskSDK.abi.html">abi</a></li><li><a href="CaskSDK.assetIcons.html">assetIcons</a></li><li><a href="CaskSDK.chains.html">chains</a></li><li><a href="CaskSDK.contracts.html">contracts</a></li><li><a href="CaskSDK.defaultChains.html">defaultChains</a></li><li><a href="CaskSDK.deployments.html">deployments</a></li><li><a href="CaskSDK.enc.html">enc</a></li><li><a href="CaskSDK.enc.mode.html">mode</a></li><li><a href="CaskSDK.enc.providers.html">providers</a></li><li><a href="CaskSDK.environments.html">environments</a></li><li><a href="CaskSDK.ipfs.html">ipfs</a></li><li><a href="CaskSDK.ipfs.providers.html">providers</a></li><li><a href="CaskSDK.units.html">units</a></li><li><a href="CaskSDK.urls.html">urls</a></li><li><a href="CaskSDK.utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="CaskSDK.enc.SecureData.html">SecureData</a></li><li><a href="CaskSDK.ipfs.IPFS.html">IPFS</a></li><li><a href="EthersConnection.html">EthersConnection</a></li><li><a href="Events.html">Events</a></li><li><a href="Prices.html">Prices</a></li><li><a href="ProviderProfile.html">ProviderProfile</a></li><li><a href="Query.html">Query</a></li><li><a href="SubscriptionPlans.html">SubscriptionPlans</a></li><li><a href="Subscriptions.html">Subscriptions</a></li><li><a href="Vault.html">Vault</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="CaskSDK.abi.html">abi</a></li><li><a href="CaskSDK.assetIcons.html">assetIcons</a></li><li><a href="CaskSDK.chains.html">chains</a></li><li><a href="CaskSDK.contracts.html">contracts</a></li><li><a href="CaskSDK.defaultChains.html">defaultChains</a></li><li><a href="CaskSDK.deployments.html">deployments</a></li><li><a href="CaskSDK.enc.html">enc</a></li><li><a href="CaskSDK.enc.mode.html">mode</a></li><li><a href="CaskSDK.enc.providers.html">providers</a></li><li><a href="CaskSDK.environments.html">environments</a></li><li><a href="CaskSDK.ipfs.html">ipfs</a></li><li><a href="CaskSDK.ipfs.providers.html">providers</a></li><li><a href="CaskSDK.meta.html">meta</a></li><li><a href="CaskSDK.meta.providers.html">providers</a></li><li><a href="CaskSDK.units.html">units</a></li><li><a href="CaskSDK.urls.html">urls</a></li><li><a href="CaskSDK.utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="CaskSDK.enc.SecureData.html">SecureData</a></li><li><a href="CaskSDK.ipfs.IPFS.html">IPFS</a></li><li><a href="CaskSDK.meta.Meta.html">Meta</a></li><li><a href="ChainlinkTopup.html">ChainlinkTopup</a></li><li><a href="DCA.html">DCA</a></li><li><a href="EthersConnection.html">EthersConnection</a></li><li><a href="Events.html">Events</a></li><li><a href="P2P.html">P2P</a></li><li><a href="Prices.html">Prices</a></li><li><a href="ProviderProfile.html">ProviderProfile</a></li><li><a href="Query.html">Query</a></li><li><a href="SubscriptionPlans.html">SubscriptionPlans</a></li><li><a href="Subscriptions.html">Subscriptions</a></li><li><a href="Tokens.html">Tokens</a></li><li><a href="Vault.html">Vault</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">

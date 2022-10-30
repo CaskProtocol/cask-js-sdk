@@ -208,9 +208,16 @@ class DCA {
     }
 
     /**
-     * Get history for a DCA
+     * Get history for a DCA flow
      *
      * @param {string} dcaId DCA ID
+     * @param [queryopts] Optional query options
+     * @param [queryopts.limit=10] Limit
+     * @param [queryopts.offset=0] Offset
+     * @param [queryopts.orderBy=timestamp] Order by
+     * @param [queryopts.orderDirection=desc] Order direction, one of asc or desc
+     * @param [queryopts.options=asc] Optional options to pass to apollo for graphQL
+     * @return {Promise<*>}
      */
     async history(
         dcaId,
