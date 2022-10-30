@@ -174,6 +174,7 @@ class DCA {
             dcaId,
             user: dcaInfo.user,
             to: dcaInfo.to,
+            swapProtocol: dcaInfo.swapProtocol,
             router: dcaInfo.router,
             priceFeed: dcaInfo.priceFeed,
             path: dcaInfo.path,
@@ -309,17 +310,13 @@ query Query {
             totalAmount = totalAmountAsset;
         }
 
-        const assetSpec = [
-            assetInfo.router.toLowerCase(),
-            assetInfo.priceFeed.toLowerCase(),
-            ...assetInfo.path.map((a) => a.toLowerCase())
-        ];
-
+        const assetSpec = utils.dcaAssetspec(assetInfo);
         const merkleProof = utils.dcaMerkleProof(this.dcaManifest.assets, assetInfo);
 
         const tx = await this.CaskDCA.connect(this.ethersConnection.signer).createDCA(
             assetSpec,
             merkleProof,
+            assetInfo.swapProtocol,
             to,
             amount,
             totalAmount,

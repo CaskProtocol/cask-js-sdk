@@ -5,8 +5,13 @@ import keccak256 from "keccak256";
 
 function dcaAssetspecHash(asset) {
     return ethers.utils.keccak256(ethers.utils.defaultAbiCoder.encode(
-        [ "address", "address", "address[]" ],
-        [ asset.router.toLowerCase(), asset.priceFeed.toLowerCase(), asset.path.map((p) => p.toLowerCase()) ]
+        [ "uint8", "address", "address", "address[]" ],
+        [
+            asset.swapProtocol,
+            asset.router.toLowerCase(),
+            asset.priceFeed.toLowerCase(),
+            asset.path.map((p) => p.toLowerCase())
+        ]
     ));
 }
 
