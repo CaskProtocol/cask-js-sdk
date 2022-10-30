@@ -41,6 +41,21 @@ import Tokens from "../tokens/index.js";
  */
 class DCA {
 
+    static STATUS = {
+        NONE: 0,
+        ACTIVE: 1,
+        PAUSED: 2,
+        CANCELED: 3,
+        COMPLETE: 4,
+    }
+
+    static SWAP_PROTOCOL = {
+        UNIV2: 0,
+        UNIV3: 1,
+        GMX: 2,
+    }
+
+
     /**
      * Create an instance of the DCA service.
      *

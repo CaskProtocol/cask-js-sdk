@@ -36,6 +36,14 @@ import Query from "../query/index.js";
  */
 class P2P {
 
+    static STATUS = {
+        NONE: 0,
+        ACTIVE: 1,
+        PAUSED: 2,
+        CANCELED: 3,
+        COMPLETE: 4,
+    }
+
     /**
      * Create an instance of the P2P service.
      *

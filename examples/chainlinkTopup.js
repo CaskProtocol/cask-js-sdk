@@ -20,7 +20,7 @@ async function createChainlinkTopup(targetId, registry) {
         lowBalanceSimple: 6.0,
         targetId,
         registry,
-        topupType: 1
+        topupType: CaskSDK.chainlinkTopupType.AUTOMATION
     });
 
     console.log(`Create Response: ${JSON.stringify(resp, null, 2)}`);
