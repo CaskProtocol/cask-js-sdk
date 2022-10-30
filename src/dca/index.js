@@ -196,7 +196,7 @@ class DCA {
             path: dcaInfo.path,
             amount: dcaInfo.amount,
             period: dcaInfo.period,
-            slippageBps: dcaInfo.slippageBps,
+            maxSlippageBps: dcaInfo.maxSlippageBps,
             status: dcaInfo.status,
             createdAt: dcaInfo.createdAt,
             processAt: dcaInfo.processAt,
@@ -294,7 +294,7 @@ query Query {
      * @return {DCA.CreateDCAResult}
      */
     async create({to, asset, amount, amountSimple, amountAsset, totalAmount=0, totalAmountSimple, totalAmountAsset,
-                     period, slippageBps=100, minPrice=0, minPriceSimple, maxPrice=0, maxPriceSimple})
+                     period, maxSlippageBps=100, minPrice=0, minPriceSimple, maxPrice=0, maxPriceSimple})
     {
         if (!this.ethersConnection.signer) {
             throw new Error("Cannot perform transaction without ethers signer");
@@ -335,18 +335,15 @@ query Query {
 
         const assetSpec = utils.dcaAssetspec(assetInfo);
         const merkleProof = utils.dcaMerkleProof(this.dcaManifest.assets, assetInfo);
+        const priceSpec = utils.dcaPricespec(period, amount, totalAmount, maxSlippageBps, minPrice, maxPrice);
 
         const tx = await this.CaskDCA.connect(this.ethersConnection.signer).createDCA(
             assetSpec,
             merkleProof,
             assetInfo.swapProtocol,
+            assetInfo.swapData,
             to,
-            amount,
-            totalAmount,
-            period,
-            slippageBps,
-            minPrice,
-            maxPrice);
+            priceSpec);
 
         const events = (await tx.wait()).events || [];
         const event = events.find((e) => e.event === "DCACreated");
