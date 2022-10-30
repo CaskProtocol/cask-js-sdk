@@ -175,6 +175,7 @@ class DCA {
             user: dcaInfo.user,
             to: dcaInfo.to,
             swapProtocol: dcaInfo.swapProtocol,
+            swapData: dcaInfo.swapData,
             router: dcaInfo.router,
             priceFeed: dcaInfo.priceFeed,
             path: dcaInfo.path,
