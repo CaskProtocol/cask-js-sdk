@@ -24,6 +24,11 @@ import EthersConnection from "../core/EthersConnection.js";
  */
 class Vault {
 
+    static FUNDING_SOURCE = {
+        CASK: 0, // Cask wallet
+        PERSONAL: 1, // personal wallet
+    }
+
     /**
      * Create an instance of the Vault service.
      *

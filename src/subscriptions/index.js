@@ -45,6 +45,16 @@ import SubscriptionPlans from "../subscriptionPlans/index.js";
  */
 class Subscriptions {
 
+    static STATUS = {
+        NONE: 0,
+        TRIALING: 1,
+        ACTIVE: 2,
+        PAUSED: 3,
+        CANCELED: 4,
+        PAST_DUE: 5,
+        PENDING_PAUSE: 6
+    }
+
     /**
      * Create an instance of the Subscriptions service.
      *

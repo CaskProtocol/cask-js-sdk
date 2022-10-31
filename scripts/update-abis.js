@@ -13,8 +13,8 @@ const abiJSONfilenames = [
     'dca/CaskDCAManager.sol/CaskDCAManager.json',
     'p2p/CaskP2P.sol/CaskP2P.json',
     'p2p/CaskP2PManager.sol/CaskP2PManager.json',
-    'chainlink_topup/CaskChainlinkTopup.sol/CaskChainlinkTopup.json',
-    'chainlink_topup/CaskChainlinkTopupManager.sol/CaskChainlinkTopupManager.json',
+    // 'chainlink_topup/CaskChainlinkTopup.sol/CaskChainlinkTopup.json',
+    // 'chainlink_topup/CaskChainlinkTopupManager.sol/CaskChainlinkTopupManager.json',
 ];
 
 for (const filename of abiJSONfilenames) {
