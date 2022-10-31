@@ -5,8 +5,14 @@ import keccak256 from "keccak256";
 
 function dcaAssetspecHash(asset) {
     return ethers.utils.keccak256(ethers.utils.defaultAbiCoder.encode(
-        [ "address", "address", "address[]" ],
-        [ asset.router.toLowerCase(), asset.priceFeed.toLowerCase(), asset.path.map((p) => p.toLowerCase()) ]
+        [ "uint8", "bytes", "address", "address", "address[]" ],
+        [
+            asset.swapProtocol,
+            asset.swapData,
+            asset.router.toLowerCase(),
+            asset.priceFeed.toLowerCase(),
+            asset.path.map((p) => p.toLowerCase())
+        ]
     ));
 }
 
@@ -16,6 +22,10 @@ function dcaAssetspec(asset) {
         asset.priceFeed.toLowerCase(),
         ...asset.path.map((a) => a.toLowerCase())
     ];
+}
+
+function dcaPricespec(period, amount, totalAmount, maxSlippageBps, minPrice, maxPrice) {
+    return [period, amount, totalAmount, maxSlippageBps, minPrice, maxPrice];
 }
 
 function _dcaMerkleTree(assetList) {
@@ -49,6 +59,7 @@ export default {
     // dca helpers
     dcaAssetspecHash,
     dcaAssetspec,
+    dcaPricespec,
     dcaMerkleRoot,
     dcaMerkleProof,
     dcaMerkleVerify,
