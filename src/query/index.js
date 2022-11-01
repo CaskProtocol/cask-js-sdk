@@ -292,7 +292,7 @@ caskDCAs(where: {user: "${address.toLowerCase()}"}) {
     pausedAt
     canceledAt
     completedAt
-    slippageBps
+    maxSlippageBps
     status
     to
     totalAmount
@@ -602,7 +602,7 @@ query Query {
     pausedAt
     canceledAt
     completedAt
-    slippageBps
+    maxSlippageBps
     status
     to
     totalAmount
