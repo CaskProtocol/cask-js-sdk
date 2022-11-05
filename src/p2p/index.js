@@ -14,7 +14,26 @@ import Query from "../query/index.js";
  * @typedef P2PDetail
  * @property {string} p2pId P2P ID
  * @property {number} status P2P status
- * @property {number} createdAt Unix timestamp of P2P creation time
+ * @property {string} to Address which receives transferred value
+ * @property {number} amount Amount of vault baseAsset to send on each transfer
+ * @property {number} period Period (in seconds) between each transfer
+ * @property {number} createdAt Unix timestmap of P2P creation time
+ * @property {number} processAt Unit timestamp of next P2P transfer
+ * @property {number} totalAmount Total amount of vault baseAsset value to send across the lifetime of the P2P
+ * @property {number} currentAmount Current amount of vault baseAsset value sent while the P2P has been active
+ * @property {number} numPayments Number of transfers performed to date while the P2P has been active
+ * @property {number} numSkips Number of skips due to an issue with the P2P
+ */
+
+/**
+ * @memberOf P2P
+ * @typedef Event
+ * @property {string} txnId On-chain transaction ID of event
+ * @property {number} timestamp Unix timestamp of event
+ * @property {string} user.id Address of user for event
+ * @property {string} type Event type
+ * @property {number} amount Amount of vault baseAsset involved in the event
+ * @property {number} fee Amount of vault baseAsset fee involved in the event
  */
 
 /**
@@ -22,13 +41,20 @@ import Query from "../query/index.js";
  * @typedef CreateP2PResult
  * @property {Object} tx Create Transaction
  * @property {number} chainId Chain ID that the transaction took place on
- * @property {string} p2pId ID of newly created P2P
+ * @property {string} user Owner of P2P
+ * @property {string} to Address which will receive the vault tokens on each transfer
+ * @property {string} amount Amount (in vault baseAsset value) for each transfer
+ * @property {string} totalAmount Total amount of vault baseAsset value to transfer over the lifetime of the P2P
+ * @property {number} period Period (in seconds) between each P2P transfer
  */
 
 /**
  * @memberOf P2P
- * @typedef P2PAssetDefinition
- * @property {string} outputAssetSymbol Outut asset symbol
+ * @typedef ServiceParameters
+ * @property {number} minAmount Minimum amount of value for a new P2P
+ * @property {number} minPeriod Minimum period (in seconds) for a new P2P
+ * @property {number} maxSkips Max number of skips allowed on an P2P before it is canceled
+ * @property {number} paymentFee Fee (in vault baseAsset value) charged for processing a P2P transfer
  */
 
 /**
@@ -107,10 +133,20 @@ class P2P {
         }
     }
 
+    /**
+     * See if the P2P service is available on the currently connected chain.
+     *
+     * @returns {boolean}
+     */
     serviceAvailable() {
         return this.CaskP2P !== undefined;
     }
 
+    /**
+     * Retrieve service configuration parameters for the P2P service.
+     *
+     * @returns {P2P.ServiceParameters}
+     */
     serviceParameters() {
         return {
             minAmount: () => { return this.CaskP2P.minAmount() },
@@ -119,56 +155,6 @@ class P2P {
             maxSkips: () => { return this.CaskP2PManager.maxSkips() },
             paymentFee: () => { return this.CaskP2PManager.paymentFee() },
         }
-    }
-
-    /**
-     * Get a map of P2Ps for a specified address
-     * @param [limit=10] Limit
-     * @param [offset=0] Offset
-     * @param [orderBy=createdAt] Order by
-     * @param [orderDirection=asc] Order direction, one of asc or desc
-     * @return {Promise<*>}
-     */
-    async getUserP2PList({address, limit=10, offset=0, orderBy="createdAt", orderDirection="asc"}={}) {
-        address = address || this.ethersConnection.address;
-        if (!address) {
-            throw new Error("address not specified or detectable");
-        }
-
-        const query = `
-query Query {
-  caskP2P(
-    where: {user: "${address.toLowerCase()}"}
-    first: ${limit}
-    skip: ${offset}
-    orderBy: ${orderBy}
-    orderDirection: ${orderDirection}
-  ) {
-    id
-  }
-}`;
-        const results = await this.query.rawQuery(query);
-        return results.data.caskP2P.map((record) => record.id);
-    }
-
-    /**
-     * Get the current number of P2Ps for an address.
-     * @return {Promise<*>}
-     */
-    async getUserP2PCount({address}={}) {
-        address = address || this.ethersConnection.address;
-        if (!address) {
-            throw new Error("address not specified or detectable");
-        }
-
-        const query = `
-query Query {
-    caskConsumer(id: "${address.toLowerCase()}") {
-        totalP2PCount
-    }
-}`;
-        const results = await this.query.rawQuery(query);
-        return parseInt(results.data.caskConsumer.totalP2PCount);
     }
 
     /**
@@ -203,7 +189,7 @@ query Query {
     }
 
     /**
-     * Get history for a P2P flow
+     * Get history for a P2P flow.
      *
      * @param {string} p2pId P2P ID
      * @param [queryopts] Optional query options
@@ -211,8 +197,8 @@ query Query {
      * @param [queryopts.offset=0] Offset
      * @param [queryopts.orderBy=timestamp] Order by
      * @param [queryopts.orderDirection=desc] Order direction, one of asc or desc
-     * @param [queryopts.options=asc] Optional options to pass to apollo for graphQL
-     * @return {Promise<*>}
+     * @param [queryopts.options] Optional options to pass to apollo for graphQL
+     * @return {Promise<Array<P2P.Event>>}
      */
     async history(
         p2pId,
@@ -248,10 +234,10 @@ query Query {
     }
 
     /**
-     * Get the estimated spend for a P2P for a specific period
+     * Get the estimated spend for a P2P for a specific period.
      *
      * @param {string} address User address
-     * @param {number} [period=1 month] Commitment period
+     * @param {number} [period=1 month] Commitment period (in seconds)
      */
     async estimatedCommitment(address, period=2628000) {
         const query = `
@@ -329,7 +315,8 @@ query Query {
     }
 
     /**
-     * Pause an active P2P
+     * Pause an active P2P.
+     *
      * @param {string} p2pId P2P ID
      * @return {Promise<{tx: *}>}
      */
@@ -347,6 +334,7 @@ query Query {
 
     /**
      * Resume a paused P2P.
+     *
      * @param {string} p2pId P2P ID
      * @return {Promise<{tx: *}>}
      */
@@ -364,6 +352,7 @@ query Query {
 
     /**
      * Cancel a P2P.
+     *
      * @param {string} p2pId P2P ID
      * @return {Promise<{tx: *}>}
      */

@@ -19,7 +19,37 @@ import Tokens from "../tokens/index.js";
  * @typedef DCADetail
  * @property {string} dcaId DCA ID
  * @property {number} status DCA status
+ * @property {string} to Address which receives purchased asset
+ * @property {number} swapProtocol Swap protocol used for DCA
+ * @property {string} swapData Extra calldata associated with DCA used by swap protocol
+ * @property {string} router Router used to perform swaps
+ * @property {string} priceFeed Address of oracle price feed for the purchasing asset
+ * @property {Array<string>} path Asset path for DCA swap
+ * @property {number} amount Amount of vault baseAsset to spend on each DCA swap
+ * @property {number} period Period (in seconds) between each asset purchase
+ * @property {number} maxSlippageBps Maximum slippage (in BPS) allowed during a purchase swap attempt
  * @property {number} createdAt Unix timestamp of DCA creation time
+ * @property {number} processAt Unit timestamp of next DCA purchase
+ * @property {number} totalAmount Total amount of vault baseAsset value to spend across the lifetime of the DCA
+ * @property {number} currentAmount Current amount of vault baseAsset value spent while the DCA has been active
+ * @property {number} numBuys Number of swap purchases performed to date while the DCA has been active
+ * @property {number} numSkips Number of skips due to an issue with the DCA
+ * @property {number} minPrice Minimum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted
+ * @property {number} maxPrice Maximum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted
+ */
+
+/**
+ * @memberOf DCA
+ * @typedef Event
+ * @property {string} txnId On-chain transaction ID of event
+ * @property {number} timestamp Unix timestamp of event
+ * @property {string} user.id Address of user for event
+ * @property {string} type Event type
+ * @property {string} assetAddress Address of asset
+ * @property {number} amount Amount of vault baseAsset involved in the event
+ * @property {number} fee Amount of vault baseAsset fee involved in the event
+ * @property {number} buyQty Amount of the purchased asset
+ * @property {number} skipReason Reason why the purchase attempt was skipped
  */
 
 /**
@@ -28,19 +58,49 @@ import Tokens from "../tokens/index.js";
  * @property {Object} tx Create Transaction
  * @property {number} chainId Chain ID that the transaction took place on
  * @property {string} dcaId ID of newly created DCA
+ * @property {string} user Owner of DCA
+ * @property {string} to Address which will receive purchased assets for the DCA
+ * @property {string} inputAsset Address of the input asset used for the DCA
+ * @property {string} outputAsset Address of the purchased DCA asset
+ * @property {string} amount Amount (in vault baseAsset value) for each purchase swap of the DCA
+ * @property {string} totalAmount Total amount of vault baseAsset value to spend over the lifetime of the DCA
+ * @property {number} period Period (in seconds) between each DCA purchase swap
+ */
+
+/**
+ * @memberOf DCA
+ * @typedef ServiceParameters
+ * @property {string} assetsMerkleRoot Merkleroot of the approved assets
+ * @property {number} minAmount Minimum amount of value for a new DCA
+ * @property {number} minPeriod Minimum period (in seconds) for a new DCA
+ * @property {number} minSlippage Minimum slippage (in BPS) allowed for a new DCA
+ * @property {number} maxSkips Max number of skips allowed on an DCA before it is canceled
+ * @property {number} dcaFeeBps Fee (in BPS) charged for processing an DCA
+ * @property {number} dcaFeeMin Minimum fee (in vault baseAsset units) charged for processing an DCA
+ * @property {number} dcaMinValue Minimum amount of value for a new DCA
  */
 
 /**
  * @memberOf DCA
  * @typedef DCAAssetDefinition
- * @property {string} outputAssetSymbol Outut asset symbol
+ * @property {string} inputAssetSymbol Input asset symbol
+ * @property {string} outputAssetSymbol Output asset symbol
+ * @property {string} outputAssetIconUrl Output asset icon URL
+ * @property {string} routerName Name of swap router
+ * @property {string} router Address of swap router
+ * @property {string} priceFeed Address of asset price oracle
+ * @property {Array<string>} path Asset swap path
+ * @property {number} chainId Chain ID
  */
 
 /**
- * Service class to handle interacting with the Cask DCA system
+ * Service class to handle interacting with the Cask DCA system.
  */
 class DCA {
 
+    /**
+     * Status of an DCA
+     */
     static STATUS = {
         NONE: 0,
         ACTIVE: 1,
@@ -49,6 +109,9 @@ class DCA {
         COMPLETE: 4,
     }
 
+    /**
+     * Swap protocol used for DCA
+     */
     static SWAP_PROTOCOL = {
         UNIV2: 0,
         UNIV3: 1,
@@ -150,10 +213,20 @@ class DCA {
         }
     }
 
+    /**
+     * See if the DCA service is available on the currently connected chain.
+     *
+     * @returns {boolean}
+     */
     serviceAvailable() {
         return this.CaskDCA !== undefined;
     }
 
+    /**
+     * Retrieve service configuration parameters for the DCA service.
+     *
+     * @returns {DCA.ServiceParameters}
+     */
     serviceParameters() {
         return {
             assetsMerkleRoot: () => { return this.CaskDCA.assetsMerkleRoot() },
@@ -165,8 +238,6 @@ class DCA {
             dcaFeeBps: () => { return this.CaskDCAManager.dcaFeeBps() },
             dcaFeeMin: () => { return this.CaskDCAManager.dcaFeeMin() },
             dcaMinValue: () => { return this.CaskDCAManager.dcaMinValue() },
-            maxPriceFeedAge: () => { return this.CaskDCAManager.maxPriceFeedAge() },
-            feeDistributor: () => { return this.CaskDCAManager.feeDistributor() },
         }
     }
 
@@ -210,7 +281,7 @@ class DCA {
     }
 
     /**
-     * Get history for a DCA flow
+     * Get history for a DCA flow.
      *
      * @param {string} dcaId DCA ID
      * @param [queryopts] Optional query options
@@ -218,8 +289,8 @@ class DCA {
      * @param [queryopts.offset=0] Offset
      * @param [queryopts.orderBy=timestamp] Order by
      * @param [queryopts.orderDirection=desc] Order direction, one of asc or desc
-     * @param [queryopts.options=asc] Optional options to pass to apollo for graphQL
-     * @return {Promise<*>}
+     * @param [queryopts.options] Optional options to pass to apollo for graphQL
+     * @return {Promise<Array<DCA.Event>>}
      */
     async history(
         dcaId,
@@ -258,10 +329,10 @@ query Query {
     }
 
     /**
-     * Get the estimated spend for a DCA for a specific period
+     * Get the estimated spend for a DCA for a specific period.
      *
      * @param {string} address User address
-     * @param {number} [period=1 month] Commitment period
+     * @param {number} [period=1 month] Commitment period (in seconds)
      */
     async estimatedCommitment(address, period=2628000) {
         const query = `
@@ -291,11 +362,32 @@ query Query {
      *
      * @param {Object} args Function arguments
      * @param {string} args.asset Address of asset to DCA
+     * @param {float} [args.amountSimple] Amount of vault baseAsset value to spend per DCA purchase swap (simple format)
+     * @param {string} [args.amountAsset] Amount of vault baseAsset value to spend per DCA purchase swap (asset format)
+     * @param {string} [args.amount] Alias for `amountAsset`
+     * @param {float} [args.totalAmountSimple] Total amount of vault baseAsset value to spend over the lifetime of the DCA (simple format)
+     * @param {string} [args.totalAmountAsset] Total amount of vault baseAsset value to spend over the lifetime of the DCA (asset format)
+     * @param {string} [args.totalAmount] Alias for `totalAmountAsset`
+     * @param {float} [args.minPriceSimple] Minimum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted (simple format)
+     * @param {string} [args.minPriceAsset] Minimum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted (asset format)
+     * @param {string} [args.minPrice] Alias for `minPriceAsset`
+     * @param {float} [args.maxPriceSimple] Maximum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted (simple format)
+     * @param {string} [args.maxPriceAsset] Maximum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted (asset format)
+     * @param {string} [args.maxPrice] Alias for `maxPriceAsset`
+     * @param {number} args.period Period (in seconds) of each DCA purchase swap
+     * @param {number} args.maxSlippageBps Maximum slippage (in BPS) to allow during a purchase swap attempt
      * @return {DCA.CreateDCAResult}
      */
-    async create({to, asset, amount, amountSimple, amountAsset, totalAmount=0, totalAmountSimple, totalAmountAsset,
-                     period, maxSlippageBps=100, minPrice=0, minPriceSimple, maxPrice=0, maxPriceSimple})
-    {
+    async create({
+                     to,
+                     asset,
+                     amount, amountSimple, amountAsset,
+                     totalAmount=0, totalAmountSimple, totalAmountAsset,
+                     minPrice=0, minPriceSimple, minPriceAsset,
+                     maxPrice=0, maxPriceSimple, maxPriceAsset,
+                     period,
+                     maxSlippageBps=100
+    }) {
         if (!this.ethersConnection.signer) {
             throw new Error("Cannot perform transaction without ethers signer");
         }
@@ -322,9 +414,14 @@ query Query {
 
         if (minPriceSimple) {
             minPrice = ethers.utils.parseUnits(minPriceSimple.toFixed(6), erc20Info.decimals);
+        } else if (minPriceAsset) {
+            minPrice = minPriceAsset;
         }
+
         if (maxPriceSimple) {
             maxPrice = ethers.utils.parseUnits(maxPriceSimple.toFixed(6), erc20Info.decimals);
+        } else if (maxPriceAsset) {
+            maxPrice = maxPriceAsset;
         }
 
         if (totalAmountSimple) {
@@ -365,7 +462,8 @@ query Query {
     }
 
     /**
-     * Pause an active DCA
+     * Pause an active DCA.
+     *
      * @param {string} dcaId DCA ID
      * @return {Promise<{tx: *}>}
      */
@@ -383,6 +481,7 @@ query Query {
 
     /**
      * Resume a paused DCA.
+     *
      * @param {string} dcaId DCA ID
      * @return {Promise<{tx: *}>}
      */
@@ -400,6 +499,7 @@ query Query {
 
     /**
      * Cancel a DCA.
+     *
      * @param {string} dcaId DCA ID
      * @return {Promise<{tx: *}>}
      */
@@ -417,6 +517,7 @@ query Query {
 
     /**
      * Load the DCA asset manifest.
+     *
      * @return {Promise<Object>}
      */
     async loadDCAManifest(force=false) {
@@ -451,7 +552,8 @@ query Query {
     }
 
     /**
-     * Get the specified asset definition from the asset manifest
+     * Get the specified asset definition from the asset manifest.
+     *
      * @return {Promise<DCA.DCAAssetDefinition>}
      */
     async assetDefinition(asset) {
@@ -464,8 +566,9 @@ query Query {
     }
 
     /**
-     * Get the current price of a DCA asset denominated in the vault base asset
-     * @return {Promise<BigNumber>}
+     * Get the current price of a DCA asset denominated in the vault base asset.
+     *
+     * @return {Promise<string>}
      */
     async assetPrice(asset) {
         if (typeof(asset) === 'string') {
@@ -526,14 +629,14 @@ query Query {
             const oracleType = this.options?.oracleType || chainInfo?.oracleType || 'chainlink';
 
             if (oracleType === 'band') {
-                return await this.bandAssetPrice(asset);
+                return await this._bandAssetPrice(asset);
             } else {
-                return await this.chainlinkAssetPrice(asset);
+                return await this._chainlinkAssetPrice(asset);
             }
         }
     }
 
-    async chainlinkAssetPrice(asset) {
+    async _chainlinkAssetPrice(asset) {
         if (typeof(asset) === 'string') {
             asset = await this.assetDefinition(asset);
         }
@@ -562,7 +665,7 @@ query Query {
         return basePrice.mul(one).div(quotePrice);
     }
 
-    async bandAssetPrice(asset) {
+    async _bandAssetPrice(asset) {
         if (typeof(asset) === 'string') {
             asset = await this.assetDefinition(asset);
         }

@@ -30,7 +30,7 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>DCA<span class="signature">(options)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Service class to handle interacting with the Cask DCA system</div>
+            <div class="class-description">Service class to handle interacting with the Cask DCA system.</div>
         
     
 </header>
@@ -189,6 +189,124 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="STATUS"><span class="type-signature"></span>STATUS<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Status of an DCA
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="SWAP_PROTOCOL"><span class="type-signature"></span>SWAP_PROTOCOL<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Swap protocol used for DCA
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -207,7 +325,7 @@
 
 
 <div class="description">
-    Get the specified asset definition from the asset manifest
+    Get the specified asset definition from the asset manifest.
 </div>
 
 
@@ -300,7 +418,7 @@
     
 
     
-    <h4 class="name" id="assetPrice"><span class="type-signature">(async) </span>assetPrice<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;BigNumber>}</span></h4>
+    <h4 class="name" id="assetPrice"><span class="type-signature">(async) </span>assetPrice<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
     
 
     
@@ -308,7 +426,7 @@
 
 
 <div class="description">
-    Get the current price of a DCA asset denominated in the vault base asset
+    Get the current price of a DCA asset denominated in the vault base asset.
 </div>
 
 
@@ -383,7 +501,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;BigNumber></span>
+<span class="param-type">Promise.&lt;string></span>
 
 
     </dd>
@@ -625,6 +743,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -650,10 +770,476 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">Address of asset to DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amountSimple</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">float</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Amount of vault baseAsset value to spend per DCA purchase swap (simple format)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amountAsset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Amount of vault baseAsset value to spend per DCA purchase swap (asset format)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Alias for `amountAsset`</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAmountSimple</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">float</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Total amount of vault baseAsset value to spend over the lifetime of the DCA (simple format)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAmountAsset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Total amount of vault baseAsset value to spend over the lifetime of the DCA (asset format)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Alias for `totalAmountAsset`</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minPriceSimple</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">float</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Minimum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted (simple format)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minPriceAsset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Minimum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted (asset format)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minPrice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Alias for `minPriceAsset`</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxPriceSimple</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">float</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted (simple format)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxPriceAsset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted (asset format)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxPrice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Alias for `maxPriceAsset`</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>period</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Period (in seconds) of each DCA purchase swap</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxSlippageBps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Maximum slippage (in BPS) to allow during a purchase swap attempt</td>
         </tr>
 
     
@@ -758,7 +1344,7 @@
 
 
 <div class="description">
-    Get the estimated spend for a DCA for a specific period
+    Get the estimated spend for a DCA for a specific period.
 </div>
 
 
@@ -865,7 +1451,7 @@
                 </td>
             
 
-            <td class="description last">Commitment period</td>
+            <td class="description last">Commitment period (in seconds)</td>
         </tr>
 
     
@@ -1089,7 +1675,7 @@
     
 
     
-    <h4 class="name" id="history"><span class="type-signature">(async) </span>history<span class="signature">(dcaId, queryopts<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
+    <h4 class="name" id="history"><span class="type-signature">(async) </span>history<span class="signature">(dcaId, queryopts<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="DCA.html#.Event">DCA.Event</a>>>}</span></h4>
     
 
     
@@ -1097,7 +1683,7 @@
 
 
 <div class="description">
-    Get history for a DCA flow
+    Get history for a DCA flow.
 </div>
 
 
@@ -1375,8 +1961,6 @@
             
                 <td class="default">
                 
-                    asc
-                
                 </td>
             
 
@@ -1459,7 +2043,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;*></span>
+<span class="param-type">Promise.&lt;Array.&lt;<a href="DCA.html#.Event">DCA.Event</a>>></span>
 
 
     </dd>
@@ -1779,7 +2363,7 @@
 
 
 <div class="description">
-    Pause an active DCA
+    Pause an active DCA.
 </div>
 
 
@@ -2066,6 +2650,208 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="serviceAvailable"><span class="type-signature"></span>serviceAvailable<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    See if the DCA service is available on the currently connected chain.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="serviceParameters"><span class="type-signature"></span>serviceParameters<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="DCA.html#.ServiceParameters">DCA.ServiceParameters</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Retrieve service configuration parameters for the DCA service.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="DCA.html#.ServiceParameters">DCA.ServiceParameters</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -2176,6 +2962,167 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>user</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Owner of DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address which will receive purchased assets for the DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>inputAsset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of the input asset used for the DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outputAsset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of the purchased DCA asset</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount (in vault baseAsset value) for each purchase swap of the DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Total amount of vault baseAsset value to spend over the lifetime of the DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>period</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Period (in seconds) between each DCA purchase swap</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2261,6 +3208,29 @@
 
         <tr>
             
+                <td class="name"><code>inputAssetSymbol</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Input asset symbol</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>outputAssetSymbol</code></td>
             
 
@@ -2277,7 +3247,145 @@
 
             
 
-            <td class="description last">Outut asset symbol</td>
+            <td class="description last">Output asset symbol</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outputAssetIconUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Output asset icon URL</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>routerName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of swap router</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>router</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of swap router</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>priceFeed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of asset price oracle</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Asset swap path</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>chainId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Chain ID</td>
         </tr>
 
     
@@ -2412,6 +3520,213 @@
 
         <tr>
             
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address which receives purchased asset</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>swapProtocol</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Swap protocol used for DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>swapData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Extra calldata associated with DCA used by swap protocol</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>router</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Router used to perform swaps</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>priceFeed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of oracle price feed for the purchasing asset</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>path</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Asset path for DCA swap</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount of vault baseAsset to spend on each DCA swap</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>period</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Period (in seconds) between each asset purchase</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxSlippageBps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Maximum slippage (in BPS) allowed during a purchase swap attempt</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>createdAt</code></td>
             
 
@@ -2429,6 +3744,722 @@
             
 
             <td class="description last">Unix timestamp of DCA creation time</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>processAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Unit timestamp of next DCA purchase</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Total amount of vault baseAsset value to spend across the lifetime of the DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currentAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Current amount of vault baseAsset value spent while the DCA has been active</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numBuys</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of swap purchases performed to date while the DCA has been active</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numSkips</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of skips due to an issue with the DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minPrice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxPrice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Maximum price (in vault baseAssset value) the asset must be for the purchase swap to be attempted</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".Event">Event</h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>txnId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">On-chain transaction ID of event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timestamp</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Unix timestamp of event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>user.id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of user for event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Event type</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>assetAddress</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of asset</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount of vault baseAsset involved in the event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount of vault baseAsset fee involved in the event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>buyQty</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount of the purchased asset</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>skipReason</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Reason why the purchase attempt was skipped</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".ServiceParameters">ServiceParameters</h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>assetsMerkleRoot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Merkleroot of the approved assets</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum amount of value for a new DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minPeriod</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum period (in seconds) for a new DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minSlippage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum slippage (in BPS) allowed for a new DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxSkips</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Max number of skips allowed on an DCA before it is canceled</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dcaFeeBps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Fee (in BPS) charged for processing an DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dcaFeeMin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum fee (in vault baseAsset units) charged for processing an DCA</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dcaMinValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum amount of value for a new DCA</td>
         </tr>
 
     

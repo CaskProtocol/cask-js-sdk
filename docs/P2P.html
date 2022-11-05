@@ -556,7 +556,7 @@
 
 
 <div class="description">
-    Get the estimated spend for a P2P for a specific period
+    Get the estimated spend for a P2P for a specific period.
 </div>
 
 
@@ -663,7 +663,7 @@
                 </td>
             
 
-            <td class="description last">Commitment period</td>
+            <td class="description last">Commitment period (in seconds)</td>
         </tr>
 
     
@@ -887,7 +887,7 @@
     
 
     
-    <h4 class="name" id="getUserP2PCount"><span class="type-signature">(async) </span>getUserP2PCount<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
+    <h4 class="name" id="history"><span class="type-signature">(async) </span>history<span class="signature">(p2pId, queryopts<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;<a href="P2P.html#.Event">P2P.Event</a>>>}</span></h4>
     
 
     
@@ -895,375 +895,7 @@
 
 
 <div class="description">
-    Get the current number of P2Ps for an address.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;*></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getUserP2PList"><span class="type-signature">(async) </span>getUserP2PList<span class="signature">(limit<span class="signature-attributes">opt</span>, offset<span class="signature-attributes">opt</span>, orderBy<span class="signature-attributes">opt</span>, orderDirection<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get a map of P2Ps for a specified address
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>limit</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    10
-                
-                </td>
-            
-
-            <td class="description last">Limit</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>offset</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    0
-                
-                </td>
-            
-
-            <td class="description last">Offset</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>orderBy</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    createdAt
-                
-                </td>
-            
-
-            <td class="description last">Order by</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>orderDirection</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    asc
-                
-                </td>
-            
-
-            <td class="description last">Order direction, one of asc or desc</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;*></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="history"><span class="type-signature">(async) </span>history<span class="signature">(p2pId, queryopts<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get history for a P2P flow
+    Get history for a P2P flow.
 </div>
 
 
@@ -1541,8 +1173,6 @@
             
                 <td class="default">
                 
-                    asc
-                
                 </td>
             
 
@@ -1625,7 +1255,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;*></span>
+<span class="param-type">Promise.&lt;Array.&lt;<a href="P2P.html#.Event">P2P.Event</a>>></span>
 
 
     </dd>
@@ -1844,7 +1474,7 @@
 
 
 <div class="description">
-    Pause an active P2P
+    Pause an active P2P.
 </div>
 
 
@@ -2131,6 +1761,208 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="serviceAvailable"><span class="type-signature"></span>serviceAvailable<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    See if the P2P service is available on the currently connected chain.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="serviceParameters"><span class="type-signature"></span>serviceParameters<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="P2P.html#.ServiceParameters">P2P.ServiceParameters</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Retrieve service configuration parameters for the P2P service.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="P2P.html#.ServiceParameters">P2P.ServiceParameters</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -2221,7 +2053,7 @@
 
         <tr>
             
-                <td class="name"><code>p2pId</code></td>
+                <td class="name"><code>user</code></td>
             
 
             <td class="type">
@@ -2237,7 +2069,99 @@
 
             
 
-            <td class="description last">ID of newly created P2P</td>
+            <td class="description last">Owner of P2P</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address which will receive the vault tokens on each transfer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount (in vault baseAsset value) for each transfer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Total amount of vault baseAsset value to transfer over the lifetime of the P2P</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>period</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Period (in seconds) between each P2P transfer</td>
         </tr>
 
     
@@ -2289,7 +2213,7 @@
 
             
                 
-<h4 class="name" id=".P2PAssetDefinition">P2PAssetDefinition</h4>
+<h4 class="name" id=".Event">Event</h4>
 
 
 
@@ -2326,7 +2250,7 @@
 
         <tr>
             
-                <td class="name"><code>outputAssetSymbol</code></td>
+                <td class="name"><code>txnId</code></td>
             
 
             <td class="type">
@@ -2342,7 +2266,122 @@
 
             
 
-            <td class="description last">Outut asset symbol</td>
+            <td class="description last">On-chain transaction ID of event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timestamp</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Unix timestamp of event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>user.id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address of user for event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Event type</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount of vault baseAsset involved in the event</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount of vault baseAsset fee involved in the event</td>
         </tr>
 
     
@@ -2477,6 +2516,75 @@
 
         <tr>
             
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Address which receives transferred value</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Amount of vault baseAsset to send on each transfer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>period</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Period (in seconds) between each transfer</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>createdAt</code></td>
             
 
@@ -2493,7 +2601,296 @@
 
             
 
-            <td class="description last">Unix timestamp of P2P creation time</td>
+            <td class="description last">Unix timestmap of P2P creation time</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>processAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Unit timestamp of next P2P transfer</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>totalAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Total amount of vault baseAsset value to send across the lifetime of the P2P</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currentAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Current amount of vault baseAsset value sent while the P2P has been active</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numPayments</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of transfers performed to date while the P2P has been active</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>numSkips</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Number of skips due to an issue with the P2P</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".ServiceParameters">ServiceParameters</h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>minAmount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum amount of value for a new P2P</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minPeriod</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum period (in seconds) for a new P2P</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxSkips</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Max number of skips allowed on an P2P before it is canceled</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>paymentFee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Fee (in vault baseAsset value) charged for processing a P2P transfer</td>
         </tr>
 
     

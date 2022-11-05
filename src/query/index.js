@@ -73,6 +73,13 @@ class Query {
         }
     }
 
+    /**
+     * Perform a raw graphql query on the subgraph
+     *
+     * @param query
+     * @param options
+     * @returns {Promise<ApolloQueryResult<any>>}
+     */
     async rawQuery(query, options={}) {
         if (!this.apolloClient) {
             throw new Error(`apolloClient not available. Current chain have a supported subgraph?`);
@@ -85,6 +92,12 @@ class Query {
         });
     }
 
+    /**
+     * Get status of the subgraph.
+     *
+     * @param options
+     * @returns {Promise<*>}
+     */
     async graphStatus(options={fetchPolicy: 'no-cache'}) {
         const query = `
 query Query {
@@ -100,7 +113,8 @@ query Query {
     }
 
     /**
-     * Get the summary metrics for a specific provider
+     * Get the summary metrics for a specific provider.
+     *
      * @param {Object} args Function arguments
      * @param {string} [args.address=this.ethersConnection.address] Address of provider
      * @return {Promise<*>}
@@ -133,7 +147,8 @@ query Query {
     }
 
     /**
-     * Get the summary metrics for a specific provider and plan
+     * Get the summary metrics for a specific provider and plan.
+     *
      * @param {Object} args Function arguments
      * @param {string} [args.address=this.ethersConnection.address] Address of user
      * @param {number} args.planId Plan ID
@@ -166,7 +181,8 @@ query Query {
     }
 
     /**
-     * Get the summary metrics for a specific consumer
+     * Get the summary metrics for a specific consumer.
+     *
      * @param {Object} args Function arguments
      * @param {string} [args.address=this.ethersConnection.address] Address of consumer
      * @return {Promise<*>}
@@ -201,7 +217,8 @@ query Query {
     }
 
     /**
-     * Get the specified flow of a specific type
+     * Get the specified flow of a specific type.
+     *
      * @param {string} id flow ID
      * @param {string} type Flow type (subscription, dca, p2p or chainlinkTopup)
      * @param {Object} [options] query options
@@ -221,7 +238,8 @@ query Query {
     }
 
     /**
-     * Get all flows for an address
+     * Get all flows for an address.
+     *
      * @param {Object} args Function arguments
      * @param {string} [args.address=this.ethersConnection.address] Address of user
      * @return {Promise<*>}
@@ -402,6 +420,11 @@ query Query {
         return result;
     }
 
+    /**
+     * Get a list of subscriptions for a consumer
+     *
+     * @returns {Promise<*>}
+     */
     subscriptions({
                       consumer,
                       first=10,
@@ -436,6 +459,11 @@ query Query {
         });
     }
 
+    /**
+     * Get a list of subscribers for a provider.
+     *
+     * @returns {Promise<*>}
+     */
     subscribers({
                     provider,
                     first=10,
@@ -470,6 +498,13 @@ query Query {
         })
     }
 
+    /**
+     * Get a specific subscription.
+     *
+     * @param {string} id Subscription ID
+     * @param {Object} [options]
+     * @returns {Promise<*>}
+     */
     async subscription(id, options={}) {
         const result = await this.subscriptionQuery({where: {id}, includeInactive: true, options});
         return result?.data?.caskSubscriptions?.[0];
@@ -543,6 +578,13 @@ query Query {
 }`, options);
     }
 
+    /**
+     * Get a specific DCA flow.
+     *
+     * @param {string} id DCA ID
+     * @param {Object} [options]
+     * @returns {Promise<*>}
+     */
     async dca(id, options={}) {
         const result = await this.dcaQuery({where: {id}, includeInactive: true, options});
         return result?.data?.caskDCAs?.[0];
@@ -610,6 +652,13 @@ query Query {
 }`, options);
     }
 
+    /**
+     * Get a specific P2P flow.
+     *
+     * @param {string} id P2P ID
+     * @param {Object} [options]
+     * @returns {Promise<*>}
+     */
     async p2p(id, options={}) {
         const result = await this.p2pQuery({where: {id}, includeInactive: true, options});
         return result?.data?.caskP2Ps?.[0];
@@ -672,6 +721,13 @@ query Query {
 }`, options);
     }
 
+    /**
+     * Get a specific chainlink topup flow.
+     *
+     * @param {string} id Chainlink Topup ID
+     * @param {Object} [options]
+     * @returns {Promise<*>}
+     */
     async chainlinkTopup(id, options={}) {
         const result = await this.chainlinkTopupQuery({where: {id}, includeInactive: true, options});
         return result?.data?.caskChainlinkTopups?.[0];
@@ -735,8 +791,11 @@ query Query {
     }
 
     /**
-     * Get wallet history for the connected user
+     * Get wallet history for a specific address.
      *
+     * @param {string} address Wallet address
+     * @param {Object} [options]
+     * @returns {Promise<Array<*>>}
      */
     async walletHistory({
                             address,

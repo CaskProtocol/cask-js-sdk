@@ -41,6 +41,16 @@ import SubscriptionPlans from "../subscriptionPlans/index.js";
  */
 
 /**
+ * @memberOf Subscriptions
+ * @typedef ServiceParameters
+ * @property {number} paymentFeeMin Minimum fee (in vault baseAsset units) charged for processing a subscription payment
+ * @property {number} paymentFeeRateMin Minimum fee (in BPS) charged for processing a subscription payment if staking the max amount of $CASK tokens
+ * @property {number} paymentFeeRateMax Maximum fee (in BPS) charged for processing a subscription payment if staking no $CASK tokens
+ * @property {number} stakeTargetFactor Stake target factor used to calculate fee discount based on staked $CASK
+ * @property {number} paymentMinValue Minimum amount allowed for a single subscription payment
+ */
+
+/**
  * Service class to handle interacting with the Cask subscriptions system
  */
 class Subscriptions {
@@ -143,20 +153,27 @@ class Subscriptions {
         }
     }
 
+    /**
+     * See if the Subscription service is available on the currently connected chain
+     *
+     * @returns {boolean}
+     */
     serviceAvailable() {
         return this.CaskSubscriptions !== undefined;
     }
 
+    /**
+     * Retrieve service configuration parameters for the Subscription service.
+     *
+     * @returns {Subscriptions.ServiceParameters}
+     */
     serviceParameters() {
         return {
             paymentFeeMin: () => { return this.CaskSubscriptionManager.paymentFeeMin() },
             paymentFeeRateMin: () => { return this.CaskSubscriptionManager.paymentFeeRateMin() },
             paymentFeeRateMax: () => { return this.CaskSubscriptionManager.paymentFeeRateMax() },
             stakeTargetFactor: () => { return this.CaskSubscriptionManager.stakeTargetFactor() },
-            processBucketSize: () => { return this.CaskSubscriptionManager.processBucketSize() },
             paymentMinValue: () => { return this.CaskSubscriptionManager.paymentMinValue() },
-            processBucketMaxAge: () => { return this.CaskSubscriptionManager.processBucketMaxAge() },
-            paymentRetryDelay: () => { return this.CaskSubscriptionManager.paymentRetryDelay() },
         }
     }
 
@@ -362,7 +379,7 @@ query Query {
      * @param [queryopts.offset=0] Offset
      * @param [queryopts.orderBy=timestamp] Order by
      * @param [queryopts.orderDirection=desc] Order direction, one of asc or desc
-     * @param [queryopts.options=asc] Optional options to pass to apollo for graphQL
+     * @param [queryopts.options] Optional options to pass to apollo for graphQL
      * @return {Promise<*>}
      */
     async history(

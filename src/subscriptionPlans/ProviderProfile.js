@@ -106,9 +106,9 @@ class ProviderProfile {
      * @param {Object} args Function arguments
      * @param {number} args.planId Plan ID of the new or existing plan
      * @param {string} args.name Name of plan
-     * @param {string} [args.price] Price of new plan, using Cask vault asset decimals (18)
-     * @param {float} [args.priceSimple] Price of new plan using SIMPLE format (floating point, with only 2 decimals used)
-     * @param {string} [args.priceAsset] Alias for the regular "price" argument
+     * @param {string} [args.price] Alias for `priceAsset`
+     * @param {float} [args.priceSimple] Price of new plan denominated in vault baseAsset value (simple format)
+     * @param {string} [args.priceAsset] Price of new plan denominated in vault baseAsset value (asset format)
      * @param {number} args.period Plan period, in seconds
      * @param {number} [args.freeTrial=0] Free trial length, in seconds. Use 0 for no free trial.
      * @param {number} [args.maxActive=0] Maximum number of active subscriptions for the plan. Use 0 for unlimited.
@@ -118,10 +118,19 @@ class ProviderProfile {
      * @param {boolean} [args.canTransfer=false] Can the consumer transfer the subscription NFT to another party
      * @param {Object} [args.metadata={}] Optional metadata object to attach to the subscription
      */
-    setPlan({planId, name, price, priceSimple, priceAsset, period, freeTrial=0,
-                maxActive=0, minPeriods=0, gracePeriod=7,
-                canPause=true, canTransfer=false, metadata={}})
-    {
+    setPlan({
+                planId,
+                name,
+                price, priceSimple, priceAsset,
+                period,
+                freeTrial=0,
+                maxActive=0,
+                minPeriods=0,
+                gracePeriod=7,
+                canPause=true,
+                canTransfer=false,
+                metadata={}
+    }) {
         if (priceSimple) {
             price = ethers.utils.parseUnits(priceSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
         } else if (priceAsset) {

@@ -257,8 +257,8 @@ class Vault {
      * Deposit an asset into the vault.
      * @param {Object} args Function arguments
      * @param {Vault.Asset|string} args.asset Asset
-     * @param {float} [args.amountSimple] Amount in float format
-     * @param {string} [args.amountAsset] Amount in asset decimals format
+     * @param {float} [args.amountSimple] Amount to deposit (simple format)
+     * @param {string} [args.amountAsset] Amount to deposit (asset format)
      * @param {string} [args.to=ethersConnection.address] Address to receive deposit credit
      * @return {Promise<{tx}>}
      */
@@ -298,8 +298,8 @@ class Vault {
      * Withdraw an asset from the vault.
      * @param {Object} args Function arguments
      * @param {Vault.Asset|string} args.asset Asset
-     * @param {float} [args.amountSimple] Amount in float format
-     * @param {string} [args.amountAsset] Amount in asset decimals format
+     * @param {float} [args.amountSimple] Amount to withdraw (simple format)
+     * @param {string} [args.amountAsset] Amount to withdraw (asset format)
      * @param {string} [args.to=ethersConnection.address] Address to receive withdrawn assets
      * @return {Promise<{tx}>}
      */
@@ -357,8 +357,8 @@ class Vault {
     /**
      * Transfer an amount of value from one cask wallet to another cask wallet.
      * @param {Object} args Function arguments
-     * @param {float} [args.amountSimple] Amount in float format
-     * @param {string} [args.amountAsset] Amount in vault decimals format
+     * @param {float} [args.amountSimple] Amount to transfer (simple format)
+     * @param {string} [args.amountAsset] Amount to transfer (asset format)
      * @param {string} args.to Address to receive the transfer
      * @return {Promise<{tx}>}
      */
@@ -449,8 +449,8 @@ class Vault {
      * @see The SDK guide for more details on unit formatting at {@link https://docs.cask.fi/developer-docs/javascript-sdk}
      * @param {Object} args Function arguments
      * @param {Vault.Asset|string} [args.asset=baseAsset] Asset
-     * @param {float} [args.amountSimple] Amount in float format
-     * @param {string} [args.amountAsset] Amount in asset decimals format
+     * @param {float} [args.amountSimple] Amount (simple format)
+     * @param {string} [args.amountAsset] Amount (asset format)
      * @return {Promise<string>}
      */
     async sharesForAmount({asset, amountSimple, amountAsset}) {
@@ -479,8 +479,8 @@ class Vault {
      * @see The SDK guide for more details on unit formatting at {@link https://docs.cask.fi/developer-docs/javascript-sdk}
      * @param {Object} args Function arguments
      * @param {Vault.Asset|string} args.asset Asset
-     * @param {float} [args.amountSimple] Amount in float format
-     * @param {string} [args.amountAsset] Amount in asset decimals format
+     * @param {float} [args.amountSimple] Amount to deposit (simple format)
+     * @param {string} [args.amountAsset] Amount to deposit (asset format)
      * @param {string} [args.units] Units of output
      * @param {Object} [args.unitOptions={}] Options passed to unit formatter.
      * @return {Promise<number|*>}
@@ -515,8 +515,8 @@ class Vault {
      * @see The SDK guide for more details on unit formatting at {@link https://docs.cask.fi/developer-docs/javascript-sdk}
      * @param {Object} args Function arguments
      * @param {Vault.Asset|string} args.asset Asset
-     * @param {float} [args.amountSimple] Amount in float format
-     * @param {string} [args.amountAsset] Amount in asset decimals format
+     * @param {float} [args.amountSimple] Amount to withdraw (simple format)
+     * @param {string} [args.amountAsset] Amount to withdraw (asset format)
      * @param {string} [args.units] Units of output
      * @param {Object} [args.unitOptions={}] Options passed to unit formatter.
      * @return {Promise<number|*>}
@@ -554,8 +554,8 @@ class Vault {
      * @param {Object} args Function arguments
      * @param {Vault.Asset|string} args.asset Asset being converted
      * @param {Vault.Asset|string} args.toAsset Asset the amount is being converted into
-     * @param {float} [args.amountSimple] Amount in float format
-     * @param {string} [args.amountAsset] Amount in asset decimals format
+     * @param {float} [args.amountSimple] Amount to convert (simple format)
+     * @param {string} [args.amountAsset] Amount to convert (asset format)
      * @param {string} [args.units] Units of output
      * @param {Object} [args.unitOptions={}] Options passed to unit formatter.
      * @return {Promise<number|*>}
@@ -647,8 +647,8 @@ class Vault {
      *
      * @param {Object} args Function arguments
      * @param {Vault.Asset|string} args.asset Asset
-     * @param {float} [args.amountSimple] Amount in float format
-     * @param {string} [args.amountAsset] Amount in asset decimals format
+     * @param {float} [args.amountSimple] Amount (simple format)
+     * @param {string} [args.amountAsset] Amount (asset format)
      * @return {string}
      */
     amountInAsset({asset, amountSimple, amountAsset}) {

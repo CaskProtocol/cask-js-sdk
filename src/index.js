@@ -68,7 +68,7 @@ import ChainlinkTopup from "./chainlinkTopup/index.js";
  *
  *
  * @author Cask Protocol & Subverse Labs, LLC
- * @version 1.1
+ * @version 1.4
  * @name CaskSDK
  */
 

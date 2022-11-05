@@ -4124,8 +4124,6 @@
             
                 <td class="default">
                 
-                    asc
-                
                 </td>
             
 
@@ -4714,6 +4712,208 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="serviceAvailable"><span class="type-signature"></span>serviceAvailable<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    See if the Subscription service is available on the currently connected chain
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="serviceParameters"><span class="type-signature"></span>serviceParameters<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Subscriptions.html#.ServiceParameters">Subscriptions.ServiceParameters</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Retrieve service configuration parameters for the Subscription service.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Subscriptions.html#.ServiceParameters">Subscriptions.ServiceParameters</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -4890,6 +5090,203 @@
             
 
             <td class="description last">ID of newly created subscription</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".ServiceParameters">ServiceParameters</h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>paymentFeeMin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum fee (in vault baseAsset units) charged for processing a subscription payment</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>paymentFeeRateMin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum fee (in BPS) charged for processing a subscription payment if staking the max amount of $CASK tokens</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>paymentFeeRateMax</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Maximum fee (in BPS) charged for processing a subscription payment if staking no $CASK tokens</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>stakeTargetFactor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Stake target factor used to calculate fee discount based on staked $CASK</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>paymentMinValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Minimum amount allowed for a single subscription payment</td>
         </tr>
 
     
