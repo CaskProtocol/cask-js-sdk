@@ -62,7 +62,10 @@ async function createDCA() {
 
     const resp = await cask.dca.create({
         asset: abcAddress,
-        amount: 10000000, //  10 usdc
+        amountSimple: 10.0, //  10 usdc
+        minPriceSimple: 0.0,
+        maxPriceSimple: 0.0,
+        totalAmountSimple: 0.0,
         period: 86400}); // 1 day
 
     console.log(`Create Response: ${JSON.stringify(resp, null, 2)}`);

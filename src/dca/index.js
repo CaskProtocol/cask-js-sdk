@@ -381,10 +381,10 @@ query Query {
     async create({
                      to,
                      asset,
-                     amount, amountSimple, amountAsset,
-                     totalAmount=0, totalAmountSimple, totalAmountAsset,
-                     minPrice=0, minPriceSimple, minPriceAsset,
-                     maxPrice=0, maxPriceSimple, maxPriceAsset,
+                     amount = '0', amountSimple, amountAsset,
+                     totalAmount='0', totalAmountSimple, totalAmountAsset,
+                     minPrice='0', minPriceSimple, minPriceAsset,
+                     maxPrice='0', maxPriceSimple, maxPriceAsset,
                      period,
                      maxSlippageBps=100
     }) {
@@ -437,8 +437,8 @@ query Query {
         const tx = await this.CaskDCA.connect(this.ethersConnection.signer).createDCA(
             assetSpec,
             merkleProof,
-            assetInfo.swapProtocol,
-            assetInfo.swapData,
+            assetInfo.swapProtocol || 0,
+            assetInfo.swapData || '0x',
             to,
             priceSpec);
 

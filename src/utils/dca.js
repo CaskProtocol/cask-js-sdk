@@ -7,8 +7,8 @@ function dcaAssetspecHash(asset) {
     return ethers.utils.keccak256(ethers.utils.defaultAbiCoder.encode(
         [ "uint8", "bytes", "address", "address", "address[]" ],
         [
-            asset.swapProtocol,
-            asset.swapData,
+            asset.swapProtocol || 0,
+            asset.swapData || '0x',
             asset.router.toLowerCase(),
             asset.priceFeed.toLowerCase(),
             asset.path.map((p) => p.toLowerCase())
