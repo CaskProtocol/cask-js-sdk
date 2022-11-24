@@ -19,14 +19,6 @@ const caskUnits = {
     ASSET: 'asset_decimals',
 };
 
-/**
- * Asset decimals used by Cask base asset
- * @memberOf CaskSDK.units
- * @type {number}
- */
-const BASE_ASSET_DECIMALS = 6;
-
-
 const DEFAULT_FORMAT = caskUnits.SIMPLE;
 const DEFAULT_NUMERAL_FORMAT = '0.00a';
 
@@ -153,7 +145,6 @@ function scalePrice(amount, amountDecimals, toDecimals) {
 
 export default {
     ...caskUnits,
-    BASE_ASSET_DECIMALS,
     DEFAULT_FORMAT,
     roundDown,
     formatUnits,

@@ -6,6 +6,7 @@ import CaskUnits from "../core/units.js";
 import EthersConnection from "../core/EthersConnection.js";
 import {ethers} from "ethers";
 import Query from "../query/index.js";
+import Vault from "../vault/index.js";
 
 
 /**
@@ -70,6 +71,12 @@ class ChainlinkTopup {
             this.options.cache.query = this.query;
         }
 
+        if (this.options.cache.vault) {
+            this.vault = this.options.cache.vault
+        } else {
+            this.vault = new Vault(options);
+            this.options.cache.vault = this.vault;
+        }
     }
 
     /**
@@ -87,6 +94,9 @@ class ChainlinkTopup {
         }
         this.ethersConnection.onSwitchChain(async(chainId) => { await this._initContracts() });
 
+        if (!this.vault.ethersConnection) {
+            await this.vault.init({ethersConnection: this.ethersConnection});
+        }
         if (!this.query.ethersConnection) {
             await this.query.init({ethersConnection: this.ethersConnection});
         }
@@ -217,7 +227,7 @@ query Query {
         }
 
         if (topupAmountSimple) {
-            topupAmount = ethers.utils.parseUnits(topupAmountSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
+            topupAmount = ethers.utils.parseUnits(topupAmountSimple.toFixed(2), this.vault.baseAsset.assetDecimals);
         }
         if (lowBalanceSimple) {
             const linkFundingToken = await this.CaskChainlinkTopupManager.linkFundingToken();

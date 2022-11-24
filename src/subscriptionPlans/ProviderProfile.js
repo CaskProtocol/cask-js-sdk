@@ -17,7 +17,8 @@ class ProviderProfile {
      *
      * @see SubscriptionPlans
      */
-    constructor(options) {
+    constructor(baseAsset, options) {
+        this.baseAsset = baseAsset;
         this.options = options;
 
         this.logger = new Logger('CaskSDK::ProviderProfile', this.options.logLevel);
@@ -94,7 +95,7 @@ class ProviderProfile {
             ...planInfo,
             price: CaskUnits.formatUnits({
                 amount: planInfo.price,
-                decimals: CaskUnits.BASE_ASSET_DECIMALS,
+                asset: this.baseAsset,
                 units: units || this.options.defaultUnits,
                 unitOptions: unitOptions || this.options.defaultUnitOptions})
         }
@@ -132,7 +133,7 @@ class ProviderProfile {
                 metadata={}
     }) {
         if (priceSimple) {
-            price = ethers.utils.parseUnits(priceSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
+            price = ethers.utils.parseUnits(priceSimple.toFixed(2), this.baseAsset.assetDecimals);
         } else if (priceAsset) {
             price = priceAsset;
         }
@@ -181,7 +182,7 @@ class ProviderProfile {
         if (discountInfo.isFixed) {
             value = CaskUnits.formatUnits({
                 amount: value,
-                decimals: CaskUnits.BASE_ASSET_DECIMALS,
+                asset: this.baseAsset,
                 units: units || this.options.defaultUnits,
                 unitOptions: unitOptions || this.options.defaultUnitOptions})
         }
@@ -242,7 +243,7 @@ class ProviderProfile {
         }
 
         if (isFixed && valueSimple) {
-            value = ethers.utils.parseUnits(valueSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
+            value = ethers.utils.parseUnits(valueSimple.toFixed(2), this.baseAsset.assetDecimals);
         } else if (isFixed && valueAsset) {
             value = valueAsset;
         }
@@ -308,7 +309,7 @@ class ProviderProfile {
 
         return CaskUnits.formatUnits({
             amount: price,
-            decimals: CaskUnits.BASE_ASSET_DECIMALS,
+            asset: this.baseAsset,
             units: units || this.options.defaultUnits,
             unitOptions: unitOptions || this.options.defaultUnitOptions})
     }

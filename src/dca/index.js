@@ -178,14 +178,14 @@ class DCA {
         }
         this.ethersConnection.onSwitchChain(async() => { await this._initContracts() });
 
+        if (!this.vault.ethersConnection) {
+            await this.vault.init({ethersConnection: this.ethersConnection});
+        }
         if (!this.query.ethersConnection) {
             await this.query.init({ethersConnection: this.ethersConnection});
         }
         if (!this.tokens.ethersConnection) {
             await this.tokens.init({ethersConnection: this.ethersConnection});
-        }
-        if (!this.vault.ethersConnection) {
-            await this.vault.init({ethersConnection: this.ethersConnection});
         }
         if (!ethersConnection) {
             await this.ethersConnection.init();
@@ -407,7 +407,7 @@ query Query {
         }
 
         if (amountSimple) {
-            amount = ethers.utils.parseUnits(amountSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
+            amount = ethers.utils.parseUnits(amountSimple.toFixed(2), this.vault.baseAsset.assetDecimals);
         } else if (amountAsset) {
             amount = amountAsset;
         }
@@ -425,7 +425,7 @@ query Query {
         }
 
         if (totalAmountSimple) {
-            totalAmount = ethers.utils.parseUnits(totalAmountSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
+            totalAmount = ethers.utils.parseUnits(totalAmountSimple.toFixed(2), this.vault.baseAsset.assetDecimals);
         } else if (totalAmountAsset) {
             totalAmount = totalAmountAsset;
         }

@@ -6,6 +6,7 @@ import CaskUnits from "../core/units.js";
 import EthersConnection from "../core/EthersConnection.js";
 import {ethers} from "ethers";
 import Query from "../query/index.js";
+import Vault from "../vault/index.js";
 
 
 
@@ -96,6 +97,12 @@ class P2P {
             this.options.cache.query = this.query;
         }
 
+        if (this.options.cache.vault) {
+            this.vault = this.options.cache.vault
+        } else {
+            this.vault = new Vault(options);
+            this.options.cache.vault = this.vault;
+        }
     }
 
     /**
@@ -113,6 +120,9 @@ class P2P {
         }
         this.ethersConnection.onSwitchChain(async() => { await this._initContracts() });
 
+        if (!this.vault.ethersConnection) {
+            await this.vault.init({ethersConnection: this.ethersConnection});
+        }
         if (!this.query.ethersConnection) {
             await this.query.init({ethersConnection: this.ethersConnection});
         }
@@ -280,13 +290,13 @@ query Query {
         }
 
         if (amountSimple) {
-            amount = ethers.utils.parseUnits(amountSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
+            amount = ethers.utils.parseUnits(amountSimple.toFixed(2), this.vault.baseAsset.assetDecimals);
         } else if (amountAsset) {
             amount = amountAsset;
         }
 
         if (totalAmountSimple) {
-            totalAmount = ethers.utils.parseUnits(totalAmountSimple.toFixed(2), CaskUnits.BASE_ASSET_DECIMALS);
+            totalAmount = ethers.utils.parseUnits(totalAmountSimple.toFixed(2), this.vault.baseAsset.assetDecimals);
         } else if (totalAmountAsset) {
             totalAmount = totalAmountAsset;
         }
