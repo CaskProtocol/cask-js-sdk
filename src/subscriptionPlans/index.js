@@ -124,6 +124,7 @@ class SubscriptionPlans {
             this.CaskSubscriptionPlans = contracts.CaskSubscriptionPlans({ethersConnection: this.ethersConnection});
         }
         this.providerProfile = null;
+        this.providerProfileCache = null;
     }
 
     /**

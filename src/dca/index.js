@@ -211,6 +211,7 @@ class DCA {
                 vaultReadyResolve = resolve;
             });
         }
+        this.dcaManifest = null;
     }
 
     /**
