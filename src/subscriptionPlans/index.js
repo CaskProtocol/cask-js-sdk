@@ -123,6 +123,7 @@ class SubscriptionPlans {
             '0x0000000000000000000000000000000000000000') {
             this.CaskSubscriptionPlans = contracts.CaskSubscriptionPlans({ethersConnection: this.ethersConnection});
         }
+        this.providerProfile = null;
     }
 
     /**
