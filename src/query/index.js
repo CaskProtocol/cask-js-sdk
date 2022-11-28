@@ -4,7 +4,6 @@ import Logger from "../utils/Logger.js";
 import deployments from "../core/deployments.js";
 
 import EthersConnection from "../core/EthersConnection.js";
-import contracts from "../contracts";
 
 /**
  * Service class for querying Cask subgraph data.

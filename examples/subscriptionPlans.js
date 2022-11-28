@@ -13,7 +13,8 @@ const cask = new CaskSDK({
         pinataApiKey: process.env.PINATA_API_KEY,
         pinataApiSecret: process.env.PINATA_API_SECRET,
     },
-    environment: CaskSDK.environments.INTERNAL,
+    environment: CaskSDK.environments.TESTNET,
+    initialChainId: CaskSDK.chains.AVAX_TESTNET.chainId,
     logLevel: 'debug',
 });
 
@@ -135,10 +136,10 @@ async function getProviderSummary(address) {
 (async () => {
     await cask.init();
 
-    // await publishProfile();
-    // await addPlanAndPublishProfile();
-    await getProviderHistory('0xd9cba6fcadf21111b6a1bced5fc466c47bac7f2f');
-    // await loadProfile();
+    await publishProfile();
+    await addPlanAndPublishProfile();
+    // await getProviderHistory('0xd9cba6fcadf21111b6a1bced5fc466c47bac7f2f');
+    await loadProfile();
 
     // await getProviderProfile(cask.ethersConnection.address);
 

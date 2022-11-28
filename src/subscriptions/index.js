@@ -7,9 +7,11 @@ import enc from "../enc/index.js";
 import utils from "../utils/index.js";
 import CaskUnits from "../core/units.js";
 import Query from "../query/index.js";
+import Vault from "../vault/index.js";
 
 import EthersConnection from "../core/EthersConnection.js";
 import SubscriptionPlans from "../subscriptionPlans/index.js";
+
 
 /**
  * @memberOf Subscriptions
@@ -91,6 +93,13 @@ class Subscriptions {
             this.options.cache.subscriptionPlans = this.subscriptionPlans;
         }
 
+        if (this.options.cache.vault) {
+            this.vault = this.options.cache.vault
+        } else {
+            this.vault = new Vault(options);
+            this.options.cache.vault = this.vault;
+        }
+
         if (this.options.cache?.query) {
             this.query = this.options.cache?.query;
         } else {
@@ -128,6 +137,9 @@ class Subscriptions {
         }
         this.ethersConnection.onSwitchChain(async(chainId) => { await this._initContracts(chainId) });
 
+        if (!this.vault.ethersConnection) {
+            await this.vault.init({ethersConnection: this.ethersConnection});
+        }
         if (!this.subscriptionPlans.ethersConnection) {
             await this.subscriptionPlans.init({ethersConnection: this.ethersConnection});
         }
@@ -338,7 +350,7 @@ query Query {
             if (discount.isFixed) {
                 discount.value = CaskUnits.formatUnits({
                     amount: discount.value,
-                    decimals: CaskUnits.BASE_ASSET_DECIMALS,
+                    asset: this.vault.baseAsset,
                     units: units || this.options.defaultUnits,
                     unitOptions: unitOptions || this.options.defaultUnitOptions})
             }
@@ -362,7 +374,7 @@ query Query {
                 ...ipfsData.plan,
                 price: CaskUnits.formatUnits({
                     amount: ipfsData.plan.price,
-                    decimals: CaskUnits.BASE_ASSET_DECIMALS,
+                    asset: this.vault.baseAsset,
                     units: units || this.options.defaultUnits,
                     unitOptions: unitOptions || this.options.defaultUnitOptions})
             },

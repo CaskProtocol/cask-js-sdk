@@ -5,7 +5,8 @@ import deployments from "../core/deployments.js";
 import EthersConnection from "../core/EthersConnection.js";
 import ProviderProfile from "./ProviderProfile.js";
 import utils from "../utils/index.js";
-import Query from "../query";
+import Query from "../query/index.js";
+import Vault from "../vault/index.js";
 
 
 /**
@@ -75,6 +76,13 @@ class SubscriptionPlans {
             this.query = new Query(this.options);
             this.options.cache.query = this.query;
         }
+
+        if (this.options.cache.vault) {
+            this.vault = this.options.cache.vault
+        } else {
+            this.vault = new Vault(options);
+            this.options.cache.vault = this.vault;
+        }
     }
 
     /**
@@ -92,6 +100,9 @@ class SubscriptionPlans {
         }
         this.ethersConnection.onSwitchChain(async(chainId) => { await this._initContracts(chainId) });
 
+        if (!this.vault.ethersConnection) {
+            await this.vault.init({ethersConnection: this.ethersConnection});
+        }
         if (!this.query.ethersConnection) {
             await this.query.init({ethersConnection: this.ethersConnection});
         }
@@ -112,6 +123,8 @@ class SubscriptionPlans {
             '0x0000000000000000000000000000000000000000') {
             this.CaskSubscriptionPlans = contracts.CaskSubscriptionPlans({ethersConnection: this.ethersConnection});
         }
+        this.providerProfile = null;
+        this.providerProfileCache = null;
     }
 
     /**
@@ -139,7 +152,6 @@ class SubscriptionPlans {
         if (!address) {
             throw new Error("address not specified or detectable");
         }
-
         if (this.providerProfile && !force) {
             return this.providerProfile;
         }
@@ -149,7 +161,7 @@ class SubscriptionPlans {
         let newProfile;
 
         if (chainProfile?.cid) {
-            newProfile = new ProviderProfile({
+            newProfile = new ProviderProfile(this.vault.baseAsset, {
                 ipfs: this.options.ipfs,
                 address,
                 nonce: chainProfile.nonce,
@@ -164,7 +176,7 @@ class SubscriptionPlans {
                 await this.mergePlanStatus(newProfile);
             }
         } else {
-            newProfile = new ProviderProfile({
+            newProfile = new ProviderProfile(this.vault.baseAsset, {
                 ipfs: this.options.ipfs,
                 address,
                 registered: false,
@@ -227,7 +239,7 @@ query Query {
             return null;
         }
 
-        const newProfile = new ProviderProfile({
+        const newProfile = new ProviderProfile(this.vault.baseAsset, {
             ipfs: this.options.ipfs,
             address,
             paymentAddress: profile.paymentAddress || address,
