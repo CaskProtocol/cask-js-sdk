@@ -354,7 +354,7 @@ viewBox="0 0 784.37 1277.39"
  * @return {Chain}
  */
 function lookupChain(chain) {
-  return Object.values(chains).find((c) => c.chainId === chain || c.shortName === chain);
+  return Object.values(chains).find((c) => c.chainId === chain || c.hexChainId?.toString()?.toLowerCase() === chain?.toString()?.toLowerCase() || c.shortName === chain);
 }
 
 export default {
