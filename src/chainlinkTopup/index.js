@@ -339,9 +339,15 @@ query Query {
                 registryAddress: cltuInfo.registry,
                 ethersConnection: this.ethersConnection
             });
-            const result = await registry.getUpkeep(cltuInfo.targetId);
+            let balance = 0;
+            try {
+                const result = await registry.getUpkeep(cltuInfo.targetId);
+                balance = result.balance;
+            } catch (e) {
+                this.logger.warn(`Unable to get upkeep ${cltuInfo.targetId}.`, e);
+            }
             return CaskUnits.formatUnits({
-                amount: result.balance,
+                amount: balance,
                 decimals: await link.decimals(),
                 units: units || this.options.defaultUnits,
                 unitOptions: unitOptions || this.options.defaultUnitOptions,
@@ -352,9 +358,16 @@ query Query {
                 coordinatorAddress: cltuInfo.registry,
                 ethersConnection: this.ethersConnection
             });
-            const result = await registry.getSubscription(cltuInfo.targetId);
+            let balance = 0;
+            try {
+                const result = await registry.getSubscription(cltuInfo.targetId);
+                balance = result.balance;
+            } catch (e) {
+                this.logger.warn(`Unable to get subscription ${cltuInfo.targetId}.`, e);
+            }
+
             return CaskUnits.formatUnits({
-                amount: result.balance,
+                amount: balance,
                 decimals: await link.decimals(),
                 units: units || this.options.defaultUnits,
                 unitOptions: unitOptions || this.options.defaultUnitOptions,
