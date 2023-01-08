@@ -190,6 +190,13 @@ class SubscriptionPlans {
         return this.providerProfile;
     }
 
+    /**
+     * UnLoads the the current service provider profile loaded.
+     */
+    unloadProfile() {
+        this.providerProfile = null;
+    }
+
     async mergePlanStatus(profile) {
 
         const query = `
