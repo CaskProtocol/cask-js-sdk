@@ -498,6 +498,52 @@ query Query {
     }
 
     /**
+     * Get a list of subscriptions for a consumer for a specific provider and also optionally a planId.
+     *
+     * @returns {Promise<*>}
+     */
+    consumerSubscriptions({
+                    consumer,
+                    provider,
+                    planId=null,
+                    first=10,
+                    skip=0,
+                    orderBy='createdAt',
+                    orderDirection='desc',
+                    includeInactive = false,
+                    status,
+                    options
+                }={})
+    {
+        if (!consumer) {
+            throw new Error("consumer not specified");
+        }
+        provider = provider || this.ethersConnection.address;
+        if (!provider) {
+            throw new Error("provider not specified or detectable");
+        }
+
+        let where = {
+            currentOwner: consumer.toLowerCase(),
+            provider: provider.toLowerCase(),
+        }
+        if (planId) {
+            where['plan_'] = {planId: planId};
+        }
+
+        return this.subscriptionQuery({
+            first,
+            skip,
+            where,
+            orderBy,
+            orderDirection,
+            includeInactive,
+            status,
+            options
+        })
+    }
+
+    /**
      * Get a specific subscription.
      *
      * @param {string} id Subscription ID
@@ -531,7 +577,7 @@ query Query {
             whereStatus = includeInactive ? '' : ', status_not_in: [Canceled]';
         }
 
-        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+        const whereString = this.whereQuery(where);
 
         return this.rawQuery(`
 query Query {
@@ -611,7 +657,7 @@ query Query {
             whereStatus = includeInactive ? '' : ', status_not_in: [Canceled,Complete]';
         }
 
-        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+        const whereString = this.whereQuery(where);
 
         return this.rawQuery(`
 query Query {
@@ -685,7 +731,7 @@ query Query {
             whereStatus = includeInactive ? '' : ', status_not_in: [Canceled,Complete]';
         }
 
-        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+        const whereString = this.whereQuery(where);
 
         return this.rawQuery(`
 query Query {
@@ -754,7 +800,7 @@ query Query {
             whereStatus = includeInactive ? '' : ', status_not_in: [Canceled]';
         }
 
-        const whereString = Object.keys( where ).map( key => `${key}:"${where[key]}"`).join( ',' );
+        const whereString = this.whereQuery(where);
 
         return this.rawQuery(`
 query Query {
@@ -865,6 +911,32 @@ query Query {
         const resultsInbound = await this.rawQuery(queryInbound, options);
 
         return [...results.data.caskWalletEvents, ...resultsInbound.data.caskWalletEvents];
+    }
+
+    /**
+     * Build graphQL where query from a map
+     *
+     * @param {Object} where
+     * @returns {String}
+     */
+    whereQuery(where) {
+        return Object.keys( where ).map( key => {
+            if (typeof where[key] === 'string') {
+                return `${key}:"${
+                    where[key]
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&quot;')
+                }"`;
+            } else if (typeof where[key] === 'number') {
+                return `${key}:${where[key]}`;
+            } else if (typeof where[key] === 'boolean') {
+                return `${key}:${where[key].toString()}`;
+            } else if (Array.isArray(where[key])) {
+                return `${key}_in:[${where[key].join(',')}]`;
+            } else {
+                return `${key}:{${this.whereQuery(where[key])}}`;
+            }
+        }).join( ',' );
     }
 }
 
