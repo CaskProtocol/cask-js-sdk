@@ -293,6 +293,9 @@ caskSubscriptions(
             outboundFlowQueries.push(`
 caskDCAs(where: {user: "${address.toLowerCase()}"}) {
     id
+    user {
+       id
+    }
     createdAt
     period
     amount
