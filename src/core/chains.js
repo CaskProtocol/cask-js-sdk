@@ -352,9 +352,7 @@ viewBox="0 0 784.37 1277.39"
     shortName: 'base_testnet',
     defaultRpcUrl: "https://goerli.base.org",
     explorerUrl: "https://goerli.basescan.org",
-    logo: `<svg width="612" height="153" viewBox="0 0 612 153" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M153 76.5C153 118.75 118.69 153 76.3665 153C36.2125 153 3.27153 122.171 0 82.9304H101.292V70.0695H0C3.27153 30.8289 36.2125 0 76.3665 0C118.69 0 153 34.2501 153 76.5Z" fill="#0052FF"/>
-</svg>`
+    logo: `<svg width="320" height="320" viewBox="0 0 190 190" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M94.2407 189.14C146.47 189.14 188.811 146.8 188.811 94.5701C188.811 42.3405 146.47 0 94.2407 0C44.6883 0 4.03726 38.1111 0 86.6207H125V102.519H6.78908e-07C4.03726 151.029 44.6883 189.14 94.2407 189.14Z" fill="#0052FF"></path></svg>`
   },
 };
 
