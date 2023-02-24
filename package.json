@@ -1,6 +1,6 @@
 {
   "name": "@caskprotocol/sdk",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "Cask Protocol JS SDK",
   "license": "MIT",
   "engines": {
@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/CaskProtocol/cask-js-sdk/issues"
   },
-  "author": "Subverse Labs, LLC <info@subverselabs.com>",
+  "author": "Cask Protocol <contact@cask.fi>",
   "mocha": {
     "timeout": 60000,
     "require": "@babel/register"

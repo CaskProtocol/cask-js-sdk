@@ -22,6 +22,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0x7899118A8A3EAe4cDd97Cb2Ea9E52a5b78da3cB6",
             [chains.AVAX_TESTNET.chainId]: "0x28E372eff469b18Bc86Fb9f0C496b219bde39E81",
             [chains.CELO_TESTNET.chainId]: "0xB844AFd937717bf117CaE2467B12f2922afa68dB",
+            [chains.BASE_TESTNET.chainId]: "0x0D985780F56e47Fd271d1e4e7d39571A16Bd6f17",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x4A6f232552E0fd76787006Bb688bFBCB931cc3d0',
@@ -53,6 +54,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0x3E9B8E9D60Abc50b032cdc42Ef2F6CBaBce17983",
             [chains.AVAX_TESTNET.chainId]: "0x06bd2FD3784E1cEe11969caA67CDb0803DcF5869",
             [chains.CELO_TESTNET.chainId]: "0x6FF7EB600f4BF68e0A3f35ba2D4825BfcA031A1b",
+            [chains.BASE_TESTNET.chainId]: "0xA93D22f5AeDbEB8c8034Bb294dAA51Bc0Cb7e8f1",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x78B5882b81AF02ebb0803eAFb4A4bf27fe35470e',
@@ -81,6 +83,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0x7F179331fDc27EFFA7620BB3fEa8B5951B623921",
             [chains.AVAX_TESTNET.chainId]: "0xEeE424F3b51b1ec62e5EAd955b5776634dc7e22e",
             [chains.CELO_TESTNET.chainId]: "0xcE1733bD8Bc301c055fa9517f384acBC5b6Fde79",
+            [chains.BASE_TESTNET.chainId]: "0x0644331350BDa992A3d97fE0469856A6e339790f",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0xfA07af9E5835D720b3798a37f716749252F94D71',
@@ -112,6 +115,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0xc924CaAFe6759F92215Dadf326FF4fAb158f6C41",
             [chains.AVAX_TESTNET.chainId]: "0x9d628d298D917BF9642Bb45D594B2075f661373D",
             [chains.CELO_TESTNET.chainId]: "0xC48f1deb2E6d68aD620cA38927F4d8b1923555d0",
+            [chains.BASE_TESTNET.chainId]: "0xA4b47B472C0F2E6a35E502c32e225Ffc8eE1317E",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x3b2b4b547dAEEbf3A703288CB43650f0F287b9ff',
@@ -143,6 +147,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0xE9E994bdaeB77B06E8b31457BAE341D8C4F081ab",
             [chains.AVAX_TESTNET.chainId]: "0x74708050c23850FDdDbd357fE504b93d4f06E901",
             [chains.CELO_TESTNET.chainId]: "0x43cff515Fd8338421B5570EEDCBEd86234189EcF",
+            [chains.BASE_TESTNET.chainId]: "0xDdcE74C684282CDBEa9723EF715Ee43e24b3A434",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x733Ec5A72c38f2f3c75E98b28DffC1885aB04AF1',
@@ -171,6 +176,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0x9C036b582E02717ae6523Eccc6AB0dC1Cad8755F",
             [chains.AVAX_TESTNET.chainId]: "0x67aEeD63d1F0a48054C6bf50e21D47921e3902B3",
             [chains.CELO_TESTNET.chainId]: "0x40f89BD69E634Eb1e3Cbe56D39DD15794E754CC8",
+            [chains.BASE_TESTNET.chainId]: "0xbC7d7C77963B4b513743Bf1e66b88D41C9D3d3bd",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0xE07c2e264fb6D4dD8215feD6f3a78d70D1BF4CE2',
@@ -202,6 +208,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0x2068607e74B3ED913F920A4e9Fc922067dD825BB",
             [chains.AVAX_TESTNET.chainId]: "0x4Deb1AAe96809Fc8f05859f7A9F21F7e59e30186",
             [chains.CELO_TESTNET.chainId]: "0x8e2c338C1b470fd0cE9014bed29D5d3C5214AC0D",
+            [chains.BASE_TESTNET.chainId]: "0xCf5EA5cBe519F7a6eEaD217c32df9E3b5E526841",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0xB80376507Dd5d561AD3A6aB452FE17e782220501',
@@ -230,6 +237,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0xC1132d3077626E16e9A799A8CbDD70E95ec6b071",
             [chains.AVAX_TESTNET.chainId]: "0x645C22Ad586509AE6B356E20a9e022C7caD18EF6",
             [chains.CELO_TESTNET.chainId]: "0x9632510b7207a6B157b83e20678Da022223e5DC4",
+            [chains.BASE_TESTNET.chainId]: "0x2e74FfD025102579845F3f2D2dA60fD1DdF4b84C",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0xfA7fe9DFFd6fEd7292fdCce2677d88e1b9a9c295',
@@ -261,6 +269,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0xFB6edCa5E31e43572233212D3FB285465C969832",
             [chains.AVAX_TESTNET.chainId]: "0x7823a600dE066e3F037396D2A4840EeA22F1361f",
             [chains.CELO_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.BASE_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0xD621F2C0374d32771d7Cfbec348a63F26f9d7c4F',
@@ -289,6 +298,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "0xCD54748EBE7507847C1523abb38d93D00791Ad27",
             [chains.AVAX_TESTNET.chainId]: "0x6065db37aa5F4453fa988a5aA12b6293a11D9113",
             [chains.CELO_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
+            [chains.BASE_TESTNET.chainId]: "0x0000000000000000000000000000000000000000",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: '0x8839A1941A9cB2deCfC05C3191c598Bf2aC5Be0C',
@@ -355,6 +365,7 @@ const deployments = {
             [chains.POLYGON_MUMBAI.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-mumbai",
             [chains.AVAX_TESTNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-fuji",
             [chains.CELO_TESTNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-alfajores",
+            [chains.BASE_TESTNET.chainId]: "https://api.studio.thegraph.com/query/25834/cask-protocol-goerlibase/v1.1.0",
         },
         [environments.PRODUCTION]: {
             [chains.POLYGON_MAINNET.chainId]: "https://api.thegraph.com/subgraphs/name/caskprotocol/cask-protocol-polygon",
